@@ -15,13 +15,12 @@ public class SeatDao implements SeatDaoInterface {
 
     //general extracting method
     private Seat extractSeatFromResultSet(ResultSet rs) throws SQLException {
+        ZoneDao zoneDao = new ZoneDao();
         Seat seat = new Seat();
         seat.setId(rs.getInt("id"));
         seat.setNumber(rs.getInt("number"));
         seat.setRow(rs.getString("row"));
-        /*seat.setZone(
-                rs.getString("zone");
-        );*/
+        seat.setZone(zoneDao.findById(rs.getInt("zone")));
         return seat;
     }
 

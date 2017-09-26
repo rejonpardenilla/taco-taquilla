@@ -42,8 +42,8 @@ public class Setup {
 
             String actor_list =
                     "CREATE TABLE public.actor_list(" +
-                            "show INT REFERENCES show (id)," +
-                            "actor INT REFERENCES person (id))";
+                    "show INT REFERENCES show (id)," +
+                    "actor INT REFERENCES person (id))";
             queries.add(actor_list);
 
             String zone =
@@ -72,7 +72,7 @@ public class Setup {
                     "CREATE TABLE public.purchase(" +
                     "id SERIAL PRIMARY KEY NOT NULL," +
                     "client INT REFERENCES person (id) ON DELETE CASCADE ON UPDATE CASCADE," +
-                    "tickets INT," +
+//                    "tickets INT," +
                     "total DECIMAL(12,2))";
             queries.add(purchase);
 
@@ -84,13 +84,6 @@ public class Setup {
                     "price DECIMAL(12,2)," +
                     "purchase INT REFERENCES purchase(id))";
             queries.add(ticket);
-
-            String purchase_tickets =
-                    "CREATE TABLE public.purchase_tickets(" +
-                    "id SERIAL PRIMARY KEY NOT NULL," +
-                    "ticket INT REFERENCES ticket (id) ON DELETE CASCADE ON UPDATE CASCADE," +
-                    "purchase INT REFERENCES purchase (id) ON DELETE CASCADE ON UPDATE CASCADE)";
-            queries.add(purchase_tickets);
 
             for (String query : queries){
                 statement.executeUpdate(query);
