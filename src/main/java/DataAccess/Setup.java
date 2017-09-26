@@ -16,7 +16,7 @@ public class Setup {
                     "name VARCHAR(255)," +
                     "last_name VARCHAR(255)," +
                     "phone VARCHAR(50)," +
-                    "phone_alternative VARCHAR(50)," +
+                    "phone_alt VARCHAR(50)," +
                     "type VARCHAR(50)," +
                     "email VARCHAR(255))";
             queries.add(person);

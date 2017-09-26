@@ -8,5 +8,7 @@ public interface PersonDaoInterface {
     List<Person> findAll();
     Person findById(int id);
 
-//    public boolean insertPerson(Person person);
+    public boolean insertPerson(Person person);
+    public boolean updatePerson(Person person);
+    public boolean deletePersonById(int id);
 }

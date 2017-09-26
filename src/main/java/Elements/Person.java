@@ -5,7 +5,7 @@ public class Person {
     private String name;
     private String lastName;
     private String phone;
-    private String phoneAlternative;
+    private String phoneAlt;
     private String email;
     private String type;
 
@@ -41,12 +41,12 @@ public class Person {
         this.phone = phone;
     }
 
-    public String getPhoneAlternative() {
-        return phoneAlternative;
+    public String getPhoneAlt() {
+        return phoneAlt;
     }
 
-    public void setPhoneAlternative(String phoneAlternative) {
-        this.phoneAlternative = phoneAlternative;
+    public void setPhoneAlt(String phoneAlt) {
+        this.phoneAlt = phoneAlt;
     }
 
     public String getEmail() {

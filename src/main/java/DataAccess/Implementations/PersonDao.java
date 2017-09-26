@@ -18,7 +18,7 @@ public class PersonDao implements PersonDaoInterface {
         person.setName(rs.getString("name"));
         person.setLastName(rs.getString("last_name"));
         person.setPhone(rs.getString("phone"));
-        person.setPhoneAlternative(rs.getString("phone_alternative"));
+        person.setPhoneAlt(rs.getString("phone_alternative"));
         person.setEmail(rs.getString("email"));
         person.setType(rs.getString("type"));
         return person;
@@ -62,5 +62,68 @@ public class PersonDao implements PersonDaoInterface {
             e.printStackTrace();
         }
         return null;
+    }
+
+    @Override
+    public boolean insertPerson(Person person) {
+        Connection connection = ConnectionFactory.getConnection();
+        Statement statement = null;
+        try{
+            statement = connection.createStatement();
+            String query = "INSERT INTO person VALUES ("+
+                            person.getName()        + ", " +
+                            person.getLastName()    + ", " +
+                            person.getPhone()       + ", " +
+                            person.getPhoneAlt()    + ", " +
+                            person.getType()        + ", " +
+                            person.getEmail()       + ")";
+            int rowsAffected = statement.executeUpdate(query);
+            if(rowsAffected == 1){
+                return true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean updatePerson(Person person) {
+        Connection connection = ConnectionFactory.getConnection();
+        Statement statement = null;
+        try{
+            statement = connection.createStatement();
+            String query = "UPDATE person SET "+
+                    "name="      + person.getName()     + ", " +
+                    "last_name=" + person.getLastName() + ", " +
+                    "phone="     + person.getPhone()    + ", " +
+                    "phone_alt=" + person.getPhoneAlt() + ", " +
+                    "type="      + person.getType()     + ", " +
+                    "email="     + person.getEmail();
+            int rowsAffected = statement.executeUpdate(query);
+            if(rowsAffected == 1){
+                return true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    @Override
+    public boolean deletePersonById(int id) {
+        Connection connection = ConnectionFactory.getConnection();
+        Statement statement = null;
+        try{
+            statement = connection.createStatement();
+            int rowsAffected = statement.executeUpdate("DELETE FROM person WHERE id=" + id);
+            if(rowsAffected == 1){
+                return true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 }
