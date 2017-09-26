@@ -7,4 +7,6 @@ import java.util.List;
 public interface PersonDaoInterface {
     List<Person> findAll();
     Person findById(int id);
+
+//    public boolean insertPerson(Person person);
 }

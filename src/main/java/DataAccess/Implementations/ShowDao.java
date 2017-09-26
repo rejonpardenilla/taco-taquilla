@@ -8,6 +8,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,6 +61,28 @@ public class ShowDao implements ShowDaoInterface {
 
             if (resultSet.next())
                 return extractShowFromResultSet(resultSet);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public List<Show> findByDate(LocalDate date){
+        Connection connection = ConnectionFactory.getConnection();
+        Statement statement = null;
+
+        try{
+            statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM show WHERE date=" + date+ " ORDER BY 'play'");
+
+            ArrayList<Show> shows = new ArrayList<>();
+            while(resultSet.next()){
+                Show show = extractShowFromResultSet(resultSet);
+                shows.add(show);
+            }
+            return shows;
 
         } catch (SQLException e) {
             e.printStackTrace();
