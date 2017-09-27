@@ -75,7 +75,6 @@ public class Setup {
                     "CREATE TABLE public.purchase(" +
                     "id SERIAL PRIMARY KEY NOT NULL," +
                     "client INT REFERENCES person (id) ON DELETE CASCADE ON UPDATE CASCADE," +
-//                    "tickets INT," +
                     "total DECIMAL(12,2))";
             queries.add(purchase);
 
