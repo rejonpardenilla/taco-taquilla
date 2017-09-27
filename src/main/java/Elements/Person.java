@@ -1,13 +1,6 @@
 package Elements;
 
 public class Person {
-    private int id;
-    private String name;
-    private String lastName;
-    private String phone;
-    private String phoneAlt;
-    private String email;
-    private String type;
 
     public int getId() {
         return id;
@@ -64,4 +57,13 @@ public class Person {
     public void setType(String type) {
         this.type = type;
     }
+
+    private int id;
+    private String name;
+    private String lastName;
+    private String phone;
+    private String phoneAlt;
+    private String email;
+    private String type;
+
 }

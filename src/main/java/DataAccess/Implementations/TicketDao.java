@@ -14,16 +14,22 @@ import java.util.List;
 public class TicketDao implements TicketDaoInterface {
 
     private Ticket extractTicketFromResultSet(ResultSet rs) throws SQLException{
-        SeatingDao seatingDao = new SeatingDao();
+
         Ticket ticket = new Ticket();
         ticket.setId(rs.getInt("id"));
         ticket.setPrice(rs.getBigDecimal("price"));
         ticket.setReturned(rs.getBoolean("returned"));
+
+        SeatingDao seatingDao = new SeatingDao();
         ticket.setSeating(seatingDao.findById(rs.getInt("seating")));
+
         return ticket;
+
     }
+
     @Override
     public List<Ticket> findAll() {
+
         Connection connection = ConnectionFactory.getConnection();
         Statement statement = null;
 
@@ -32,24 +38,30 @@ public class TicketDao implements TicketDaoInterface {
             ResultSet resultSet = statement.executeQuery("SELECT * FROM ticket");
 
             ArrayList<Ticket> tickets = new ArrayList<>();
+
             while (resultSet.next()) {
                 Ticket ticket = extractTicketFromResultSet(resultSet);
                 tickets.add(ticket);
             }
+
             return tickets;
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
         return null;
+
     }
 
     @Override
     public Ticket findById(int id) {
+
         Connection connection = ConnectionFactory.getConnection();
         Statement statement = null;
 
         try {
+
             statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery("SELECT * FROM ticket WHERE id=" + id);
 
@@ -59,6 +71,9 @@ public class TicketDao implements TicketDaoInterface {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
         return null;
+
     }
+
 }

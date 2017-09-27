@@ -3,10 +3,6 @@ package Elements;
 import java.math.BigDecimal;
 
 public class Ticket {
-    int id;
-    Seating seating;
-    BigDecimal price; 
-    boolean returned;
 
     public int getId() {
         return id;
@@ -39,4 +35,10 @@ public class Ticket {
     public void setReturned(boolean returned) {
         this.returned = returned;
     }
+
+    private int id;
+    private Seating seating;
+    private BigDecimal price;
+    private boolean returned;
+
 }

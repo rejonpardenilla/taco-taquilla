@@ -7,8 +7,6 @@ import java.time.LocalDate;
 import java.util.List;
 
 public class ShowListController {
-    LocalDate today = LocalDate.now();
-    ShowDao showDao = new ShowDao();
 
     private List<Show> getDayShows(){
         return getDayShows(0);
@@ -24,5 +22,7 @@ public class ShowListController {
 
     }
 
+    private LocalDate today = LocalDate.now();
+    private ShowDao showDao = new ShowDao();
 
 }

@@ -5,10 +5,6 @@ import java.util.List;
 
 public class Purchase {
 
-    int id;
-    Person client;
-    BigDecimal total;
-
     public int getId() {
         return id;
     }
@@ -32,4 +28,9 @@ public class Purchase {
     public void setTotal(BigDecimal total) {
         this.total = total;
     }
+
+    private int id;
+    private Person client;
+    private BigDecimal total;
+
 }

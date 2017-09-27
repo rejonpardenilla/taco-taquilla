@@ -1,10 +1,6 @@
 package Elements;
 
 public class Seating {
-    int id;
-    String state; //FREE, TAKEN, RESERVED
-    Seat seat;
-    Show show;
 
     public int getId() {
         return id;
@@ -37,4 +33,10 @@ public class Seating {
     public void setShow(Show show) {
         this.show = show;
     }
+
+    private int id;
+    private String state; //FREE, TAKEN, RESERVED
+    private Seat seat;
+    private Show show;
+
 }
