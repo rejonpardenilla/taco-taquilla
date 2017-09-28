@@ -59,4 +59,9 @@ public class Show {
     public void setCancelled(boolean cancelled) {
         this.cancelled = cancelled;
     }
+
+    @Override
+    public String toString() {
+        return play.getName() + ": " + time;
+    }
 }

@@ -1,12 +1,17 @@
 package Elements;
 
-import java.math.BigDecimal;
+import DataAccess.Implementations.TicketDao;
+import Elements.Methods.DataAccessMethods;
 
-public class Ticket {
+import java.math.BigDecimal;
+import java.sql.SQLException;
+
+public class Ticket implements DataAccessMethods {
     int id;
     Seating seating;
     BigDecimal price; 
     boolean returned;
+    Purchase purchase;
 
     public int getId() {
         return id;
@@ -38,5 +43,20 @@ public class Ticket {
 
     public void setReturned(boolean returned) {
         this.returned = returned;
+    }
+
+    public Purchase getPurchase() {
+        return purchase;
+    }
+
+    public void setPurchase(Purchase purchase) {
+        this.purchase = purchase;
+    }
+
+    @Override
+    public Ticket save() throws SQLException {
+        TicketDao ticketDao = new TicketDao();
+        this.id = ticketDao.insertTicket(this);
+        return this;
     }
 }

@@ -4,10 +4,7 @@ import DataAccess.ConnectionFactory;
 import DataAccess.Interfaces.SeatingDaoInterface;
 import Elements.Seating;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,5 +63,51 @@ public class SeatingDao implements SeatingDaoInterface{
             e.printStackTrace();
         }
         return null;
+    }
+
+    @Override
+    public int insertSeating(Seating seating) throws SQLException{
+        Connection connection = ConnectionFactory.getConnection();
+        PreparedStatement statement = null;
+
+        String query = "INSERT INTO seating (seat, state, show) VALUES (?, ?, ?)";
+        statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+
+        statement.setInt(1, seating.getSeat().getId());
+        statement.setString(2, seating.getState());
+        statement.setInt(3, seating.getShow().getId());
+
+        int rowsAffected = statement.executeUpdate();
+        if(rowsAffected == 0){
+            throw new SQLException("No rows affected");
+        }
+
+        try(ResultSet generatedKeys = statement.getGeneratedKeys()){
+            if (generatedKeys.next()){
+                return generatedKeys.getInt("id");
+            } else {
+                throw new SQLException("No id obtained");
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        SeatingDao seatingDao = new SeatingDao();
+        SeatDao seatDao = new SeatDao();
+        ShowDao showDao = new ShowDao();
+
+        Seating seating = new Seating();
+        seating.setSeat(seatDao.findById(1));
+        seating.setState("TAKEN");
+        seating.setShow(showDao.findById(1));
+
+
+        try {
+            seating.save();
+//            int id = seatingDao.insertSeating(seating);
+//            seating.setId(id);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }
