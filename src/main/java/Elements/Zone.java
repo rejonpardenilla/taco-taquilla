@@ -1,8 +1,6 @@
 package Elements;
 
 public class Zone {
-    int id;
-    int discountPercent;
 
     public int getId() {
         return id;
@@ -19,4 +17,8 @@ public class Zone {
     public void setDiscountPercent(int discountPercent) {
         this.discountPercent = discountPercent;
     }
+
+    private int id;
+    private int discountPercent;
+
 }

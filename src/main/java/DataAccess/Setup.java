@@ -3,8 +3,11 @@ import java.sql.*;
 import java.util.ArrayList;
 
 public class Setup {
+
     public static void main(String[] args) {
+
         try {
+
             Connection connection = ConnectionFactory.getConnection();
             Statement statement = connection.createStatement();
 
@@ -95,4 +98,5 @@ public class Setup {
         }
 
     }
+
 }
