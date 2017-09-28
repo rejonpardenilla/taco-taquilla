@@ -3,6 +3,12 @@ package Elements;
 import java.util.List;
 
 public class Play {
+    private int id;
+    private String name;
+    private Person responsible;
+    private String description;
+    private List<Person> actors;
+    private boolean cancelled;
 
     public int getId() {
         return id;
@@ -51,12 +57,5 @@ public class Play {
     public void setCancelled(boolean cancelled) {
         this.cancelled = cancelled;
     }
-
-    private int id;
-    private String name;
-    private Person responsible;
-    private String description;
-    private List<Person> actors;
-    private boolean cancelled;
 
 }
