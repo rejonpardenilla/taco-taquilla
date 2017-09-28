@@ -5,6 +5,12 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 public class Show {
+    int id;
+    LocalDate date;
+    LocalTime time;
+    Play play;
+    BigDecimal price;
+    boolean cancelled;
 
     public int getId() {
         return id;
@@ -54,11 +60,8 @@ public class Show {
         this.cancelled = cancelled;
     }
 
-    private int id;
-    private LocalDate date;
-    private LocalTime time;
-    private Play play;
-    private BigDecimal price;
-    private boolean cancelled;
-
+    @Override
+    public String toString() {
+        return play.getName() + ": " + time;
+    }
 }

@@ -60,7 +60,7 @@ public class ZoneDao implements ZoneDaoInterface {
         try {
 
             statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery("SELECT * FROM 'zone' WHERE id=" + id);
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM zone WHERE id=" + id);
 
             if (resultSet.next())
                 return extractZoneFromResultSet(resultSet);

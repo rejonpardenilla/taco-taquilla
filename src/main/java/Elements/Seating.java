@@ -1,6 +1,15 @@
 package Elements;
 
-public class Seating {
+import DataAccess.Implementations.SeatingDao;
+import Elements.Methods.DataAccessMethods;
+
+import java.sql.SQLException;
+
+public class Seating implements DataAccessMethods {
+    int id;
+    String state; //FREE, TAKEN, RESERVED
+    Seat seat;
+    Show show;
 
     public int getId() {
         return id;
@@ -34,9 +43,10 @@ public class Seating {
         this.show = show;
     }
 
-    private int id;
-    private String state; //FREE, TAKEN, RESERVED
-    private Seat seat;
-    private Show show;
-
+    @Override
+    public Seating save() throws SQLException{
+        SeatingDao seatingDao = new SeatingDao();
+        this.id = seatingDao.insertSeating(this);
+        return this;
+    }
 }

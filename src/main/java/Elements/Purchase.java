@@ -1,9 +1,16 @@
 package Elements;
 
-import java.math.BigDecimal;
-import java.util.List;
+import DataAccess.Implementations.PurchaseDao;
+import Elements.Methods.DataAccessMethods;
 
-public class Purchase {
+import java.math.BigDecimal;
+import java.sql.SQLException;
+
+public class Purchase implements DataAccessMethods {
+
+    int id;
+    Person client;
+    BigDecimal total;
 
     public int getId() {
         return id;
@@ -29,8 +36,10 @@ public class Purchase {
         this.total = total;
     }
 
-    private int id;
-    private Person client;
-    private BigDecimal total;
-
+    @Override
+    public Purchase save() throws SQLException {
+        PurchaseDao purchaseDao = new PurchaseDao();
+        this.id = purchaseDao.insertPurchase(this);
+        return this;
+    }
 }

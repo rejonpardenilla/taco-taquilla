@@ -1,6 +1,18 @@
 package Elements;
 
-public class Person {
+import DataAccess.Implementations.PersonDao;
+import Elements.Methods.DataAccessMethods;
+
+import java.sql.SQLException;
+
+public class Person implements DataAccessMethods {
+    private int id;
+    private String name;
+    private String lastName;
+    private String phone;
+    private String phoneAlt;
+    private String email;
+    private String type;
 
     public int getId() {
         return id;
@@ -58,12 +70,10 @@ public class Person {
         this.type = type;
     }
 
-    private int id;
-    private String name;
-    private String lastName;
-    private String phone;
-    private String phoneAlt;
-    private String email;
-    private String type;
-
+    @Override
+    public Person save() throws SQLException {
+        PersonDao personDao = new PersonDao();
+        this.id = personDao.insertPerson(this);
+        return this;
+    }
 }
