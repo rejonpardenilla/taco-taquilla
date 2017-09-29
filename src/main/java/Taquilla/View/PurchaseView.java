@@ -2,6 +2,8 @@ package Taquilla.View;
 
 import DataAccess.Implementations.ShowDao;
 import Elements.Show;
+import Taquilla.Model.PurchaseModel;
+import Taquilla.View.Helpers.PanelFactory;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -9,41 +11,75 @@ import java.util.ArrayList;
 import javax.swing.*;
 
 public class PurchaseView extends JPanel implements ActionListener {
-    JLabel purchaseMenu;
+    JPanel menu;
 
-    ShowDao showDao;
+    PanelFactory panelFactory;
+
+    PurchaseModel purchaseModel;
+
+    TextField seatRowField, seatNumberField, clientNameField;
+    JComboBox<Show> shows;
+
+    void initFields(){
+        seatRowField = new TextField();
+        seatNumberField = new TextField();
+        clientNameField = new TextField();
+        panelFactory = new PanelFactory();
+
+        purchaseModel = new PurchaseModel();
+
+        seatRowField.setColumns(15);
+        seatNumberField.setColumns(15);
+        clientNameField.setColumns(15);
+    }
+
+    public void populateComboBox(){
+        Show[] showArray = (Show[]) purchaseModel.loadShows().toArray(new Show[0]);
+        shows = new JComboBox<Show>(showArray);
+        shows.setSelectedIndex(0);
+        shows.addActionListener(this);
+    }
+
+    public void generateLayout(){
+        add(shows, BorderLayout.PAGE_START);
+        add(menu, BorderLayout.CENTER);
+        setBorder(BorderFactory.createEmptyBorder(20,20,20,20));
+    }
+
+    private void createMenu(){
+        JPanel row, number, client;
+        row = panelFactory.labeledField("Row", seatRowField);
+        number = panelFactory.labeledField("Number", seatNumberField);
+        client = panelFactory.labeledField("Client name", clientNameField);
+
+        menu = new JPanel(new BorderLayout());
+
+        menu.add(row, BorderLayout.PAGE_START);
+        menu.add(number, BorderLayout.CENTER);
+        menu.add(client, BorderLayout.PAGE_END);
+        menu.setBorder(BorderFactory.createEmptyBorder(50,0,0,0));
+
+//        menu.setPreferredSize(new Dimension(177, 122+10));
+    }
 
     public PurchaseView() {
         super(new BorderLayout());
-        ArrayList<Show> shows = new ArrayList<>();
-        showDao = new ShowDao();
-        shows = (ArrayList<Show>) showDao.findAll();
 
-        JComboBox showList = new JComboBox(shows.toArray());
-        showList.setSelectedIndex(0);
-        showList.addActionListener(this);
+        initFields();
 
-        purchaseMenu = new JLabel();
-        purchaseMenu.setHorizontalAlignment(JLabel.CENTER);
-        updateLabel(shows.get(0).toString());
-        purchaseMenu.setBorder(BorderFactory.createEmptyBorder(10,0,0,0));
+        populateComboBox();
 
-        purchaseMenu.setPreferredSize(new Dimension(177, 122+10));
+        createMenu();
 
-        add(showList, BorderLayout.PAGE_START);
-        add(purchaseMenu, BorderLayout.PAGE_END);
-        setBorder(BorderFactory.createEmptyBorder(20,20,20,20));
+        generateLayout();
     }
 
     public void actionPerformed(ActionEvent e) {
         JComboBox cb = (JComboBox)e.getSource();
-        updateLabel(cb.getSelectedItem().toString());
-        purchaseMenu.setText(cb.getSelectedItem().toString());
+        seatRowField.setText("action");
+        seatNumberField.setText("performed");
     }
 
-    protected void updateLabel(String name) {
-        purchaseMenu.setText(name);
-    }
 
     /**
      * Create the GUI and show it.  For thread safety,

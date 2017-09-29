@@ -3,6 +3,7 @@ package DataAccess.Implementations;
 import DataAccess.ConnectionFactory;
 import DataAccess.Interfaces.SeatingDaoInterface;
 import Elements.Seating;
+import Elements.Show;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -58,6 +59,29 @@ public class SeatingDao implements SeatingDaoInterface{
 
             if (resultSet.next())
                 return extractSeatingFromResultSet(resultSet);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public List<Seating> findByShow(Show show) {
+        Connection connection = ConnectionFactory.getConnection();
+        Statement statement = null;
+
+        try {
+            statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM seating WHERE show=" + show.getId());
+
+            ArrayList<Seating> seatings = new ArrayList<>();
+
+            while (resultSet.next()) {
+                Seating seating =  extractSeatingFromResultSet(resultSet);
+                seatings.add(seating);
+            }
+            return seatings;
 
         } catch (SQLException e) {
             e.printStackTrace();
