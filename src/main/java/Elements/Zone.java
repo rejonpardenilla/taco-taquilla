@@ -1,6 +1,6 @@
 package Elements;
 
-import Elements.Methods.SerializedObject;
+import Elements.Base.SerializedObject;
 
 public class Zone extends SerializedObject {
     private int discountPercent;

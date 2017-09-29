@@ -1,6 +1,6 @@
 package Elements;
 
-import Elements.Methods.SerializedObject;
+import Elements.Base.SerializedObject;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;

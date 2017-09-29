@@ -1,8 +1,8 @@
 package Elements;
 
 import DataAccess.Implementations.PersonDao;
-import Elements.Methods.DataAccessMethods;
-import Elements.Methods.SerializedObject;
+import Elements.Base.DataAccessMethods;
+import Elements.Base.SerializedObject;
 
 import java.sql.SQLException;
 

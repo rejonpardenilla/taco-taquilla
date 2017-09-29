@@ -1,8 +1,8 @@
 package Elements;
 
 import DataAccess.Implementations.TicketDao;
-import Elements.Methods.DataAccessMethods;
-import Elements.Methods.SerializedObject;
+import Elements.Base.DataAccessMethods;
+import Elements.Base.SerializedObject;
 
 import java.math.BigDecimal;
 import java.sql.SQLException;

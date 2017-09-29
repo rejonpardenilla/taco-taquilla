@@ -1,4 +1,4 @@
-package Elements.Methods;
+package Elements.Base;
 
 public abstract class SerializedObject {
     protected int id;
