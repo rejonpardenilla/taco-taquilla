@@ -1,22 +1,15 @@
 package Elements;
 
+import Elements.Methods.SerializedObject;
+
 import java.util.List;
 
-public class Play {
-    private int id;
+public class Play extends SerializedObject{
     private String name;
     private Person responsible;
     private String description;
     private List<Person> actors;
     private boolean cancelled;
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;
@@ -58,4 +51,8 @@ public class Play {
         this.cancelled = cancelled;
     }
 
+    @Override
+    public String toString() {
+        return name;
+    }
 }

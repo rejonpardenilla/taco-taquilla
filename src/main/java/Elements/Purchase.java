@@ -2,23 +2,16 @@ package Elements;
 
 import DataAccess.Implementations.PurchaseDao;
 import Elements.Methods.DataAccessMethods;
+import Elements.Methods.SerializedObject;
 
 import java.math.BigDecimal;
 import java.sql.SQLException;
 
-public class Purchase implements DataAccessMethods {
+public class Purchase extends SerializedObject implements DataAccessMethods {
 
-    int id;
     Person client;
     BigDecimal total;
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public Person getClient() {
         return client;

@@ -1,24 +1,17 @@
 package Elements;
 
+import Elements.Methods.SerializedObject;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-public class Show {
-    int id;
+public class Show extends SerializedObject {
     LocalDate date;
     LocalTime time;
     Play play;
     BigDecimal price;
     boolean cancelled;
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public LocalDate getDate() {
         return date;

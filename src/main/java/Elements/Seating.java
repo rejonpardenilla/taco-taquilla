@@ -2,22 +2,14 @@ package Elements;
 
 import DataAccess.Implementations.SeatingDao;
 import Elements.Methods.DataAccessMethods;
+import Elements.Methods.SerializedObject;
 
 import java.sql.SQLException;
 
-public class Seating implements DataAccessMethods {
-    int id;
+public class Seating extends SerializedObject implements DataAccessMethods {
     String state; //FREE, TAKEN, RESERVED
     Seat seat;
     Show show;
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public String getState() {
         return state;

@@ -2,25 +2,17 @@ package Elements;
 
 import DataAccess.Implementations.PersonDao;
 import Elements.Methods.DataAccessMethods;
+import Elements.Methods.SerializedObject;
 
 import java.sql.SQLException;
 
-public class Person implements DataAccessMethods {
-    private int id;
+public class Person extends SerializedObject implements DataAccessMethods {
     private String name;
     private String lastName;
     private String phone;
     private String phoneAlt;
     private String email;
     private String type;
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;

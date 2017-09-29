@@ -1,18 +1,11 @@
 package Elements;
 
-public class Seat {
-    private int id;
+import Elements.Methods.SerializedObject;
+
+public class Seat extends SerializedObject{
     private String row;
     private int number;
     private Zone zone;
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public String getRow() {
         return row;
