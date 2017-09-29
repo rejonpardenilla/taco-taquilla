@@ -1,6 +1,10 @@
 package Elements;
 
 public class Seat {
+    private int id;
+    private String row;
+    private int number;
+    private Zone zone;
 
     public int getId() {
         return id;
@@ -33,10 +37,5 @@ public class Seat {
     public void setZone(Zone zone) {
         this.zone = zone;
     }
-
-    private int id;
-    private String row;
-    private int number;
-    private Zone zone;
 
 }
