@@ -12,9 +12,10 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ShowDao implements ShowDaoInterface {
+public class ShowDao extends BaseDao<Show> implements ShowDaoInterface {
 
-    private Show extractShowFromResultSet(ResultSet rs) throws SQLException {
+    @Override
+    public Show extractFromResultSet(ResultSet rs) throws SQLException {
 
         Show show = new Show();
         show.setId(rs.getInt("id"));
@@ -34,56 +35,6 @@ public class ShowDao implements ShowDaoInterface {
     }
 
     @Override
-    public List<Show> findAll() {
-
-        Connection connection = ConnectionFactory.getConnection();
-        Statement statement = null;
-
-        try {
-
-            statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery("SELECT * FROM show");
-
-            ArrayList<Show> shows = new ArrayList<Show>();
-
-            while(resultSet.next()){
-                Show show = extractShowFromResultSet(resultSet);
-                shows.add(show);
-            }
-
-            return shows;
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return null;
-
-    }
-
-    @Override
-    public Show findById(int id) {
-
-        Connection connection = ConnectionFactory.getConnection();
-        Statement statement = null;
-
-        try {
-
-            statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery("SELECT * FROM show WHERE id=" + id);
-
-            if (resultSet.next())
-                return extractShowFromResultSet(resultSet);
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return null;
-
-    }
-
-    @Override
     public List<Show> findByDate(LocalDate date){
 
         Connection connection = ConnectionFactory.getConnection();
@@ -97,7 +48,7 @@ public class ShowDao implements ShowDaoInterface {
             ArrayList<Show> shows = new ArrayList<>();
 
             while(resultSet.next()){
-                Show show = extractShowFromResultSet(resultSet);
+                Show show = extractFromResultSet(resultSet);
                 shows.add(show);
             }
 

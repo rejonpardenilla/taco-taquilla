@@ -1,25 +1,17 @@
 package Elements;
 
 import DataAccess.Implementations.TicketDao;
-import Elements.Methods.DataAccessMethods;
+import Elements.Base.DataAccessMethods;
+import Elements.Base.SerializedObject;
 
 import java.math.BigDecimal;
 import java.sql.SQLException;
 
-public class Ticket implements DataAccessMethods {
-    int id;
+public class Ticket extends SerializedObject implements DataAccessMethods {
     Seating seating;
     BigDecimal price; 
     boolean returned;
     Purchase purchase;
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public Seating getSeating() {
         return seating;

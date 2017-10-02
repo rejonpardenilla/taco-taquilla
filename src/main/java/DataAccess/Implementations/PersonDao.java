@@ -6,10 +6,11 @@ import Elements.Person;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.List;
 
-public class PersonDao implements PersonDaoInterface {
-    private Person extractPersonFromResultSet(ResultSet rs) throws SQLException {
+public class PersonDao extends BaseDao<Person> implements PersonDaoInterface {
+
+    @Override
+    public Person extractFromResultSet(ResultSet rs) throws SQLException {
         Person person = new Person();
         person.setId(rs.getInt("id"));
         person.setName(rs.getString("name"));
@@ -19,46 +20,6 @@ public class PersonDao implements PersonDaoInterface {
         person.setEmail(rs.getString("email"));
         person.setType(rs.getString("type"));
         return person;
-    }
-
-    @Override
-    public List<Person> findAll() {
-        Connection connection = ConnectionFactory.getConnection();
-        Statement statement = null;
-
-        try {
-            statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery("SELECT * FROM person");
-
-            ArrayList<Person> people = new ArrayList<Person>();
-            while(resultSet.next()){
-                Person person = extractPersonFromResultSet(resultSet);
-                people.add(person);
-            }
-
-            return people;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return null;
-    }
-
-    public Person findById(int id){
-        Connection connection = ConnectionFactory.getConnection();
-        Statement statement = null;
-
-        try {
-            statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery("SELECT * FROM person WHERE id=" + id);
-
-            if (resultSet.next())
-                return extractPersonFromResultSet(resultSet);
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 
     @Override
@@ -133,9 +94,15 @@ public class PersonDao implements PersonDaoInterface {
     public static void main(String[] args) {
         PersonDao personDao = new PersonDao();
         Person person = new Person();
-        person.setName("jhonny");
-        person.setLastName("rockets");
-        person.setType("actor");
+        person.setName("juanito");
+        person.setLastName("jones");
+        person.setType("todologo");
+
+        ArrayList<Person> people = new ArrayList<>(personDao.findAll());
+
+        person = personDao.findById(1);
+
+        System.out.println(person.getClass().getName());
         try {
             int id = personDao.insertPerson(person);
             person.setId(id);

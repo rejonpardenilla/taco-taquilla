@@ -1,14 +1,9 @@
 package Elements;
 
-public class Zone {
+import Elements.Base.SerializedObject;
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
+public class Zone extends SerializedObject {
+    private int discountPercent;
 
     public int getDiscountPercent() {
         return discountPercent;
@@ -17,8 +12,5 @@ public class Zone {
     public void setDiscountPercent(int discountPercent) {
         this.discountPercent = discountPercent;
     }
-
-    private int id;
-    private int discountPercent;
 
 }
