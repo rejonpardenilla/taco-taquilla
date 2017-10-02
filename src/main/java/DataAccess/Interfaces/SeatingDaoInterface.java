@@ -6,9 +6,7 @@ import Elements.Show;
 import java.sql.SQLException;
 import java.util.List;
 
-public interface SeatingDaoInterface extends BaseDao{
-    @Override List<Seating> findAll();
-    @Override Seating findById(int id);
+public interface SeatingDaoInterface extends BaseDaoInterface<Seating> {
 
     List<Seating> findByShow(Show show);
 

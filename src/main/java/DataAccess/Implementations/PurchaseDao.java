@@ -7,58 +7,17 @@ import Elements.Purchase;
 
 import java.math.BigDecimal;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 
-public class PurchaseDao implements PurchaseDaoInterface{
-    private Purchase extractPurchaseFromResultSet(ResultSet rs) throws SQLException{
+public class PurchaseDao extends BaseDao<Purchase> implements PurchaseDaoInterface{
+
+    @Override
+    public Purchase extractFromResultSet(ResultSet rs) throws SQLException{
         PersonDao personDao = new PersonDao();
         Purchase purchase = new Purchase();
         purchase.setId(rs.getInt("id"));
         purchase.setClient(personDao.findById(rs.getInt("client")));
         purchase.setTotal(rs.getBigDecimal("total"));
         return purchase;
-    }
-
-    @Override
-    public List<Purchase> findAll() {
-        Connection connection = ConnectionFactory.getConnection();
-        Statement statement = null;
-
-        try{
-            statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery("SELECT * FROM purchase");
-
-            ArrayList<Purchase> purchases = new ArrayList<>();
-            while(resultSet.next()){
-                Purchase purchase = extractPurchaseFromResultSet(resultSet);
-                purchases.add(purchase);
-            }
-            return purchases;
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return null;
-    }
-
-    @Override
-    public Purchase findById(int id) {
-        Connection connection = ConnectionFactory.getConnection();
-        Statement statement = null;
-
-        try{
-            statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery("SELECT * FROM purchase WHERE id="+id);
-
-            if (resultSet.next()){
-                return extractPurchaseFromResultSet(resultSet);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 
     @Override
@@ -85,6 +44,12 @@ public class PurchaseDao implements PurchaseDaoInterface{
             }
         }
     }
+
+    @Override
+    public int updatePurchase(Purchase purchase) {
+        return 0;
+    }
+
     public static void main(String[] args) {
         PurchaseDao purchaseDao = new PurchaseDao();
         PersonDao personDao = new PersonDao();
@@ -99,10 +64,5 @@ public class PurchaseDao implements PurchaseDaoInterface{
         } catch (SQLException e) {
             e.printStackTrace();
         }
-    }
-
-    @Override
-    public int updatePurchase(Purchase purchase) {
-        return 0;
     }
 }

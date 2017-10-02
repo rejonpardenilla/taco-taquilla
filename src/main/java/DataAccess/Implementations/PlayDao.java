@@ -12,9 +12,10 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PlayDao implements PlayDaoInterface {
+public class PlayDao extends BaseDao<Play> implements PlayDaoInterface {
 
-    private Play extractPlayFromResultSet(ResultSet rs) throws SQLException {
+    @Override
+    public Play extractFromResultSet(ResultSet rs) throws SQLException {
 
         Play play = new Play();
         play.setId(rs.getInt("id"));
@@ -62,53 +63,4 @@ public class PlayDao implements PlayDaoInterface {
 
     }
 
-    @Override
-    public List<Play> findAll() {
-
-        Connection connection = ConnectionFactory.getConnection();
-        Statement statement = null;
-
-        try {
-
-            statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery("SELECT * FROM play");
-
-            ArrayList<Play> plays = new ArrayList<Play>();
-
-            while(resultSet.next()){
-                Play play = extractPlayFromResultSet(resultSet);
-                plays.add(play);
-            }
-
-            return plays;
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return null;
-
-    }
-
-    @Override
-    public Play findById(int id) {
-
-        Connection connection = ConnectionFactory.getConnection();
-        Statement statement = null;
-
-        try {
-
-            statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery("SELECT * FROM play WHERE id=" + id);
-
-            if (resultSet.next())
-                return extractPlayFromResultSet(resultSet);
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return null;
-
-    }
 }
