@@ -74,6 +74,7 @@ public class Setup {
             String purchase =
                     "CREATE TABLE public.purchase(" +
                     "id SERIAL PRIMARY KEY NOT NULL," +
+                    "date TIMESTAMP WITH TIME ZONE NULL," +
                     "client INT REFERENCES person (id) ON DELETE CASCADE ON UPDATE CASCADE," +
                     "total DECIMAL(12,2))";
             queries.add(purchase);
