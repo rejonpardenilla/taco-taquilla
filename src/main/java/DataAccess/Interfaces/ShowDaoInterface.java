@@ -5,8 +5,8 @@ import Elements.Show;
 import java.time.LocalDate;
 import java.util.List;
 
-public interface ShowDaoInterface {
-    List<Show> findAll();
-    Show findById(int id);
+public interface ShowDaoInterface extends BaseDao{
+    @Override List<Show> findAll();
+    @Override Show findById(int id);
     List<Show> findByDate(LocalDate date);
 }

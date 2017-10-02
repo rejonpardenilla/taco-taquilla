@@ -4,7 +4,7 @@ import Elements.Zone;
 
 import java.util.List;
 
-public interface ZoneDaoInterface {
-    List<Zone> findAll();
-    Zone findById(int id);
+public interface ZoneDaoInterface extends BaseDao {
+    @Override List<Zone> findAll();
+    @Override Zone findById(int id);
 }

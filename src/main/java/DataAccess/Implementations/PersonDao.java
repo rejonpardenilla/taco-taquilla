@@ -2,6 +2,7 @@ package DataAccess.Implementations;
 
 import DataAccess.ConnectionFactory;
 import DataAccess.Interfaces.PersonDaoInterface;
+import Elements.Base.SerializedObject;
 import Elements.Person;
 
 import java.sql.*;
@@ -44,6 +45,7 @@ public class PersonDao implements PersonDaoInterface {
         return null;
     }
 
+    @Override
     public Person findById(int id){
         Connection connection = ConnectionFactory.getConnection();
         Statement statement = null;
@@ -133,9 +135,11 @@ public class PersonDao implements PersonDaoInterface {
     public static void main(String[] args) {
         PersonDao personDao = new PersonDao();
         Person person = new Person();
-        person.setName("jhonny");
-        person.setLastName("rockets");
-        person.setType("actor");
+        person.setName("juanito");
+        person.setLastName("jones");
+        person.setType("todologo");
+
+        System.out.println(person.getClass().getName());
         try {
             int id = personDao.insertPerson(person);
             person.setId(id);
