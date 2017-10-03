@@ -11,6 +11,13 @@ public class Play extends SerializedObject{
     private List<Person> actors;
     private boolean cancelled;
 
+    public Play() {
+    }
+
+    public Play(String name) {
+        this.name = name;
+    }
+
     public String getName() {
         return name;
     }

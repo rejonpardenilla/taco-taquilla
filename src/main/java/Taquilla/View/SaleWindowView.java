@@ -5,7 +5,6 @@ import Taquilla.Controller.SaleWindowController;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
-import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableModel;
 import java.awt.*;
@@ -13,24 +12,46 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class SaleWindowView {
-    JFrame window;
-    JPanel gui, seats;
-//    JScrollPane showList;
+    //Windows and panels
+    private JFrame window;
+    private JPanel gui, seats;
 
-    JTable Table;
+    //Key components
+    private JTable showTable;
+    private JComboBox<Play> playsComboBox;
 
-    JComboBox<Play> Plays;
+    //Events
+    private ActionListener onPlaySelect, onSeatSelect, onClearButton;
+    private ListSelectionListener onShowSelect;
 
-    ActionListener onPlaySelect, onSeatSelect, onClearButton;
-    ListSelectionListener onShowSelect;
+    //Controller
+    private SaleWindowController saleWindowController;
 
-    SaleWindowController saleWindowController;
+    private SaleWindowView(){
+        init();
+    }
+
+    private void init(){
+        saleWindowController = new SaleWindowController();
+        window = new JFrame();
+        window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        window.setTitle("Taco Taquilla (TM)");
+
+        createEvents();
+        gui = generateGUI();
+        window.setContentPane(gui);
+
+        window.pack();
+        window.setLocationRelativeTo(null);
+        window.setMinimumSize(window.getSize());
+        window.setVisible(true);
+    }
 
     private void createEvents(){
-        onPlaySelect = event -> fillShowList((Play)Plays.getSelectedItem());
+        onPlaySelect = event -> fillShowList((Play) playsComboBox.getSelectedItem());
 
         onShowSelect = event -> { //EVENTO AL HACER CLIC EN UNA FILA DE LA TABLA
-            int show_id = Integer.valueOf((String)Table.getValueAt(Table.getSelectedRow(),0));
+            int show_id = Integer.valueOf((String) showTable.getValueAt(showTable.getSelectedRow(),0));
             //TODO: LLAMAR LA PANTALLA DE ASIENTOS DEL SHOW INDICADO
         };
 
@@ -61,6 +82,44 @@ public class SaleWindowView {
         return gui;
     }
 
+    private JPanel generatePlaySelector(){
+        JPanel playSelector = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        playSelector.setBorder(new TitledBorder("Select Play to display shows"));
+
+        //combobox
+        Play[] plays = saleWindowController.getPlays().toArray(new Play[0]);
+        playsComboBox = new JComboBox<Play>(plays);
+
+        //Set selected to first show, or show a message if none are found
+        if (plays.length < 1) playsComboBox.addItem(new Play("No plays found. Check db"));
+        playsComboBox.setSelectedIndex(0);
+
+        playsComboBox.addActionListener(onPlaySelect);
+        playSelector.add(playsComboBox);
+
+        return playSelector;
+    }
+
+    private JScrollPane generateShowList() {
+        showTable = new JTable();
+        fillShowList(new Play());
+        showTable.setAutoCreateRowSorter(true);
+        JScrollPane showList = new JScrollPane(showTable);
+        Dimension tableDimension = showList.getPreferredSize();
+        showList.setPreferredSize(
+                new Dimension(tableDimension.width, tableDimension.height/3));
+
+        showTable.getSelectionModel().addListSelectionListener(onShowSelect);
+
+        return showList;
+    }
+    private void fillShowList(Play play){
+
+        TableModel tableModel = saleWindowController.getShows(play);
+        showTable.setModel(tableModel);
+        showTable.getColumnModel().getColumn(0).setMaxWidth(10);
+    }
+
     private JPanel generateSeatList() {
         JPanel seatList = new JPanel(new BorderLayout(4,4));
         seatList.setBorder(new TitledBorder("Selected Seats"));
@@ -76,65 +135,8 @@ public class SaleWindowView {
         return seatList;
     }
 
-    private void fillShowList(Play play){
-        TableModel tableModel = saleWindowController.getShows(play);
-        Table.setModel(tableModel);
-        Table.getColumnModel().getColumn(0).setMaxWidth(10);
-    }
-
-    private JScrollPane generateShowList() {
-        Table = new JTable();
-        fillShowList(new Play());
-        Table.setAutoCreateRowSorter(true);
-        JScrollPane showList = new JScrollPane(Table);
-        Dimension tableDimension = showList.getPreferredSize();
-        showList.setPreferredSize(
-                new Dimension(tableDimension.width, tableDimension.height/3));
-
-        Table.getSelectionModel().addListSelectionListener(onShowSelect);
-
-        return showList;
-    }
-
-    private JPanel generatePlaySelector(){
-        JPanel playSelector = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        playSelector.setBorder(new TitledBorder("Select Play to display shows"));
-
-        //combobox
-        Play[] plays = saleWindowController.getPlays().toArray(new Play[0]);
-
-
-        Plays = new JComboBox<Play>(plays);
-        Plays.setSelectedIndex(0);
-        Plays.addActionListener(onPlaySelect);
-        playSelector.add(Plays);
-
-        return playSelector;
-    }
-
-    private void init(){
-        saleWindowController = new SaleWindowController();
-        window = new JFrame();
-        window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        window.setTitle("Taco Taquilla (TM)");
-
-        createEvents();
-        gui = generateGUI();
-        window.setContentPane(gui);
-
-
-
-        window.pack();
-        window.setLocationRelativeTo(null);
-        window.setMinimumSize(window.getSize());
-        window.setVisible(true);
-    }
-
-    public SaleWindowView(){
-        init();
-    }
-
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new SaleWindowView());
+        SwingUtilities.invokeLater(SaleWindowView::new);
     }
+
 }

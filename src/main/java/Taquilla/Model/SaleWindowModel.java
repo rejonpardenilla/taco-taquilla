@@ -12,9 +12,9 @@ import java.util.List;
 
 public class SaleWindowModel {
 
-    PlayDao playDao;
-    ShowDao showDao;
-    SeatDao seatDao;
+    private PlayDao playDao;
+    private ShowDao showDao;
+    private SeatDao seatDao;
 
     public SaleWindowModel() {
         playDao = new PlayDao();
