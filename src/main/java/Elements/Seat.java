@@ -1,6 +1,8 @@
 package Elements;
 
+import DataAccess.Implementations.SeatDao;
 import Elements.Base.SerializedObject;
+import java.sql.SQLException;
 
 public class Seat extends SerializedObject{
     private String row;
@@ -29,6 +31,12 @@ public class Seat extends SerializedObject{
 
     public void setZone(Zone zone) {
         this.zone = zone;
+    }
+
+    public Seat save() throws SQLException {
+        SeatDao seatDao = new SeatDao();
+        this.id = seatDao.insertSeat(this);
+        return this;
     }
 
 }

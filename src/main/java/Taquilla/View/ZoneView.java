@@ -1,12 +1,16 @@
 package Taquilla.View;
 
+import Elements.Seat;
+import Elements.Zone;
+
 import java.awt.*;
+import java.sql.SQLException;
 import javax.swing.*;
 
 public class ZoneView {
     private static final int ROWS = 8;
     private static final int COLUMNS = 20;
-    private static final char[] ROW_LETTERS = {'H', 'G', 'F', 'E', 'D', 'C', 'B', 'A'};
+    private static final String[] ROW_LETTERS = {"H", "G", "F", "E", "D", "C", "B", "A"};
     private static final String WINDOW_DISPLAY_NAME = "Choose seats";
     private static final Dimension WINDOW_SIZE = new Dimension(1200, 800);
     private static final int WINDOW_LOCATION_X = 150;
@@ -18,7 +22,6 @@ public class ZoneView {
         for (int row = 1; row <= ROWS; row++) {
             for (int column = 1; column <= COLUMNS; column++) {
                 final JToggleButton button = new JToggleButton(ROW_LETTERS[row - 1] + "" + column);
-                
                 performButtonAction(panel, button);
             }
         }
@@ -32,12 +35,8 @@ public class ZoneView {
     }
 
     public static void main(String[] args) {
-        EventQueue.invokeLater(new Runnable() {
-
-            @Override
-            public void run() {
-                ZoneView theaterJToggle = new ZoneView();
-            }
+        EventQueue.invokeLater(() -> {
+            ZoneView theaterJToggle = new ZoneView();
         });
     }
 
