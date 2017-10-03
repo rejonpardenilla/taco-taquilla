@@ -2,6 +2,7 @@ package DataAccess.Implementations;
 
 import DataAccess.ConnectionFactory;
 import DataAccess.Interfaces.ShowDaoInterface;
+import Elements.Play;
 import Elements.Show;
 
 import java.sql.Connection;
@@ -43,7 +44,7 @@ public class ShowDao extends BaseDao<Show> implements ShowDaoInterface {
         try{
 
             statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery("SELECT * FROM show WHERE date=" + date+ " ORDER BY 'play'");
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM show WHERE date = '" + date+ "' ORDER BY play");
 
             ArrayList<Show> shows = new ArrayList<>();
 
@@ -60,5 +61,30 @@ public class ShowDao extends BaseDao<Show> implements ShowDaoInterface {
 
         return null;
 
+    }
+
+    @Override
+    public List<Show> findByPlay(Play play) {
+        Connection connection = ConnectionFactory.getConnection();
+        Statement statement = null;
+        try{
+
+            statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM show WHERE play=" + play.getId());
+
+            ArrayList<Show> shows = new ArrayList<>();
+
+            while(resultSet.next()){
+                Show show = extractFromResultSet(resultSet);
+                shows.add(show);
+            }
+
+            return shows;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 }

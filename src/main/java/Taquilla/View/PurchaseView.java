@@ -1,13 +1,11 @@
 package Taquilla.View;
 
-import DataAccess.Implementations.ShowDao;
 import Elements.Show;
 import Taquilla.Model.PurchaseModel;
 import Taquilla.View.Helpers.PanelFactory;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.util.ArrayList;
 import javax.swing.*;
 
 public class PurchaseView extends JPanel implements ActionListener {
@@ -28,12 +26,12 @@ public class PurchaseView extends JPanel implements ActionListener {
 
         purchaseModel = new PurchaseModel();
 
-        seatRowField.setColumns(15);
-        seatNumberField.setColumns(15);
-        clientNameField.setColumns(15);
+//        seatRowField.setColumns(15);
+//        seatNumberField.setColumns(15);
+//        clientNameField.setColumns(15);
     }
 
-    public void populateComboBox(){
+    public void createComboBox(){
         Show[] showArray = (Show[]) purchaseModel.loadShows().toArray(new Show[0]);
         shows = new JComboBox<Show>(showArray);
         shows.setSelectedIndex(0);
@@ -52,12 +50,14 @@ public class PurchaseView extends JPanel implements ActionListener {
         number = panelFactory.labeledField("Number", seatNumberField);
         client = panelFactory.labeledField("Client name", clientNameField);
 
-        menu = new JPanel(new BorderLayout());
+        menu = new JPanel();
+        menu.setLayout(new BoxLayout(menu, BoxLayout.PAGE_AXIS));
 
-        menu.add(row, BorderLayout.PAGE_START);
-        menu.add(number, BorderLayout.CENTER);
-        menu.add(client, BorderLayout.PAGE_END);
-        menu.setBorder(BorderFactory.createEmptyBorder(50,0,0,0));
+
+        menu.add(row);
+        menu.add(number);
+        menu.add(client);
+        menu.setBorder(BorderFactory.createEmptyBorder(20,0,0,0));
 
 //        menu.setPreferredSize(new Dimension(177, 122+10));
     }
@@ -67,11 +67,17 @@ public class PurchaseView extends JPanel implements ActionListener {
 
         initFields();
 
-        populateComboBox();
+        createComboBox();
 
         createMenu();
 
+        createPurchaseButton();
+
         generateLayout();
+    }
+
+    private void createPurchaseButton() {
+
     }
 
     public void actionPerformed(ActionEvent e) {
