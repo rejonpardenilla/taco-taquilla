@@ -1,16 +1,25 @@
 package Taquilla.View;
 
+import DataAccess.Implementations.SeatDao;
+import DataAccess.Implementations.ZoneDao;
 import Elements.Seat;
 import Elements.Zone;
 
 import java.awt.*;
-import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import javax.swing.*;
 
 public class ZoneView {
-    private static final int ROWS = 8;
-    private static final int COLUMNS = 20;
-    private static final String[] ROW_LETTERS = {"H", "G", "F", "E", "D", "C", "B", "A"};
+    ZoneDao zoneDao = new ZoneDao();
+    SeatDao seatDao = new SeatDao();
+    Zone zone = zoneDao.findById(1);
+    List<Seat> seats = seatDao.findAll();
+
+    private ArrayList<String> rowLetters = getRowLetters(seats);
+    private int rows = rowLetters.size();
+    private int columns = countColumns(seats);
     private static final String WINDOW_DISPLAY_NAME = "Choose seats";
     private static final Dimension WINDOW_SIZE = new Dimension(1200, 800);
     private static final int WINDOW_LOCATION_X = 150;
@@ -18,10 +27,10 @@ public class ZoneView {
     private Icon res = (UIManager.getIcon("OptionPane.errorIcon"));
 
     public ZoneView() {
-        JPanel panel = new JPanel(new GridLayout(ROWS, COLUMNS));
-        for (int row = 1; row <= ROWS; row++) {
-            for (int column = 1; column <= COLUMNS; column++) {
-                final JToggleButton button = new JToggleButton(ROW_LETTERS[row - 1] + "" + column);
+        JPanel panel = new JPanel(new GridLayout(rows, columns));
+        for (int row = 1; row <= rows; row++) {
+            for (int column = 1; column <= columns; column++) {
+                final JToggleButton button = new JToggleButton(rowLetters.get(row - 1) + "" + column);
                 performButtonAction(panel, button);
             }
         }
@@ -51,5 +60,26 @@ public class ZoneView {
             }
         });
         panel.add(button);
+    }
+
+    private static ArrayList<String> getRowLetters(List<Seat> seats) {
+        ArrayList<String> rowLetters = new ArrayList<>();
+        seats.forEach(seat -> {
+            if (rowLetters.isEmpty()) {
+                rowLetters.add(seat.getRow());
+            } else {
+                if (!rowLetters.get(rowLetters.size() - 1).equals(seat.getRow())) {
+                    rowLetters.add(seat.getRow());
+                }
+            }
+        });
+        return rowLetters;
+    }
+
+    private static int countColumns(List<Seat> seats) {
+        ArrayList<Integer> columns = new ArrayList<>();
+        seats.forEach(seat -> columns.add(seat.getNumber()));
+        Collections.sort(columns);
+        return columns.get(columns.size() - 1);
     }
 }

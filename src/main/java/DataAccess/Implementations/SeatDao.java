@@ -39,7 +39,7 @@ public class SeatDao extends BaseDao<Seat> implements SeatDaoInterface {
             throw new SQLException("No rows affected");
         }
 
-        try (ResultSet generatedKeys = statement.getGeneratedKeys()){
+        try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
             if (generatedKeys.next()) {
                 return generatedKeys.getInt("id");
             } else {
