@@ -8,10 +8,10 @@ import java.math.BigDecimal;
 import java.sql.SQLException;
 
 public class Ticket extends SerializedObject implements DataAccessMethods {
-    Seating seating;
-    BigDecimal price; 
-    boolean returned;
-    Purchase purchase;
+    private Seating seating;
+    private BigDecimal price;
+    private boolean returned;
+    private Purchase purchase;
 
     public Seating getSeating() {
         return seating;

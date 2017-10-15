@@ -8,9 +8,8 @@ import java.math.BigDecimal;
 import java.sql.SQLException;
 
 public class Purchase extends SerializedObject implements DataAccessMethods {
-
-    Person client;
-    BigDecimal total;
+    private Person client;
+    private BigDecimal total;
 
 
     public Person getClient() {

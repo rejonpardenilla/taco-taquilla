@@ -8,9 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PurchaseModel {
-    Person client;
-    Purchase purchase;
-    ArrayList<Ticket> tickets;
+    private Person client;
+    private Purchase purchase;
+    private ArrayList<Ticket> tickets;
 
     private void processPurchase(Show show, List<Seat> seats, Person client){
 
