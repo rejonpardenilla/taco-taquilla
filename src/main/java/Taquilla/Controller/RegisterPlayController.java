@@ -4,7 +4,7 @@ import Elements.Person;
 import Elements.Play;
 import Elements.Show;
 import Taquilla.Model.RegisterPlayModel;
-import Taquilla.Views.RegisterPlay;
+import Taquilla.Views.RegisterPlayView;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.LocalDate;
@@ -13,12 +13,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RegisterPlayController implements ActionListener {
-    private final RegisterPlay view;
+    private final RegisterPlayView view;
     private final RegisterPlayModel model;
     private final DateTimeFormatter dateFormat;
     private final DateTimeFormatter timeFormat;
 
-    public RegisterPlayController(RegisterPlay view) {
+    public RegisterPlayController(RegisterPlayView view) {
         this.view = view;
         this.view.getDisponibilityButton().addActionListener(this);
         this.view.getSaveButton().addActionListener(this);
