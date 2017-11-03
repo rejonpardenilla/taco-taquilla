@@ -24,13 +24,14 @@ public class ZoneView {
     private static final Dimension WINDOW_SIZE = new Dimension(1200, 800);
     private static final int WINDOW_LOCATION_X = 150;
     private static final int WINDOW_LOCATION_Y = 50;
-    private Icon res = (UIManager.getIcon("OptionPane.errorIcon"));
+    private Icon seatOccupiedIcon = (UIManager.getIcon("OptionPane.errorIcon"));
 
     public ZoneView() {
         JPanel panel = new JPanel(new GridLayout(rows, columns));
         for (int row = 1; row <= rows; row++) {
             for (int column = 1; column <= columns; column++) {
                 final JToggleButton button = new JToggleButton(rowLetters.get(row - 1) + "" + column);
+                button.setFont(new Font("Source Sans Pro", Font.BOLD, 24));
                 performButtonAction(panel, button);
             }
         }
@@ -50,13 +51,16 @@ public class ZoneView {
     }
 
     private void performButtonAction(JPanel panel, JToggleButton button) {
+        String buttonText = button.getText();
         button.addActionListener(actionEvent -> {
             AbstractButton abstractButton = (AbstractButton) actionEvent.getSource();
             boolean selected = abstractButton.getModel().isSelected();
             if (selected) {
-                button.setIcon(res);
+                button.setIcon(seatOccupiedIcon);
+                button.setText(null);
             } else {
                 button.setIcon(null);
+                button.setText(buttonText);
             }
         });
         panel.add(button);

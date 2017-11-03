@@ -1,4 +1,4 @@
-package Taquilla.Controller;
+package Taquilla.Model;
 
 import DataAccess.Implementations.ShowDao;
 import Elements.Show;
@@ -6,7 +6,7 @@ import Elements.Show;
 import java.time.LocalDate;
 import java.util.List;
 
-public class ShowListController {
+public class ShowListModel {
 
     private List<Show> getDayShows(){
         return getDayShows(0);

@@ -1,22 +1,41 @@
 package Taquilla.View;
 
 import Elements.Show;
-import Taquilla.Model.PurchaseModel;
+import Taquilla.Controller.PurchaseController;
 import Taquilla.View.Helpers.PanelFactory;
 
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
+@Deprecated //UNFINISHED
 public class PurchaseView extends JPanel implements ActionListener {
-    JPanel menu;
+    //Panel Factory and panels
+    private PanelFactory panelFactory;
+    private JPanel menu;
 
-    PanelFactory panelFactory;
+    //Components
+    private TextField seatRowField, seatNumberField, clientNameField;
+    private JComboBox<Show> shows;
 
-    PurchaseModel purchaseModel;
+    //Controller
+    private PurchaseController purchaseController;
 
-    TextField seatRowField, seatNumberField, clientNameField;
-    JComboBox<Show> shows;
+    public PurchaseView() {
+        super(new BorderLayout());
+
+        initFields();
+        createComboBox();
+        createMenu();
+        createPurchaseButton();
+        generateLayout();
+    }
+
+    public void actionPerformed(ActionEvent e) {
+        JComboBox cb = (JComboBox)e.getSource();
+        seatRowField.setText("action");
+        seatNumberField.setText("performed");
+    }
 
     void initFields(){
         seatRowField = new TextField();
@@ -24,24 +43,14 @@ public class PurchaseView extends JPanel implements ActionListener {
         clientNameField = new TextField();
         panelFactory = new PanelFactory();
 
-        purchaseModel = new PurchaseModel();
-
-//        seatRowField.setColumns(15);
-//        seatNumberField.setColumns(15);
-//        clientNameField.setColumns(15);
+        purchaseController = new PurchaseController();
     }
 
     public void createComboBox(){
-        Show[] showArray = (Show[]) purchaseModel.loadShows().toArray(new Show[0]);
+        Show[] showArray = (Show[]) purchaseController.loadShows().toArray(new Show[0]);
         shows = new JComboBox<Show>(showArray);
         shows.setSelectedIndex(0);
         shows.addActionListener(this);
-    }
-
-    public void generateLayout(){
-        add(shows, BorderLayout.PAGE_START);
-        add(menu, BorderLayout.CENTER);
-        setBorder(BorderFactory.createEmptyBorder(20,20,20,20));
     }
 
     private void createMenu(){
@@ -53,7 +62,6 @@ public class PurchaseView extends JPanel implements ActionListener {
         menu = new JPanel();
         menu.setLayout(new BoxLayout(menu, BoxLayout.PAGE_AXIS));
 
-
         menu.add(row);
         menu.add(number);
         menu.add(client);
@@ -62,54 +70,33 @@ public class PurchaseView extends JPanel implements ActionListener {
 //        menu.setPreferredSize(new Dimension(177, 122+10));
     }
 
-    public PurchaseView() {
-        super(new BorderLayout());
-
-        initFields();
-
-        createComboBox();
-
-        createMenu();
-
-        createPurchaseButton();
-
-        generateLayout();
-    }
-
     private void createPurchaseButton() {
-
+        //TODO
     }
 
-    public void actionPerformed(ActionEvent e) {
-        JComboBox cb = (JComboBox)e.getSource();
-        seatRowField.setText("action");
-        seatNumberField.setText("performed");
+    public void generateLayout(){
+        add(shows, BorderLayout.PAGE_START);
+        add(menu, BorderLayout.CENTER);
+        setBorder(BorderFactory.createEmptyBorder(20,20,20,20));
     }
 
-
-    /**
-     * Create the GUI and show it.  For thread safety,
-     * this method should be invoked from the
-     * event-dispatching thread.
-     */
     private static void createAndShowGUI() {
         //Create and set up the window.
-        JFrame frame = new JFrame("PurchaseView");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        JFrame window = new JFrame("PurchaseView");
+        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         //Create and set up the content pane.
         JComponent newContentPane = new PurchaseView();
-        newContentPane.setOpaque(true); //content panes must be opaque
-        frame.setContentPane(newContentPane);
+        newContentPane.setOpaque(true);
+        window.setContentPane(newContentPane);
 
         //Display the window.
-        frame.pack();
-        frame.setVisible(true);
+        window.pack();
+        window.setVisible(true);
     }
 
     public static void main(String[] args) {
         //Schedule a job for the event-dispatching thread:
-        //creating and showing this application's GUI.
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 createAndShowGUI();

@@ -4,7 +4,7 @@ import DataAccess.Implementations.SeatDao;
 import Elements.Base.SerializedObject;
 import java.sql.SQLException;
 
-public class Seat extends SerializedObject{
+public class Seat extends SerializedObject {
     private String row;
     private int number;
     private Zone zone;
