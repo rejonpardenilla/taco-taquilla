@@ -4,6 +4,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
 
 public class EditPlayView extends javax.swing.JFrame {
     private javax.swing.JButton cancelButton;
@@ -24,6 +25,7 @@ public class EditPlayView extends javax.swing.JFrame {
     private javax.swing.JButton rescheduleShowButton;
     private javax.swing.JButton saveButton;
     private javax.swing.JTable showsTable;
+    private DefaultTableModel showsTableModel;
 
     public EditPlayView() {
         initComponents();
@@ -67,17 +69,10 @@ public class EditPlayView extends javax.swing.JFrame {
 
         jLabel3.setText("Seleccione un show de la tabla haga click en la opción deseada.");
 
-        showsTable.setModel(new javax.swing.table.DefaultTableModel(
-                new Object [][] {
-                        {null, null, null, null},
-                        {null, null, null, null},
-                        {null, null, null, null},
-                        {null, null, null, null}
-                },
-                new String [] {
-                        "Title 1", "Title 2", "Title 3", "Title 4"
-                }
-        ));
+        String header[] = {"Fecha", "Hora"};
+        String data[][] = {};
+
+        showsTableModel = new DefaultTableModel(data, header);
         jScrollPane1.setViewportView(showsTable);
 
         deleteShowButton.setText("Cancelar...");
@@ -221,13 +216,13 @@ public class EditPlayView extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-        );
+            );
 
-        pack();
-    }
+    pack();
+}
 
     public static void main(String args[]) {
 
@@ -274,8 +269,8 @@ public class EditPlayView extends javax.swing.JFrame {
         return saveButton;
     }
 
-    public JTable getShowsTable() {
-        return showsTable;
+    public DefaultTableModel getScheduleTable() {
+        return showsTableModel;
     }
 
     public JButton getDeleteShowButton() {

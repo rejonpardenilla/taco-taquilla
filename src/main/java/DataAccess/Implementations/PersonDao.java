@@ -91,6 +91,44 @@ public class PersonDao extends BaseDao<Person> implements PersonDaoInterface {
         return false;
     }
 
+    public boolean isRegistered(String firstName, String lastName) {
+        Connection connection = ConnectionFactory.getConnection();
+        Statement statement = null;
+
+        try {
+            statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(
+                    "SELECT * FROM person WHERE name='" + firstName + "' AND last_name='" + lastName + "'");
+
+            if (resultSet.next())
+                return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+    public int findByName(String firstName, String lastName) {
+        int personId = 0;
+        Connection connection = ConnectionFactory.getConnection();
+        Statement statement = null;
+
+        try {
+            statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(
+                    "SELECT * FROM person WHERE name='" + firstName + "' AND last_name='" + lastName + "'");
+
+            if (resultSet.next())
+                personId = extractFromResultSet(resultSet).getId();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return personId;
+    }
+
     public static void main(String[] args) {
         PersonDao personDao = new PersonDao();
         Person person = new Person();

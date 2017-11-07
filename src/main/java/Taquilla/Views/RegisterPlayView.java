@@ -1,9 +1,7 @@
 package Taquilla.Views;
 
-import javax.swing.JButton;
-import javax.swing.JSpinner;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 
 public class RegisterPlayView extends javax.swing.JFrame {
 
@@ -42,7 +40,7 @@ public class RegisterPlayView extends javax.swing.JFrame {
     private javax.swing.JLabel responsibleTelephoneLabel;
     private javax.swing.JButton saveButton;
     private javax.swing.JTextField scheduleDate;
-
+    private DefaultTableModel showsTableModel;
     public RegisterPlayView() {
         initComponents();
     }
@@ -223,20 +221,16 @@ public class RegisterPlayView extends javax.swing.JFrame {
 
         scheduleMinutes.setModel(new javax.swing.SpinnerNumberModel(59, 0, 59, 1));
 
-        scheduleSelectedTable.setModel(new javax.swing.table.DefaultTableModel(
-                new Object [][] {
-                        {null, null},
-                        {null, null},
-                        {null, null}
-                },
-                new String [] {
-                        "Fecha", "Hora"
-                }
-        ));
+        String header[] = {"Fecha", "Hora"};
+        String data[][] = {};
+
+        showsTableModel = new DefaultTableModel(data, header);
+
+        scheduleSelectedTable.setModel(showsTableModel);
 
         jScrollPane4.setViewportView(scheduleSelectedTable);
 
-        scheduleDateLabel.setText("Selecciones fecha (dd/MM/yyyy):");
+        scheduleDateLabel.setText("Selecciones fecha (dd-MM-yyyy):");
 
         disponibilityButton.setText("Comprobar disponibilidad...");
 
@@ -414,6 +408,10 @@ public class RegisterPlayView extends javax.swing.JFrame {
 
     public JTextField getScheduleDate() {
         return scheduleDate;
+    }
+
+    public DefaultTableModel getScheduleTable() {
+        return showsTableModel;
     }
 
 }

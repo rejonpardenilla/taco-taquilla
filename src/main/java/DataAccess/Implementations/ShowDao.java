@@ -5,10 +5,7 @@ import DataAccess.Interfaces.ShowDaoInterface;
 import Elements.Play;
 import Elements.Show;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +41,7 @@ public class ShowDao extends BaseDao<Show> implements ShowDaoInterface {
         try{
 
             statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery("SELECT * FROM show WHERE date = '" + date+ "' ORDER BY play");
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM show WHERE date = '" + date + "' ORDER BY play");
 
             ArrayList<Show> shows = new ArrayList<>();
 
@@ -86,5 +83,33 @@ public class ShowDao extends BaseDao<Show> implements ShowDaoInterface {
         }
 
         return null;
+    }
+
+    public int insertShow(Show show, int playId) throws SQLException{
+        Connection connection = ConnectionFactory.getConnection();
+        PreparedStatement statement = null;
+
+        String query = "INSERT INTO show (date, time, play, price, cancelled) VALUES (?, ?, ?, ?, ?)";
+        statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+
+        statement.setDate(1, Date.valueOf(show.getDate()));
+        statement.setTime(2, Time.valueOf(show.getTime()));
+        statement.setInt(3, playId);
+        statement.setBigDecimal(4, show.getPrice());
+        statement.setBoolean(5, show.isCancelled());
+
+        int rowsAffected = statement.executeUpdate();
+        if(rowsAffected == 0){
+            throw new SQLException("No rows affected");
+        }
+
+        try(ResultSet generatedKeys = statement.getGeneratedKeys()){
+            if (generatedKeys.next()){
+                int id = generatedKeys.getInt("id");
+                return id;
+            } else {
+                throw new SQLException("No id obtained");
+            }
+        }
     }
 }

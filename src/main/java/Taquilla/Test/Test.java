@@ -1,6 +1,9 @@
 package Taquilla.Test;
 
+import Taquilla.Controller.EditPlayController;
 import Taquilla.Controller.RegisterPlayController;
+import Taquilla.Model.RegisterPlayModel;
+import Taquilla.Views.EditPlayView;
 import Taquilla.Views.RegisterPlayView;
 
 /**
@@ -11,8 +14,9 @@ import Taquilla.Views.RegisterPlayView;
 public class Test {
 
     public static void main(String[] args) {
-        RegisterPlayView viewRegisterShow = new RegisterPlayView();
-        RegisterPlayController controllerRegisterView = new RegisterPlayController(viewRegisterShow);
+        RegisterPlayController controlador = new RegisterPlayController(new RegisterPlayView());
+        //EditPlayController controlador = new EditPlayController(new EditPlayView());
+
     }
 
 }

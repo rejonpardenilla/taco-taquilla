@@ -5,9 +5,14 @@ import Elements.Play;
 import Elements.Show;
 import Taquilla.Model.RegisterPlayModel;
 import Taquilla.Views.RegisterPlayView;
+
+import javax.swing.*;
+import javax.swing.table.TableColumn;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +29,7 @@ public class RegisterPlayController implements ActionListener {
         this.view.getSaveButton().addActionListener(this);
         this.view.getCancelButton().addActionListener(this);
         this.model = new RegisterPlayModel();
-        this.dateFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        this.dateFormat = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         this.timeFormat = DateTimeFormatter.ofPattern("HH:mm");
     }
 
@@ -45,10 +50,11 @@ public class RegisterPlayController implements ActionListener {
         Play play = new Play();
 
         play.setName(view.getPlayName().getText());
+        play.setResponsible(responsible);
         play.setDescription(view.getPlayDescription().getText());
         play.setActors(setActors(view.getPlayActors().getText()));
+        play.setCancelled(false);
         play.setComments(view.getPlayComments().getText());
-        play.setResponsible(responsible);
 
         return play;
     }
@@ -61,7 +67,6 @@ public class RegisterPlayController implements ActionListener {
 
         for (int i = 0; i < splitedActors.length; i++) {
             actors.add(setActor(splitedActors[i]));
-            System.out.println(splitedActors[i]);
         }
 
         return actors;
@@ -82,14 +87,29 @@ public class RegisterPlayController implements ActionListener {
 
     private List<Show> setShows(Play play) {
         List<Show> shows = new ArrayList<Show>();
+        int numberOfShows = view.getScheduleTable().getRowCount();
+        final int DATE_COLUMN = 0;
+        final int TIME_COLUMN = 1;
+
+        for (int rows = 0; rows < numberOfShows; rows++) {
+            Show show = new Show();
+
+            String tableDate = view.getScheduleTable().getValueAt(rows, DATE_COLUMN).toString();
+            DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            String tableTime[] = view.getScheduleTable().getValueAt(rows, TIME_COLUMN).toString().split(":");
+
+            LocalDate date = LocalDate.parse(tableDate, dateFormat);
+            LocalTime time = LocalTime.of(Integer.parseInt(tableTime[0]), Integer.parseInt(tableTime[1]));
+
+            show.setDate(date);
+            show.setTime(time);
+            show.setPlay(play);
+            show.setPrice(BigDecimal.valueOf(0.00));
+            show.setCancelled(false);
+            shows.add(show);
+        }
 
         return shows;
-    }
-
-    private Show setShow(String date, String time) {
-        Show show = new Show();
-
-        return show;
     }
 
     //Recupera la información de la GUI para poder guardarla posteriormente.
@@ -102,18 +122,64 @@ public class RegisterPlayController implements ActionListener {
         responsible = setResponsible();
         play = setPlay(responsible);
         totalShows = setShows(play);
+
+        for (Show show : totalShows) {
+            RegisterPlayModel registerModel = new RegisterPlayModel();
+            registerModel.registerShow(show);
+        }
+
+        JOptionPane.showMessageDialog(null, "Obra guardada con exito!");
+        view.dispose();
     }
 
     private void checkDisponibility() {
         int hours = (int) view.getScheduleHours().getModel().getValue();
         int minutes = (int) view.getScheduleMinutes().getModel().getValue();
-        LocalDate time = (LocalDate) timeFormat.parse(hours + ":" + minutes);
-        LocalDate date = (LocalDate) dateFormat.parse(view.getScheduleDate().getText());
+        LocalTime time = LocalTime.of(hours, minutes);
+        LocalDate date = LocalDate.parse(view.getScheduleDate().getText(), dateFormat);
+        Show show = new Show();
 
+        show.setDate(date);
+        show.setTime(time);
+
+        if ( (showInTable(show) == false) && (model.checkDisponibility(show) == true) ) {
+            JOptionPane.showMessageDialog(null, "Disponible!");
+            fillShowsTable(show);
+        } else {
+            JOptionPane.showMessageDialog(null, "No disponible!");
+        }
+    }
+
+    private boolean showInTable(Show show) {
+        int numberOfShows = view.getScheduleTable().getRowCount();
+        final int DATE_COLUMN = 0;
+        final int TIME_COLUMN = 1;
+
+        for (int rows = 0; rows < numberOfShows; rows++) {
+            String tableDate = view.getScheduleTable().getValueAt(rows, DATE_COLUMN).toString();
+            DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            String tableTime[] = view.getScheduleTable().getValueAt(rows, TIME_COLUMN).toString().split(":");
+
+            LocalDate date = LocalDate.parse(tableDate, dateFormat);
+            LocalTime time = LocalTime.of(Integer.parseInt(tableTime[0]), Integer.parseInt(tableTime[1]));
+
+            if (show.getDate().equals(date)) {
+                if (show.getTime().equals(time))
+                    return true;
+            }
+        }
+
+        return false;
+    }
+
+    private void fillShowsTable(Show show) {
+        Object showData[] = {show.getDate(), show.getTime()};
+
+        view.getScheduleTable().addRow(showData);
     }
 
     private void cancelButton() {
-        System.exit(0);
+        view.dispose();
     }
 
     /**
