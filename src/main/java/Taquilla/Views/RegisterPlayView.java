@@ -41,6 +41,7 @@ public class RegisterPlayView extends javax.swing.JFrame {
     private javax.swing.JButton saveButton;
     private javax.swing.JTextField scheduleDate;
     private DefaultTableModel showsTableModel;
+
     public RegisterPlayView() {
         initComponents();
     }

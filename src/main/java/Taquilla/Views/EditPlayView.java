@@ -24,7 +24,7 @@ public class EditPlayView extends javax.swing.JFrame {
     private javax.swing.JLabel playStatusLabel;
     private javax.swing.JButton rescheduleShowButton;
     private javax.swing.JButton saveButton;
-    private javax.swing.JTable showsTable;
+    public javax.swing.JTable showsTable;
     private DefaultTableModel showsTableModel;
 
     public EditPlayView() {
@@ -115,7 +115,7 @@ public class EditPlayView extends javax.swing.JFrame {
 
         jLabel2.setText("Estado de la obra:");
 
-        playStatusLabel.setText("Cancelada");
+        playStatusLabel.setText("");
 
         cancelledShowsButton.setText("Shows cancelados");
 
@@ -269,8 +269,12 @@ public class EditPlayView extends javax.swing.JFrame {
         return saveButton;
     }
 
-    public DefaultTableModel getScheduleTable() {
+    public DefaultTableModel getTableModel() {
         return showsTableModel;
+    }
+
+    public JTable getShowsTable() {
+        return showsTable;
     }
 
     public JButton getDeleteShowButton() {

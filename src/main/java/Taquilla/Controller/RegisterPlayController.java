@@ -3,6 +3,7 @@ package Taquilla.Controller;
 import Elements.Person;
 import Elements.Play;
 import Elements.Show;
+import Taquilla.Model.EditPlayModel;
 import Taquilla.Model.RegisterPlayModel;
 import Taquilla.Views.RegisterPlayView;
 
@@ -23,12 +24,12 @@ public class RegisterPlayController implements ActionListener {
     private final DateTimeFormatter dateFormat;
     private final DateTimeFormatter timeFormat;
 
-    public RegisterPlayController(RegisterPlayView view) {
+    public RegisterPlayController(RegisterPlayView view, RegisterPlayModel model) {
         this.view = view;
         this.view.getDisponibilityButton().addActionListener(this);
         this.view.getSaveButton().addActionListener(this);
         this.view.getCancelButton().addActionListener(this);
-        this.model = new RegisterPlayModel();
+        this.model = model;
         this.dateFormat = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         this.timeFormat = DateTimeFormatter.ofPattern("HH:mm");
     }
@@ -154,6 +155,8 @@ public class RegisterPlayController implements ActionListener {
         int numberOfShows = view.getScheduleTable().getRowCount();
         final int DATE_COLUMN = 0;
         final int TIME_COLUMN = 1;
+        final int HOURS = 0;
+        final int MINUTES = 1;
 
         for (int rows = 0; rows < numberOfShows; rows++) {
             String tableDate = view.getScheduleTable().getValueAt(rows, DATE_COLUMN).toString();
@@ -161,7 +164,7 @@ public class RegisterPlayController implements ActionListener {
             String tableTime[] = view.getScheduleTable().getValueAt(rows, TIME_COLUMN).toString().split(":");
 
             LocalDate date = LocalDate.parse(tableDate, dateFormat);
-            LocalTime time = LocalTime.of(Integer.parseInt(tableTime[0]), Integer.parseInt(tableTime[1]));
+            LocalTime time = LocalTime.of(Integer.parseInt(tableTime[HOURS]), Integer.parseInt(tableTime[MINUTES]));
 
             if (show.getDate().equals(date)) {
                 if (show.getTime().equals(time))

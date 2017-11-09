@@ -2,6 +2,7 @@ package Taquilla.Test;
 
 import Taquilla.Controller.EditPlayController;
 import Taquilla.Controller.RegisterPlayController;
+import Taquilla.Model.EditPlayModel;
 import Taquilla.Model.RegisterPlayModel;
 import Taquilla.Views.EditPlayView;
 import Taquilla.Views.RegisterPlayView;
@@ -14,8 +15,8 @@ import Taquilla.Views.RegisterPlayView;
 public class Test {
 
     public static void main(String[] args) {
-        RegisterPlayController controlador = new RegisterPlayController(new RegisterPlayView());
-        //EditPlayController controlador = new EditPlayController(new EditPlayView());
+        //RegisterPlayController controlador = new RegisterPlayController(new RegisterPlayView(), new RegisterPlayModel());
+        EditPlayController controlador = new EditPlayController(new EditPlayView() , new EditPlayModel());
 
     }
 

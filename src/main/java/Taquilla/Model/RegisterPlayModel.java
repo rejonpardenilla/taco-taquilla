@@ -12,6 +12,31 @@ import java.util.ArrayList;
 
 public class RegisterPlayModel {
 
+    private void saveActors(Play play) throws SQLException {
+
+        //Registrando los actores en la tabla actor_list
+
+        int numberOfActors = play.getActors().size();
+        for (int i = 0; i < numberOfActors; i++) {
+            Person actor = new Person();
+            PersonDao daoActor = new PersonDao();
+            int idActor = 0;
+
+            actor.setName(play.getActors().get(i).getName());
+            actor.setLastName(play.getActors().get(i).getLastName());
+            actor.setPhone("");
+            actor.setPhoneAlt("");
+            actor.setEmail("");
+            actor.setType("Actor");
+
+            if (daoActor.isRegistered(actor.getName(), actor.getLastName())) {
+                idActor = daoActor.findByName(actor.getName(), actor.getLastName());
+            } else {
+                idActor = daoActor.insertPerson(actor);
+            }
+        }
+    }
+
     public boolean checkDisponibility(Show show) {
         ArrayList<Show> dateShows = new ArrayList<Show>();
         ShowDao query = new ShowDao();
@@ -34,7 +59,6 @@ public class RegisterPlayModel {
         try {
             int playId = registerPlay(show.getPlay());
             ShowDao dao = new ShowDao();
-
             dao.insertShow(show, playId);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -45,6 +69,8 @@ public class RegisterPlayModel {
         int playId = 0;
         int responsibleId = registerResponsible(play.getResponsible());
         PlayDao dao = new PlayDao();
+
+        //Registrando la obra en la tabla play
 
         if (dao.isRegistered(play.getName())){
             playId = dao.findByName(play.getName());
