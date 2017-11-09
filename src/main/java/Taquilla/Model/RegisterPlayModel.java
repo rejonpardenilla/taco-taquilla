@@ -30,7 +30,7 @@ public class RegisterPlayModel {
             actor.setType("Actor");
 
             if (daoActor.isRegistered(actor.getName(), actor.getLastName())) {
-                idActor = daoActor.findByName(actor.getName(), actor.getLastName());
+                idActor = daoActor.findByName(actor.getName(), actor.getLastName()).getId();
             } else {
                 idActor = daoActor.insertPerson(actor);
             }
@@ -73,7 +73,7 @@ public class RegisterPlayModel {
         //Registrando la obra en la tabla play
 
         if (dao.isRegistered(play.getName())){
-            playId = dao.findByName(play.getName());
+            playId = dao.findPlayByName(play.getName()).getId();
         } else {
             playId = dao.insertPlay(play, responsibleId);
         }
@@ -86,7 +86,7 @@ public class RegisterPlayModel {
         PersonDao dao = new PersonDao();
 
         if (dao.isRegistered(responsible.getName(), responsible.getLastName())) {
-            responsibleId = dao.findByName(responsible.getName(), responsible.getLastName());
+            responsibleId = dao.findByName(responsible.getName(), responsible.getLastName()).getId();
         } else {
             responsibleId = dao.insertPerson(responsible);
         }

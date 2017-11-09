@@ -1,22 +1,19 @@
 package Taquilla.Controller;
 
-import Elements.Play;
 import Elements.Show;
 import Taquilla.Model.EditPlayModel;
 import Taquilla.Views.EditPlayView;
-
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
+import java.util.List;
 
 public class EditPlayController implements ActionListener {
     private final EditPlayView view;
     private final EditPlayModel model;
-    private Play play;
 
     public EditPlayController(EditPlayView view, EditPlayModel model) {
         this.view = view;
@@ -29,7 +26,6 @@ public class EditPlayController implements ActionListener {
         this.view.getRescheduleShowButton().addActionListener(this);
         this.view.getDeletePlayButton().addActionListener(this);
         this.model = model;
-        this.play = null;
     }
 
     private void findPlay() {
@@ -42,13 +38,26 @@ public class EditPlayController implements ActionListener {
                     "Error al buscar obra",
                     JOptionPane.WARNING_MESSAGE);
         } else {
-            play = model.findPlayByName(playName);
-            ArrayList<Show> shows = model.findShowsByPlay(play);
-            fillShowsTable(shows);
+            model.setPlay(playName);
+
+            if (model.getPlay() == null) {
+                JOptionPane.showMessageDialog(null, "Obra no encontrada");
+            } else {
+                model.setShows(model.getPlay());
+                fillShowsTable(model.getActiveShows());
+            }
         }
     }
 
-    private void fillShowsTable(ArrayList<Show> shows) {
+    private void cleanShowsTable() {
+        int rows = view.getTableModel().getRowCount();
+
+        for (int i = 0; i < rows; i++) {
+            view.getTableModel().removeRow(i);
+        }
+    }
+
+    private void fillShowsTable(List<Show> shows) {
         for (Show show : shows) {
             Object showData[] = {show.getDate(), show.getTime()};
 
@@ -59,7 +68,7 @@ public class EditPlayController implements ActionListener {
     private void cancelShow() {
         final int NO_ROW_SELECTED = -1;
 
-        //Si no hay una fila seleccionada, getSelectedRow() retorna -1.
+        //Si no hay una fila seleccionada, getSelectedRow() retorna -1.+
         int selectedRow = view.getShowsTable().getSelectedRow();
 
         if (selectedRow == NO_ROW_SELECTED) {
@@ -91,7 +100,9 @@ public class EditPlayController implements ActionListener {
                 LocalDate date = LocalDate.parse(tableDate, dateFormat);
                 LocalTime time = LocalTime.of(Integer.parseInt(tableTime[HOURS]), Integer.parseInt(tableTime[MINUTES]));
 
-                model.cancelShow(date, time, play);
+                model.cancelShow(date, time);
+                cleanShowsTable();
+                fillShowsTable(model.getActiveShows());
             }
         }
     }
@@ -109,12 +120,12 @@ public class EditPlayController implements ActionListener {
                     "Error al recalendarizar funcion",
                     JOptionPane.WARNING_MESSAGE);
         } else {
-
+            //Código de recalendarización.
         }
     }
 
     private void cancelPlay() {
-        if (play == null) {
+        if (model.getPlay() == null) {
             JOptionPane.showMessageDialog(
                     null,
                     "Debe buscar una obra primero!",
@@ -131,7 +142,10 @@ public class EditPlayController implements ActionListener {
                     JOptionPane.YES_NO_OPTION);
 
             if (confirmCancel == YES) {
-                model.cancelPlay(play);
+                model.cancelPlay();
+                JOptionPane.showMessageDialog(null, "Cancelacion de obra exitosa!");
+                cleanShowsTable();
+                view.getFindShowText().setText("");
             }
         }
     }
@@ -149,15 +163,15 @@ public class EditPlayController implements ActionListener {
         } else if (selectedButton == view.getDeletePlayButton()) {
             cancelPlay();
         } else if (selectedButton == view.getCancelledPlaysButton()) {
-
+            //Registro de obras canceladas.
         } else if (selectedButton == view.getCancelledShowsButton()) {
-
+            //Registro de shows cancelados.
         } else if (selectedButton == view.getDeleteShowButton()) {
             cancelShow();
         } else if (selectedButton == view.getRescheduleShowButton()) {
             rescheduleShow();
         } else if (selectedButton == view.getSaveButton()) {
-
+            //Posiblemente se elimine el botón de guardar, pues los cambios se hacen al momento dependiendo del evento.
         } else if (selectedButton == view.getCancelButton()) {
             cancelButton();
         }

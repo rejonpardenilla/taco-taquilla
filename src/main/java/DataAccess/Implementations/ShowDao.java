@@ -4,7 +4,6 @@ import DataAccess.ConnectionFactory;
 import DataAccess.Interfaces.ShowDaoInterface;
 import Elements.Play;
 import Elements.Show;
-
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -64,6 +63,7 @@ public class ShowDao extends BaseDao<Show> implements ShowDaoInterface {
     public List<Show> findByPlay(Play play) {
         Connection connection = ConnectionFactory.getConnection();
         Statement statement = null;
+
         try{
 
             statement = connection.createStatement();
@@ -111,5 +111,48 @@ public class ShowDao extends BaseDao<Show> implements ShowDaoInterface {
                 throw new SQLException("No id obtained");
             }
         }
+    }
+
+    public boolean updateShow(Show show) {
+        Connection connection = ConnectionFactory.getConnection();
+        Statement statement = null;
+
+        try{
+            statement = connection.createStatement();
+            String query = "UPDATE show SET "+
+                    "date=" + show.getDate().toString() + ", " +
+                    "time=" + show.getTime().toString() + ", " +
+                    "play=" + show.getPlay().getId() + ", " +
+                    "price=" + show.getPrice() + ", " +
+                    "cancelled=" + show.isCancelled();
+
+            int rowsAffected = statement.executeUpdate(query);
+
+            if(rowsAffected == 1){
+                return true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+    public boolean deleteShowById(int id) {
+        Connection connection = ConnectionFactory.getConnection();
+        Statement statement = null;
+
+        try{
+            statement = connection.createStatement();
+            int rowsAffected = statement.executeUpdate("DELETE FROM show WHERE id=" + id);
+
+            if(rowsAffected == 1){
+                return true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return false;
     }
 }

@@ -109,8 +109,8 @@ public class PersonDao extends BaseDao<Person> implements PersonDaoInterface {
         return false;
     }
 
-    public int findByName(String firstName, String lastName) {
-        int personId = 0;
+    public Person findByName(String firstName, String lastName) {
+        Person person = null;
         Connection connection = ConnectionFactory.getConnection();
         Statement statement = null;
 
@@ -120,13 +120,13 @@ public class PersonDao extends BaseDao<Person> implements PersonDaoInterface {
                     "SELECT * FROM person WHERE name='" + firstName + "' AND last_name='" + lastName + "'");
 
             if (resultSet.next())
-                personId = extractFromResultSet(resultSet).getId();
+                person = extractFromResultSet(resultSet);
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        return personId;
+        return person;
     }
 
     public static void main(String[] args) {

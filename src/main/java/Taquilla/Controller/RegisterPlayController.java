@@ -3,12 +3,9 @@ package Taquilla.Controller;
 import Elements.Person;
 import Elements.Play;
 import Elements.Show;
-import Taquilla.Model.EditPlayModel;
 import Taquilla.Model.RegisterPlayModel;
 import Taquilla.Views.RegisterPlayView;
-
 import javax.swing.*;
-import javax.swing.table.TableColumn;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;

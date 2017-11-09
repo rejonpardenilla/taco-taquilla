@@ -4,7 +4,6 @@ import DataAccess.ConnectionFactory;
 import DataAccess.Interfaces.PlayDaoInterface;
 import Elements.Person;
 import Elements.Play;
-
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -130,8 +129,8 @@ public class PlayDao extends BaseDao<Play> implements PlayDaoInterface {
         return false;
     }
 
-    public int findByName(String name) {
-        int playId = 0;
+    public Play findPlayByName(String name) {
+        Play play = null;
         Connection connection = ConnectionFactory.getConnection();
         Statement statement = null;
 
@@ -140,13 +139,37 @@ public class PlayDao extends BaseDao<Play> implements PlayDaoInterface {
             ResultSet resultSet = statement.executeQuery("SELECT * FROM play WHERE name='" + name + "'");
 
             if (resultSet.next())
-                playId = extractFromResultSet(resultSet).getId();
+                play = extractFromResultSet(resultSet);
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        return playId;
+        return play;
+    }
+
+    public boolean updateShow(Play play) {
+        Connection connection = ConnectionFactory.getConnection();
+        Statement statement = null;
+
+        try{
+            statement = connection.createStatement();
+            String query = "UPDATE play SET "+
+                    "name=" + play.getName() + ", " +
+                    "responsible=" + play.getResponsible() + ", " +
+                    "description=" + play.getDescription() + ", " +
+                    "cancelled=" + play.isCancelled();
+
+            int rowsAffected = statement.executeUpdate(query);
+
+            if(rowsAffected == 1){
+                return true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return false;
     }
 
     public static void main(String[] args) {
