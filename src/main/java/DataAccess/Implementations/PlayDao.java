@@ -138,9 +138,9 @@ public class PlayDao extends BaseDao<Play> implements PlayDaoInterface {
             statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery("SELECT * FROM play WHERE name='" + name + "'");
 
-            if (resultSet.next())
+            if (resultSet.next()) {
                 play = extractFromResultSet(resultSet);
-
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -148,17 +148,18 @@ public class PlayDao extends BaseDao<Play> implements PlayDaoInterface {
         return play;
     }
 
-    public boolean updateShow(Play play) {
+    public boolean updatePlay(Play play) {
         Connection connection = ConnectionFactory.getConnection();
         Statement statement = null;
 
         try{
             statement = connection.createStatement();
             String query = "UPDATE play SET "+
-                    "name=" + play.getName() + ", " +
-                    "responsible=" + play.getResponsible() + ", " +
-                    "description=" + play.getDescription() + ", " +
-                    "cancelled=" + play.isCancelled();
+                    "name='" + play.getName() + "', " +
+                    "responsible=" + play.getResponsible().getId() + ", " +
+                    "description='" + play.getDescription() + "', " +
+                    "cancelled=" + play.isCancelled() +
+                    " WHERE id=" + play.getId();
 
             int rowsAffected = statement.executeUpdate(query);
 

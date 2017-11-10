@@ -73,6 +73,9 @@ public class EditPlayView extends javax.swing.JFrame {
         String data[][] = {};
 
         showsTableModel = new DefaultTableModel(data, header);
+
+        showsTable.setModel(showsTableModel);
+
         jScrollPane1.setViewportView(showsTable);
 
         deleteShowButton.setText("Cancelar...");

@@ -31,6 +31,8 @@ public class EditPlayController implements ActionListener {
     private void findPlay() {
         String playName = view.getFindShowText().getText();
 
+        cleanShowsTable();
+
         if (playName.equals("")) {
             JOptionPane.showMessageDialog(
                     null,
@@ -45,15 +47,31 @@ public class EditPlayController implements ActionListener {
             } else {
                 model.setShows(model.getPlay());
                 fillShowsTable(model.getActiveShows());
+                showPlayStatus();
             }
         }
     }
 
+    private void showPlayStatus() {
+        boolean playIsCancelled = model.getPlay().isCancelled();
+        String playStatus = "";
+
+        if (playIsCancelled == true) {
+            playStatus = "Cancelada";
+        } else {
+            playStatus = "Activa";
+        }
+
+        view.getPlayStatusLabel().setText(playStatus);
+    }
+
     private void cleanShowsTable() {
         int rows = view.getTableModel().getRowCount();
-
-        for (int i = 0; i < rows; i++) {
-            view.getTableModel().removeRow(i);
+        if (rows > 0) {
+            for (int i = rows; i >= 0; i--) {
+                System.out.println("Row " + i);
+                view.getTableModel().removeRow(i);
+            }
         }
     }
 
@@ -83,8 +101,8 @@ public class EditPlayController implements ActionListener {
             //confirmDelete será 0 si el usuario selecciona si, 1 si selecciona no.
             int confirmCancel = JOptionPane.showConfirmDialog(
                     null,
-                    "Esta seguro de eliminar el show?",
-                    "Eliminar show?",
+                    "Esta seguro de cancelar el show?",
+                    "Cancelar show?",
                     JOptionPane.YES_NO_OPTION);
 
             if (confirmCancel == YES) {
@@ -101,8 +119,7 @@ public class EditPlayController implements ActionListener {
                 LocalTime time = LocalTime.of(Integer.parseInt(tableTime[HOURS]), Integer.parseInt(tableTime[MINUTES]));
 
                 model.cancelShow(date, time);
-                cleanShowsTable();
-                fillShowsTable(model.getActiveShows());
+                view.getTableModel().removeRow(selectedRow);
             }
         }
     }
@@ -120,7 +137,25 @@ public class EditPlayController implements ActionListener {
                     "Error al recalendarizar funcion",
                     JOptionPane.WARNING_MESSAGE);
         } else {
-            //Código de recalendarización.
+            final int DATE_COLUMN = 0;
+            final int TIME_COLUMN = 1;
+            final int HOURS = 0;
+            final int MINUTES = 1;
+
+            String tableDate = view.getTableModel().getValueAt(selectedRow, DATE_COLUMN).toString();
+            DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            String tableTime[] = view.getTableModel().getValueAt(selectedRow, TIME_COLUMN).toString().split(":");
+
+            LocalDate date = LocalDate.parse(tableDate, dateFormat);
+            LocalTime time = LocalTime.of(Integer.parseInt(tableTime[HOURS]), Integer.parseInt(tableTime[MINUTES]));
+
+            if (model.checkDisponibility(date, time)) {
+
+            } else {
+                System.out.println("No disponible");
+            }
+
+
         }
     }
 

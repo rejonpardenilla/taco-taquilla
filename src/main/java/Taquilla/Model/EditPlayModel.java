@@ -6,6 +6,7 @@ import Elements.Play;
 import Elements.Show;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 
 public class EditPlayModel {
@@ -35,7 +36,7 @@ public class EditPlayModel {
     }
 
     public List<Show> getActiveShows() {
-        List<Show> activeShows = null;
+        List<Show> activeShows = new ArrayList<Show>();
 
         for (Show show : shows) {
             if (show.isCancelled() == false) {
@@ -53,11 +54,32 @@ public class EditPlayModel {
         }
 
         play.setCancelled(true);
-        new PlayDao().updateShow(play);
+        new PlayDao().updatePlay(play);
+        play = null;
+        shows = null;
     }
 
     public void cancelShow(LocalDate date, LocalTime time) {
+        for (int i = 0; i < shows.size(); i++) {
+            if (shows.get(i).getDate().equals(date) && shows.get(i).getTime().equals(time)) {
+                shows.get(i).setCancelled(true);
+                new ShowDao().updateShow(shows.get(i));
+                break;
+            }
+        }
+    }
 
+    public boolean checkDisponibility(LocalDate date, LocalTime time) {
+        ShowDao dao = new ShowDao();
+        List<Show> showsToCheck = dao.findByDate(date);
+
+        for (Show show : showsToCheck) {
+            if (show.getTime().equals(time) && show.isCancelled() == false) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
 }

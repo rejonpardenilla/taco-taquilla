@@ -64,8 +64,11 @@ public class PersonDao extends BaseDao<Person> implements PersonDaoInterface {
                     "phone="     + person.getPhone()    + ", " +
                     "phone_alt=" + person.getPhoneAlt() + ", " +
                     "type="      + person.getType()     + ", " +
-                    "email="     + person.getEmail();
+                    "email="     + person.getEmail() +
+                    " WHERE id=" + person.getId();
+
             int rowsAffected = statement.executeUpdate(query);
+
             if(rowsAffected == 1){
                 return true;
             }

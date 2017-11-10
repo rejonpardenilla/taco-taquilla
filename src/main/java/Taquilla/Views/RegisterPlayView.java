@@ -10,7 +10,7 @@ public class RegisterPlayView extends javax.swing.JFrame {
     private javax.swing.JSpinner scheduleHours;
     private javax.swing.JSpinner scheduleMinutes;
     private javax.swing.JLabel scheduleSelectedLabel;
-    private javax.swing.JTable scheduleSelectedTable;
+    private javax.swing.JTable showsTable;
     private javax.swing.JButton cancelButton;
     private javax.swing.JButton disponibilityButton;
     private javax.swing.JScrollPane jScrollPane1;
@@ -78,7 +78,7 @@ public class RegisterPlayView extends javax.swing.JFrame {
         scheduleHours = new javax.swing.JSpinner();
         scheduleMinutes = new javax.swing.JSpinner();
         jScrollPane4 = new javax.swing.JScrollPane();
-        scheduleSelectedTable = new javax.swing.JTable();
+        showsTable = new javax.swing.JTable();
         scheduleDateLabel = new javax.swing.JLabel();
         scheduleDate = new javax.swing.JTextField();
         disponibilityButton = new javax.swing.JButton();
@@ -227,9 +227,9 @@ public class RegisterPlayView extends javax.swing.JFrame {
 
         showsTableModel = new DefaultTableModel(data, header);
 
-        scheduleSelectedTable.setModel(showsTableModel);
+        showsTable.setModel(showsTableModel);
 
-        jScrollPane4.setViewportView(scheduleSelectedTable);
+        jScrollPane4.setViewportView(showsTable);
 
         scheduleDateLabel.setText("Selecciones fecha (dd-MM-yyyy):");
 
@@ -411,7 +411,7 @@ public class RegisterPlayView extends javax.swing.JFrame {
         return scheduleDate;
     }
 
-    public DefaultTableModel getScheduleTable() {
+    public DefaultTableModel getTableModel() {
         return showsTableModel;
     }
 

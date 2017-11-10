@@ -42,7 +42,7 @@ public class ShowDao extends BaseDao<Show> implements ShowDaoInterface {
             statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery("SELECT * FROM show WHERE date = '" + date + "' ORDER BY play");
 
-            ArrayList<Show> shows = new ArrayList<>();
+            ArrayList<Show> shows = new ArrayList<Show>();
 
             while(resultSet.next()){
                 Show show = extractFromResultSet(resultSet);
@@ -69,7 +69,7 @@ public class ShowDao extends BaseDao<Show> implements ShowDaoInterface {
             statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery("SELECT * FROM show WHERE play=" + play.getId());
 
-            ArrayList<Show> shows = new ArrayList<>();
+            ArrayList<Show> shows = new ArrayList<Show>();
 
             while(resultSet.next()){
                 Show show = extractFromResultSet(resultSet);
@@ -120,11 +120,12 @@ public class ShowDao extends BaseDao<Show> implements ShowDaoInterface {
         try{
             statement = connection.createStatement();
             String query = "UPDATE show SET "+
-                    "date=" + show.getDate().toString() + ", " +
-                    "time=" + show.getTime().toString() + ", " +
-                    "play=" + show.getPlay().getId() + ", " +
-                    "price=" + show.getPrice() + ", " +
-                    "cancelled=" + show.isCancelled();
+                    "date='"        + show.getDate()            + "', " +
+                    "time='"        + show.getTime()            + "', " +
+                    "play="         + show.getPlay().getId()    + ", " +
+                    "price="        + show.getPrice()           + ", " +
+                    "cancelled="    + show.isCancelled() +
+                    " WHERE id=" + show.getId();
 
             int rowsAffected = statement.executeUpdate(query);
 

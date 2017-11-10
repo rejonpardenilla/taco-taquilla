@@ -85,16 +85,16 @@ public class RegisterPlayController implements ActionListener {
 
     private List<Show> setShows(Play play) {
         List<Show> shows = new ArrayList<Show>();
-        int numberOfShows = view.getScheduleTable().getRowCount();
+        int numberOfShows = view.getTableModel().getRowCount();
         final int DATE_COLUMN = 0;
         final int TIME_COLUMN = 1;
 
         for (int rows = 0; rows < numberOfShows; rows++) {
             Show show = new Show();
 
-            String tableDate = view.getScheduleTable().getValueAt(rows, DATE_COLUMN).toString();
+            String tableDate = view.getTableModel().getValueAt(rows, DATE_COLUMN).toString();
             DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-            String tableTime[] = view.getScheduleTable().getValueAt(rows, TIME_COLUMN).toString().split(":");
+            String tableTime[] = view.getTableModel().getValueAt(rows, TIME_COLUMN).toString().split(":");
 
             LocalDate date = LocalDate.parse(tableDate, dateFormat);
             LocalTime time = LocalTime.of(Integer.parseInt(tableTime[0]), Integer.parseInt(tableTime[1]));
@@ -149,16 +149,16 @@ public class RegisterPlayController implements ActionListener {
     }
 
     private boolean showInTable(Show show) {
-        int numberOfShows = view.getScheduleTable().getRowCount();
+        int numberOfShows = view.getTableModel().getRowCount();
         final int DATE_COLUMN = 0;
         final int TIME_COLUMN = 1;
         final int HOURS = 0;
         final int MINUTES = 1;
 
         for (int rows = 0; rows < numberOfShows; rows++) {
-            String tableDate = view.getScheduleTable().getValueAt(rows, DATE_COLUMN).toString();
+            String tableDate = view.getTableModel().getValueAt(rows, DATE_COLUMN).toString();
             DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-            String tableTime[] = view.getScheduleTable().getValueAt(rows, TIME_COLUMN).toString().split(":");
+            String tableTime[] = view.getTableModel().getValueAt(rows, TIME_COLUMN).toString().split(":");
 
             LocalDate date = LocalDate.parse(tableDate, dateFormat);
             LocalTime time = LocalTime.of(Integer.parseInt(tableTime[HOURS]), Integer.parseInt(tableTime[MINUTES]));
@@ -175,7 +175,7 @@ public class RegisterPlayController implements ActionListener {
     private void fillShowsTable(Show show) {
         Object showData[] = {show.getDate(), show.getTime()};
 
-        view.getScheduleTable().addRow(showData);
+        view.getTableModel().addRow(showData);
     }
 
     private void cancelButton() {
