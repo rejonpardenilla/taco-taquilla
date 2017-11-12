@@ -11,7 +11,12 @@ public class GUI extends JPanel{
     /*
      * Constructors
      */
-    private GUI(String title){
+    public GUI(){
+        super();
+    }
+
+    public GUI(String title){
+        super();
         this.setBorder(new TitledBorder(title));
     }
 
