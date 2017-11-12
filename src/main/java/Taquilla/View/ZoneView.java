@@ -1,8 +1,12 @@
 package Taquilla.View;
 
 import DataAccess.Implementations.SeatDao;
+import DataAccess.Implementations.SeatingDao;
+import DataAccess.Implementations.ShowDao;
 import DataAccess.Implementations.ZoneDao;
 import Elements.Seat;
+import Elements.Seating;
+import Elements.Show;
 import Elements.Zone;
 
 import java.awt.*;
@@ -14,6 +18,7 @@ import javax.swing.*;
 public class ZoneView {
     ZoneDao zoneDao = new ZoneDao();
     SeatDao seatDao = new SeatDao();
+    SeatingDao seatingDao = new SeatingDao();
     Zone zone = zoneDao.findById(1);
     List<Seat> seats = seatDao.findAll();
 
@@ -25,14 +30,26 @@ public class ZoneView {
     private static final int WINDOW_LOCATION_X = 150;
     private static final int WINDOW_LOCATION_Y = 50;
     private Icon seatOccupiedIcon = (UIManager.getIcon("OptionPane.errorIcon"));
+    private ArrayList<String> seatNames = new ArrayList<>();
 
-    public ZoneView() {
+    // ZoneView(Show show)
+    public ZoneView(Show show) {
+        ArrayList<String> seatingNames = getSeatingNames(show);
         JPanel panel = new JPanel(new GridLayout(rows, columns));
         for (int row = 1; row <= rows; row++) {
             for (int column = 1; column <= columns; column++) {
-                final JToggleButton button = new JToggleButton(rowLetters.get(row - 1) + "" + column);
+                String seatName = rowLetters.get(row - 1) + column;
+                seatNames.add(seatName);
+                final JToggleButton button = new JToggleButton(seatName);
                 button.setFont(new Font("Source Sans Pro", Font.BOLD, 24));
                 performButtonAction(panel, button);
+                if (seatingNames != null) {
+                    for (String seatingName : seatingNames) {
+                        if (seatingName.equals(seatName)) {
+                            selectButton(button);
+                        }
+                    }
+                }
             }
         }
         final JFrame frame = new JFrame(WINDOW_DISPLAY_NAME);
@@ -45,8 +62,10 @@ public class ZoneView {
     }
 
     public static void main(String[] args) {
+        ShowDao showDao = new ShowDao();
+        Show show = showDao.findById(1);
         EventQueue.invokeLater(() -> {
-            ZoneView theaterJToggle = new ZoneView();
+            ZoneView theaterJToggle = new ZoneView(show);
         });
     }
 
@@ -56,8 +75,7 @@ public class ZoneView {
             AbstractButton abstractButton = (AbstractButton) actionEvent.getSource();
             boolean selected = abstractButton.getModel().isSelected();
             if (selected) {
-                button.setIcon(seatOccupiedIcon);
-                button.setText(null);
+                selectButton(button);
             } else {
                 button.setIcon(null);
                 button.setText(buttonText);
@@ -85,5 +103,26 @@ public class ZoneView {
         seats.forEach(seat -> columns.add(seat.getNumber()));
         Collections.sort(columns);
         return columns.get(columns.size() - 1);
+    }
+
+    private void selectButton(JToggleButton button) {
+        button.setSelected(true);
+        button.setIcon(seatOccupiedIcon);
+        button.setText(null);
+    }
+
+    private ArrayList<String> getSeatingNames(Show show) {
+        if (show != null) {
+            ArrayList<Seating> seatings = new ArrayList<>(seatingDao.findByShow(show));
+            ArrayList<String> seatingNames = new ArrayList<>();
+            for (Seating seating : seatings) {
+                Seat seat = seating.getSeat();
+                String seatName = seat.getRow() + Integer.toString(seat.getNumber());
+                if (seating.getState().equals("TAKEN")) seatingNames.add(seatName);
+            }
+            return seatingNames;
+        } else {
+            return null;
+        }
     }
 }

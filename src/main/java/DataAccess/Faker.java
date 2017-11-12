@@ -8,7 +8,7 @@ import java.sql.SQLException;
 public class Faker {
     private static final int ROWS = 2;
     private static final int COLUMNS = 5;
-    private static final String[] ROW_LETTERS = {"B", "A"};
+    private static final String[] ROW_LETTERS = {"A", "B"};
 
     private static void populateSeats() {
         Zone zone = new Zone();
