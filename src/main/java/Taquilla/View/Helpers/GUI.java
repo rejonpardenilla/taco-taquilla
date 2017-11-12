@@ -97,7 +97,7 @@ public class GUI extends JPanel{
     /*
      * Custom field creation
      */
-    private void addLabeledField(String id, String label, Component field){
+    public void addLabeledField(String id, String label, Component field){
         JPanel panel = new JPanel(new BorderLayout());
         JLabel jlabel = new JLabel(label);
         jlabel.setLabelFor(field);
