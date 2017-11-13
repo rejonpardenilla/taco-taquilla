@@ -6,17 +6,16 @@ import Taquilla.View.Helpers.GUI;
 import Taquilla.View.Helpers.JFrameHelper;
 
 import javax.swing.*;
-import java.awt.*;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class ZonePricesView {
+public class ZoneDiscountsView {
     public GUI gui;
     ZoneDao zoneDao = new ZoneDao();
 
-    public ZonePricesView() {
+    public ZoneDiscountsView() {
         JFrame frame = JFrameHelper.createFrame();
-        gui = JFrameHelper.createCenteredGUI("Establish Zone Prices");
+        gui = JFrameHelper.createCenteredGUI("Establish Zone Discounts");
 
         ArrayList<Zone> zones = new ArrayList<>(zoneDao.findAll());
 
@@ -59,6 +58,6 @@ public class ZonePricesView {
     }
 
     public static void main(String[] args) {
-        new ZonePricesView();
+        new ZoneDiscountsView();
     }
 }
