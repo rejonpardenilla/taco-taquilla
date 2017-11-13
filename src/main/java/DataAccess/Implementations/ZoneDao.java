@@ -14,20 +14,21 @@ public class ZoneDao extends BaseDao<Zone> implements ZoneDaoInterface {
 
         Zone zone = new Zone();
         zone.setId(rs.getInt("id"));
+        zone.setName(rs.getString("name"));
         zone.setDiscountPercent(rs.getInt("discount_percent"));
 
         return zone;
-
     }
 
     public int insertZone(Zone zone) throws SQLException{
         Connection connection = ConnectionFactory.getConnection();
         PreparedStatement statement = null;
 
-        String query = "INSERT INTO zone (discount_percent) VALUES (?)";
+        String query = "INSERT INTO zone (name, discount_percent) VALUES (?, ?)";
         statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 
-        statement.setInt(1, zone.getDiscountPercent());
+        statement.setString(1, zone.getName());
+        statement.setInt(2, zone.getDiscountPercent());
 
         int rowsAffected = statement.executeUpdate();
         if(rowsAffected == 0){

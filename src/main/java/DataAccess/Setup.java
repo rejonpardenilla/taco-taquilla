@@ -52,6 +52,7 @@ public class Setup {
             String zone =
                     "CREATE TABLE public.zone(" +
                     "id SERIAL PRIMARY KEY NOT NULL," +
+                    "name VARCHAR(50)," +
                     "discount_percent INT)";
             queries.add(zone);
 
