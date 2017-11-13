@@ -13,7 +13,7 @@ public class ClientRegisterView {
 
     public ClientRegisterView() {
         JFrame frame = JFrameHelper.createFrame();
-        gui = new GUI(new FlowLayout(FlowLayout.CENTER), "Register Client");
+        gui = JFrameHelper.createCenteredGUI("Register Client");
 
         // Name
         JTextField nameField = new JTextField();
