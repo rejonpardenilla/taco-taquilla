@@ -6,6 +6,7 @@ import Elements.Person;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class PersonDao extends BaseDao<Person> implements PersonDaoInterface {
 
@@ -92,22 +93,33 @@ public class PersonDao extends BaseDao<Person> implements PersonDaoInterface {
     }
 
     public static void main(String[] args) {
-        PersonDao personDao = new PersonDao();
-        Person person = new Person();
-        person.setName("juanito");
-        person.setLastName("jones");
-        person.setType("todologo");
+        ArrayList<String> names = new ArrayList<>(Arrays.asList(
+                "John", "Jane", "Joe", "Jim"
+        ));
+        ArrayList<String> lastNames = new ArrayList<>(Arrays.asList(
+                "Doe", "Dao", "Don", "Doe"
+        ));
+        ArrayList<String> phones = new ArrayList<>(Arrays.asList(
+                "9991009988", "9991000000", "9992019080", "9999557788"
+        ));
+        ArrayList<String> emails = new ArrayList<>(Arrays.asList(
+                "jdoe@mail.com", "jdae@mail.com", "jdon@mail.com", "jimdoe@mail.com"
+        ));
 
-        ArrayList<Person> people = new ArrayList<>(personDao.findAll());
-
-        person = personDao.findById(1);
-
-        System.out.println(person.getClass().getName());
-        try {
-            int id = personDao.insertPerson(person);
-            person.setId(id);
-        } catch (SQLException e) {
-            e.printStackTrace();
+        for (int i = 0; i < names.size(); i++) {
+            Person person = new Person();
+            person.setType("client");
+            person.setName(names.get(i));
+            person.setLastName(lastNames.get(i));
+            person.setPhone(phones.get(i));
+            person.setEmail(emails.get(i));
+            try {
+                person.save();
+                System.out.println("Person populated");
+            } catch (SQLException e) {
+                System.err.println("Person NOT populated");
+                e.printStackTrace();
+            }
         }
     }
 }
