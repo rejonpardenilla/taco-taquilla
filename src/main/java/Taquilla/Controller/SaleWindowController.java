@@ -26,6 +26,7 @@ public class SaleWindowController {
 
     public TableModel getShows(Play play){
         String[] header = {"id", "Play", "Time"};
+        if (play == null) return new DefaultTableModel();
         Show[] shows = saleWindowModel.getShowsFromPlay(play).toArray(new Show[0]);
         String[][] data = new String[shows.length][3];
         for(int i = 0; i<shows.length; i++){
