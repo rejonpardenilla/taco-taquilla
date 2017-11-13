@@ -82,4 +82,23 @@ public class EditPlayModel {
         return true;
     }
 
+    public boolean rescheduleShow(LocalDate oldDate, LocalTime oldTime, LocalDate newDate, LocalTime newTime) {
+        System.out.println(oldDate);
+        System.out.println(oldTime);
+        System.out.println(newDate);
+        System.out.println(newTime);
+        for (int i = 0; i < shows.size(); i++) {
+            if (shows.get(i).getDate().equals(oldDate) && shows.get(i).getTime().equals(oldTime)) {
+
+                shows.get(i).setDate(newDate);
+                shows.get(i).setTime(newTime);
+                new ShowDao().updateShow(shows.get(i));
+
+                return true;
+            }
+        }
+
+        return false;
+    }
+
 }

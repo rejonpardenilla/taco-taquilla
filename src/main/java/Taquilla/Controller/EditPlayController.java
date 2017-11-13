@@ -9,6 +9,7 @@ import java.awt.event.ActionListener;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 
 public class EditPlayController implements ActionListener {
@@ -141,21 +142,68 @@ public class EditPlayController implements ActionListener {
             final int TIME_COLUMN = 1;
             final int HOURS = 0;
             final int MINUTES = 1;
+            String newDateString = "";
+            String newTimeString = "";
 
-            String tableDate = view.getTableModel().getValueAt(selectedRow, DATE_COLUMN).toString();
-            DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-            String tableTime[] = view.getTableModel().getValueAt(selectedRow, TIME_COLUMN).toString().split(":");
+            try {
+                newDateString = JOptionPane.showInputDialog("Fecha (dd-MM-yyyy):");
+                newTimeString = JOptionPane.showInputDialog("Hora (mm:HH)");
 
-            LocalDate date = LocalDate.parse(tableDate, dateFormat);
-            LocalTime time = LocalTime.of(Integer.parseInt(tableTime[HOURS]), Integer.parseInt(tableTime[MINUTES]));
+                DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+                String newTimeSplit[] = newTimeString.split(":");
 
-            if (model.checkDisponibility(date, time)) {
+                LocalDate newDate = LocalDate.parse(newDateString, dateFormat);
+                LocalTime newTime = LocalTime.of(Integer.parseInt(newTimeSplit[HOURS]), Integer.parseInt(newTimeSplit[MINUTES]));
 
-            } else {
-                System.out.println("No disponible");
+
+                if (model.checkDisponibility(newDate, newTime)) {
+                    String oldDateString = view.getTableModel().getValueAt(selectedRow, DATE_COLUMN).toString();
+                    DateTimeFormatter tableDateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                    String oldTimeSplit[] = view.getTableModel().getValueAt(selectedRow, TIME_COLUMN).toString().split(":");
+
+                    LocalDate oldDate = LocalDate.parse(oldDateString, tableDateFormat);
+                    LocalTime oldTime = LocalTime.of(Integer.parseInt(oldTimeSplit[HOURS]), Integer.parseInt(oldTimeSplit[MINUTES]));
+
+                    if (model.rescheduleShow(oldDate, oldTime, newDate, newTime)) {
+                        JOptionPane.showMessageDialog(
+                                null,
+                                "Disponible!\nRecalendarización exitosa!",
+                                "Recalendarizacion exitosa",
+                                JOptionPane.WARNING_MESSAGE);
+                    } else {
+                        JOptionPane.showMessageDialog(
+                                null,
+                                "Error al recalendarizar la obra",
+                                "Error",
+                                JOptionPane.WARNING_MESSAGE);
+                    }
+
+                } else {
+                    JOptionPane.showMessageDialog(
+                            null,
+                            "Horario no disponible!",
+                            "Recalendarización fallida.",
+                            JOptionPane.WARNING_MESSAGE);
+                }
+            } catch (DateTimeParseException e1) {
+                JOptionPane.showMessageDialog(
+                        null,
+                        "La fecha u hora no son correctas!",
+                        "Error en el formato de la fecha/hora",
+                        JOptionPane.ERROR_MESSAGE);
+            } catch (NumberFormatException e2) {
+                JOptionPane.showMessageDialog(
+                        null,
+                        "La hora no se escribio correctamente!",
+                        "Error en el formato de la hora",
+                        JOptionPane.ERROR_MESSAGE);
+            } catch (NullPointerException e3) {
+                JOptionPane.showMessageDialog(
+                        null,
+                        "Los campos de fecha y/u hora estan vacios",
+                        "Error en el formato de la fecha/hora",
+                        JOptionPane.ERROR_MESSAGE);
             }
-
-
         }
     }
 
