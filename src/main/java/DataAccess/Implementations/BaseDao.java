@@ -15,8 +15,8 @@ import java.util.List;
 
 public abstract class BaseDao<T extends SerializedObject> implements BaseDaoInterface<T> {
 
-    Class<T> typeOfT;
-    String tableName;
+    private Class<T> typeOfT;
+    private String tableName;
 
     @SuppressWarnings("unchecked")
     public BaseDao() {
@@ -69,6 +69,7 @@ public abstract class BaseDao<T extends SerializedObject> implements BaseDaoInte
         return null;
     }
 
+    @Override
     public int insert(T object) throws SQLException{
         Connection connection = ConnectionFactory.getConnection();
         PreparedStatement statement = null;
