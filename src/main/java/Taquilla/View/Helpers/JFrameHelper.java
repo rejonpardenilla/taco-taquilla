@@ -30,4 +30,12 @@ public class JFrameHelper {
         frame.setContentPane(gui);
         frame.setVisible(true);
     }
+
+    public static void addSeparator(GUI gui, int size) {
+        String separator = "";
+        for (int i = 0; i < size; i++) {
+            separator = separator.concat(" ");
+        }
+        gui.add(new JLabel(separator));
+    }
 }
