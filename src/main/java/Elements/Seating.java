@@ -11,6 +11,15 @@ public class Seating extends SerializedObject implements DataAccessMethods {
     private Seat seat;
     private Show show;
 
+    public Seating() {
+    }
+
+    public Seating(Seat seat, Show show, String state) {
+        this.seat = seat;
+        this.state = state;
+        this.show = show;
+    }
+
     public String getState() {
         return state;
     }

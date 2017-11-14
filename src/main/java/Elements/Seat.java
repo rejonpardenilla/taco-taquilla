@@ -39,4 +39,8 @@ public class Seat extends SerializedObject {
         return this;
     }
 
+    @Override
+    public String toString() {
+        return row+number;
+    }
 }

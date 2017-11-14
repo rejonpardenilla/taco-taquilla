@@ -10,4 +10,5 @@ public interface BaseDaoInterface<T extends SerializedObject> {
     T extractFromResultSet(ResultSet resultSet) throws SQLException;
     List<T> findAll();
     T findById(int id);
+    int insert(T object) throws SQLException;
 }

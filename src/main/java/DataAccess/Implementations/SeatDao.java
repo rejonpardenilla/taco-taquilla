@@ -3,6 +3,7 @@ package DataAccess.Implementations;
 import DataAccess.ConnectionFactory;
 import DataAccess.Interfaces.SeatDaoInterface;
 import Elements.Seat;
+import Elements.Zone;
 
 import java.sql.*;
 
@@ -40,6 +41,7 @@ public class SeatDao extends BaseDao<Seat> implements SeatDaoInterface {
         }
 
         try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
+            connection.close();
             if (generatedKeys.next()) {
                 return generatedKeys.getInt("id");
             } else {
@@ -47,5 +49,27 @@ public class SeatDao extends BaseDao<Seat> implements SeatDaoInterface {
             }
         }
     }
+    public static void main(String[] args) {
+        SeatDao seatDao = new SeatDao();
+        Seat seat = new Seat();
+        ZoneDao zoneDao = new ZoneDao();
+        seat.setZone(zoneDao.findById(1));
+        seat.setRow("J");
+        seat.setNumber(3);
+        try {
+            seatDao.insert(seat);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        Zone zz = new Zone();
+        zz.setDiscountPercent(12);
+        try {
+            zoneDao.insert(zz);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 
 }

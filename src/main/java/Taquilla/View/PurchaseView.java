@@ -1,106 +1,130 @@
 package Taquilla.View;
 
-import Elements.Show;
-import Taquilla.Controller.PurchaseController;
-import Taquilla.View.Helpers.PanelFactory;
+import DataAccess.Implementations.PurchaseDao;
+import Elements.Person;
+import Elements.Purchase;
+import Elements.Ticket;
+import Taquilla.Auxiliary.SeatState;
+import Taquilla.View.Helpers.GUI;
+import Taquilla.View.Helpers.JFrameHelper;
 
-import java.awt.*;
-import java.awt.event.*;
 import javax.swing.*;
+import java.awt.*;
+import java.math.BigDecimal;
+import java.sql.SQLException;
+import java.util.ArrayList;
 
-@Deprecated //UNFINISHED
-public class PurchaseView extends JPanel implements ActionListener {
-    //Panel Factory and panels
-    private PanelFactory panelFactory;
-    private JPanel menu;
+public class PurchaseView {
+    public GUI gui;
+    JFrame frame;
 
-    //Components
-    private TextField seatRowField, seatNumberField, clientNameField;
-    private JComboBox<Show> shows;
+    public PurchaseView(ArrayList<SeatState> seats) {
+        frame = JFrameHelper.createFrame();
+        frame.setSize(new Dimension(200, 200));
 
-    //Controller
-    private PurchaseController purchaseController;
+        GUI leftPanel;
+        leftPanel = JFrameHelper.createCenteredGUI("Register Client");
+        leftPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
 
-    public PurchaseView() {
-        super(new BorderLayout());
+        // Name
+        JTextField nameField = new JTextField();
+        nameField.setColumns(11);
+        leftPanel.addLabeledField("nameField", "Name: ", nameField);
 
-        initFields();
-        createComboBox();
-        createMenu();
-        createPurchaseButton();
-        generateLayout();
-    }
+        // Last Name
+        JTextField lastNameField = new JTextField();
+        lastNameField.setColumns(9);
+        leftPanel.addLabeledField("lastNameField", "Last Name: ", lastNameField);
 
-    public void actionPerformed(ActionEvent e) {
-        JComboBox cb = (JComboBox)e.getSource();
-        seatRowField.setText("action");
-        seatNumberField.setText("performed");
-    }
+        // Phone
+        JTextField phoneField = new JTextField();
+        phoneField.setColumns(11);
+        leftPanel.addLabeledField("phoneField", "Phone: ", phoneField);
 
-    void initFields(){
-        seatRowField = new TextField();
-        seatNumberField = new TextField();
-        clientNameField = new TextField();
-        panelFactory = new PanelFactory();
+        // Email
+        JTextField emailField = new JTextField();
+        emailField.setColumns(12);
+        leftPanel.addLabeledField("emailField", "Email: ", emailField);
 
-        purchaseController = new PurchaseController();
-    }
-
-    public void createComboBox(){
-        Show[] showArray = (Show[]) purchaseController.loadShows().toArray(new Show[0]);
-        shows = new JComboBox<Show>(showArray);
-        shows.setSelectedIndex(0);
-        shows.addActionListener(this);
-    }
-
-    private void createMenu(){
-        JPanel row, number, client;
-        row = panelFactory.labeledField("Row", seatRowField);
-        number = panelFactory.labeledField("Number", seatNumberField);
-        client = panelFactory.labeledField("Client name", clientNameField);
-
-        menu = new JPanel();
-        menu.setLayout(new BoxLayout(menu, BoxLayout.PAGE_AXIS));
-
-        menu.add(row);
-        menu.add(number);
-        menu.add(client);
-        menu.setBorder(BorderFactory.createEmptyBorder(20,0,0,0));
-
-//        menu.setPreferredSize(new Dimension(177, 122+10));
-    }
-
-    private void createPurchaseButton() {
-        //TODO
-    }
-
-    public void generateLayout(){
-        add(shows, BorderLayout.PAGE_START);
-        add(menu, BorderLayout.CENTER);
-        setBorder(BorderFactory.createEmptyBorder(20,20,20,20));
-    }
-
-    private static void createAndShowGUI() {
-        //Create and set up the window.
-        JFrame window = new JFrame("PurchaseView");
-        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        //Create and set up the content pane.
-        JComponent newContentPane = new PurchaseView();
-        newContentPane.setOpaque(true);
-        window.setContentPane(newContentPane);
-
-        //Display the window.
-        window.pack();
-        window.setVisible(true);
-    }
-
-    public static void main(String[] args) {
-        //Schedule a job for the event-dispatching thread:
-        javax.swing.SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                createAndShowGUI();
+        JToggleButton sendButton = new JToggleButton();
+        sendButton.setText("Register");
+        sendButton.addActionListener(actionEvent -> {
+            Person client = new Person();
+            client.setType("client");
+            client.setName((String) leftPanel.getCurrentValueFrom("nameField"));
+            client.setLastName((String) leftPanel.getCurrentValueFrom("lastNameField"));
+            client.setPhone((String) leftPanel.getCurrentValueFrom("phoneField"));
+            client.setEmail((String) leftPanel.getCurrentValueFrom("emailField"));
+            try {
+                client.save();
+//                frame.dispose();
+                proceedToPurchase(client, seats);
+//                JFrameHelper.showMessageAndClose(frame, sendButton, "Client saved!");
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
         });
+        leftPanel.add(sendButton);
+        leftPanel.setPreferredSize(new Dimension(200, 300));
+
+        gui = new GUI(new BorderLayout());
+        gui.add("left", leftPanel, BorderLayout.WEST);
+
+        frame.setContentPane(gui);
+        frame.setVisible(true);
+    }
+
+    private void proceedToPurchase(Person client, ArrayList<SeatState> seats) {
+        Purchase purchase = new Purchase();
+        BigDecimal total = new BigDecimal(0);
+        for (SeatState state : seats){
+            Ticket ticket = new Ticket();
+            BigDecimal price = state.getSeating().getShow().getPrice();
+            BigDecimal discountPercent = BigDecimal.valueOf(state.getSeat().getZone().getDiscountPercent());
+            BigDecimal cost = (price.multiply(discountPercent.divide(BigDecimal.valueOf(100))));
+            total = total.add(cost);
+        }
+        purchase.setTotal(total);
+        purchase.setClient(client);
+
+        ArrayList<Ticket> tickets = new ArrayList<>();
+        try {
+            purchase.save();
+            for (SeatState state : seats){
+                Ticket ticket = new Ticket();
+                BigDecimal price = state.getSeating().getShow().getPrice();
+                BigDecimal discountPercent = BigDecimal.valueOf(state.getSeat().getZone().getDiscountPercent());
+                BigDecimal cost = (price.multiply(discountPercent.divide(BigDecimal.valueOf(100))));
+                ticket.setPurchase(purchase);
+                ticket.setSeating(state.getSeating().save());
+                ticket.setReturned(false);
+                ticket.setPrice(cost);
+                tickets.add(ticket.save());
+            }
+            gui.add(finalizePurchase(tickets), BorderLayout.CENTER);
+            gui.revalidate();
+            gui.repaint();
+            frame.pack();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private GUI finalizePurchase(ArrayList<Ticket> tickets) {
+        String type = tickets.get(0).getSeating().getState().toLowerCase().equals("taken")
+                        ? "Purchase"
+                        : "Reservation";
+        GUI minigui = JFrameHelper.createCenteredGUI("Thank you for your " + type);
+        JPanel report = new JPanel();
+        report.setLayout(new BoxLayout(report, BoxLayout.Y_AXIS));
+        JLabel header = new JLabel("The total for " + tickets.size() + " tickets is: " + tickets.get(0).getPurchase().getTotal().toString());
+        header.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 24));
+        report.add(header);
+        for(Ticket ticket : tickets){
+            report.add(new JLabel(ticket.getSeating().getSeat().toString() + " - " + ticket.getPrice()));
+        }
+        minigui.add(report);
+        return minigui;
     }
 }

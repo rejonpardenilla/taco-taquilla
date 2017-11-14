@@ -1,29 +1,28 @@
 package Taquilla.View;
 
+import DataAccess.Implementations.ShowDao;
 import Elements.Play;
+import Elements.Show;
 import Taquilla.Controller.SaleWindowController;
+import Taquilla.View.Helpers.GUI;
+import Taquilla.View.Helpers.JFrameHelper;
+import Taquilla.View.Helpers.PanelFactory;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableModel;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class SaleWindowView {
     //Windows and panels
     private JFrame window;
-    private JPanel gui, seats;
-
-    //Key components
-    private JTable showTable;
-    private JComboBox<Play> playsComboBox;
+    private GUI gui;
 
     //Events
-    private ActionListener onPlaySelect, onSeatSelect, onClearButton;
+    private ActionListener onPlaySelect, onPurchase, onReservation;
     private ListSelectionListener onShowSelect;
-
     //Controller
     private SaleWindowController saleWindowController;
 
@@ -33,66 +32,64 @@ public class SaleWindowView {
 
     private void init(){
         saleWindowController = new SaleWindowController();
-        window = new JFrame();
+        window = JFrameHelper.createFrame();
         window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         window.setTitle("Taco Taquilla (TM)");
 
         createEvents();
-        gui = generateGUI();
-        window.setContentPane(gui);
+        generateGUI();
 
+        window.setContentPane(gui);
         window.pack();
-        window.setLocationRelativeTo(null);
-        window.setMinimumSize(window.getSize());
         window.setVisible(true);
     }
 
     private void createEvents(){
-        onPlaySelect = event -> fillShowList((Play) playsComboBox.getSelectedItem());
-
-        onShowSelect = event -> { //EVENTO AL HACER CLIC EN UNA FILA DE LA TABLA
-            int show_id = Integer.valueOf((String) showTable.getValueAt(showTable.getSelectedRow(),0));
-            //TODO: LLAMAR LA PANTALLA DE ASIENTOS DEL SHOW INDICADO
+        onPlaySelect = event -> {
+            ((JTable)gui.$("showTable")).clearSelection();
+            fillShowList((Play)gui.getCurrentValueFrom("playsComboBox"));
+            gui.$("purchaseButton").setEnabled(false);
+            gui.$("reservationButton").setEnabled(false);
         };
 
-        onSeatSelect = new ActionListener() {//EVENTO AL SELECCIONAR UN ASIENTO
-            private int seatCount = 0;
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                //aqui se agrega
-                seats.add(new JLabel(seatCount + "H-3"));
-                seatCount++;
-                window.validate();
-            }
+        onShowSelect = event -> {
+            gui.$("purchaseButton").setEnabled(true);
+            gui.$("reservationButton").setEnabled(true);
         };
 
-        onClearButton = event -> {
-            //TODO EVENTO DE CLEAR ASIENTOS
+        onReservation = event->{
+            ShowDao showDao = new ShowDao();
+            Show currentShow = showDao.findById((int)gui.getCurrentValueFrom("showTable"));
+            new SeatsView(currentShow, "RESERVED");
+        };
+
+        onPurchase = event->{
+            ShowDao showDao = new ShowDao();
+            Show currentShow = showDao.findById((int)gui.getCurrentValueFrom("showTable"));
+            new SeatsView(currentShow, "TAKEN");
         };
 
     }
 
-    private JPanel generateGUI(){
-        JPanel gui = new JPanel(new BorderLayout(5,5));
+    private void generateGUI() {
+        gui = new GUI(new BorderLayout(5,5));
         gui.setBorder(new TitledBorder("Taco Taquilla GUI"));
 
         gui.add(generatePlaySelector(), BorderLayout.NORTH);
-        gui.add(generateShowList(), BorderLayout.CENTER);
-        gui.add(generateSeatList(), BorderLayout.WEST);
-        return gui;
+        gui.add(generateButtonSidebar(), BorderLayout.EAST);
+        gui.add("showList", generateShowList(), BorderLayout.CENTER);
     }
 
-    private JPanel generatePlaySelector(){
+    private JPanel generatePlaySelector() {
         JPanel playSelector = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         playSelector.setBorder(new TitledBorder("Select Play to display shows"));
 
         //combobox
         Play[] plays = saleWindowController.getPlays().toArray(new Play[0]);
-        playsComboBox = new JComboBox<Play>(plays);
+        JComboBox playsComboBox = (JComboBox) gui.add("playsComboBox", new JComboBox<Play>(plays));
 
         //Set selected to first show, or show a message if none are found
         if (plays.length < 1) playsComboBox.addItem(new Play("No plays found. Check db"));
-        playsComboBox.setSelectedIndex(0);
 
         playsComboBox.addActionListener(onPlaySelect);
         playSelector.add(playsComboBox);
@@ -101,7 +98,7 @@ public class SaleWindowView {
     }
 
     private JScrollPane generateShowList() {
-        showTable = new JTable();
+        JTable showTable = (JTable) gui.add("showTable", new JTable());
         fillShowList(new Play());
         showTable.setAutoCreateRowSorter(true);
         JScrollPane showList = new JScrollPane(showTable);
@@ -111,28 +108,36 @@ public class SaleWindowView {
 
         showTable.getSelectionModel().addListSelectionListener(onShowSelect);
 
+
         return showList;
     }
-    private void fillShowList(Play play){
 
+    private void fillShowList(Play play){
         TableModel tableModel = saleWindowController.getShows(play);
+        JTable showTable = (JTable) gui.$("showTable");
         showTable.setModel(tableModel);
         showTable.getColumnModel().getColumn(0).setMaxWidth(10);
     }
 
-    private JPanel generateSeatList() {
-        JPanel seatList = new JPanel(new BorderLayout(4,4));
-        seatList.setBorder(new TitledBorder("Selected Seats"));
-        seats = new JPanel(new GridLayout(0,2,3,3));
-        seats.setBorder(new TitledBorder("hello"));
-        seatList.add(seats);
-        //CLEAR BUTTON
-        JButton clear = new JButton("Clear");
-        clear.addActionListener(onSeatSelect); //change event to onClearButton
-        seatList.add(clear, BorderLayout.SOUTH);
+    private JPanel generateButtonSidebar() {
+        JPanel sidebar = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        sidebar.setBorder(new TitledBorder("Proceed to:"));
+        JButton purchaseButton = (JButton)gui.add("purchaseButton", new JButton("  Purchase  "));
+        purchaseButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        JButton reservationButton = (JButton)gui.add("reservationButton", new JButton("Reservation"));
+        reservationButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        seatList.setPreferredSize(new Dimension(100,200));
-        return seatList;
+        purchaseButton.addActionListener(onPurchase);
+        reservationButton.addActionListener(onReservation);
+
+        purchaseButton.setEnabled(false);
+        reservationButton.setEnabled(false);
+
+        sidebar.add(purchaseButton);
+        sidebar.add(reservationButton);
+
+        sidebar.setPreferredSize(new Dimension(130,200));
+        return sidebar;
     }
 
     public static void main(String[] args) {
