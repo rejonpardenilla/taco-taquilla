@@ -25,11 +25,12 @@ public class PurchaseDao extends BaseDao<Purchase> implements PurchaseDaoInterfa
         Connection connection = ConnectionFactory.getConnection();
         PreparedStatement statement = null;
 
-        String query = "INSERT INTO purchase (client, total) VALUES (?,?)";
+        String query = "INSERT INTO purchase (client, total, date, time) VALUES (?,?,?,?)";
         statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
         statement.setInt(1, purchase.getClient().getId());
         statement.setBigDecimal(2, purchase.getTotal());
-
+        statement.setDate(3, purchase.getDate());
+        statement.setTime(4, purchase.getTime());
 
         int rowsAffected = statement.executeUpdate();
         if(rowsAffected == 0){
@@ -59,8 +60,10 @@ public class PurchaseDao extends BaseDao<Purchase> implements PurchaseDaoInterfa
         purchase.setClient(client);
         purchase.setTotal(BigDecimal.valueOf(29.96));
         try {
-            int id = purchaseDao.insertPurchase(purchase);
-            purchase.setId(id);
+            // int id = purchaseDao.insertPurchase(purchase);
+            // purchase.setId(id);
+            purchase.save();
+            System.out.println("Purchase populated");
         } catch (SQLException e) {
             e.printStackTrace();
         }
