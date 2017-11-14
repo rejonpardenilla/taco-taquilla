@@ -7,6 +7,7 @@ import Elements.Purchase;
 
 import java.math.BigDecimal;
 import java.sql.*;
+import java.util.List;
 
 public class PurchaseDao extends BaseDao<Purchase> implements PurchaseDaoInterface{
 
@@ -25,12 +26,11 @@ public class PurchaseDao extends BaseDao<Purchase> implements PurchaseDaoInterfa
         Connection connection = ConnectionFactory.getConnection();
         PreparedStatement statement = null;
 
-        String query = "INSERT INTO purchase (client, total, date, time) VALUES (?,?,?,?)";
+        String query = "INSERT INTO purchase (client, total) VALUES (?,?)";
         statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
         statement.setInt(1, purchase.getClient().getId());
         statement.setBigDecimal(2, purchase.getTotal());
-        statement.setDate(3, purchase.getDate());
-        statement.setTime(4, purchase.getTime());
+
 
         int rowsAffected = statement.executeUpdate();
         if(rowsAffected == 0){
@@ -53,19 +53,19 @@ public class PurchaseDao extends BaseDao<Purchase> implements PurchaseDaoInterfa
 
     public static void main(String[] args) {
         PurchaseDao purchaseDao = new PurchaseDao();
-        PersonDao personDao = new PersonDao();
-
-        Purchase purchase = new Purchase();
-        Person client = personDao.findById(1);
-        purchase.setClient(client);
-        purchase.setTotal(BigDecimal.valueOf(29.96));
-        try {
-            // int id = purchaseDao.insertPurchase(purchase);
-            // purchase.setId(id);
-            purchase.save();
-            System.out.println("Purchase populated");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+//        PersonDao personDao = new PersonDao();
+//
+//        Purchase purchase = new Purchase();
+//        Person client = personDao.findById(1);
+//        purchase.setClient(client);
+//        purchase.setTotal(BigDecimal.valueOf(29.96));
+//        try {
+//            int id = purchaseDao.insertPurchase(purchase);
+//            purchase.setId(id);
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+        List<Purchase> hehe = purchaseDao.findAll();
+        System.out.println("hehe");
     }
 }
