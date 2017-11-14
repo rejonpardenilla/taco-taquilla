@@ -2,11 +2,12 @@ package Taquilla.Auxiliary;
 
 import javax.swing.*;
 import java.awt.*;
+import java.time.LocalTime;
 import java.util.ArrayList;
 
 public class SeatButton extends JButton {
     private final Color zoneColor;
-    private final Color pressedColor = new Color(255, 145, 164);
+    private Color pressedColor = new Color(255, 145, 164);
     private SeatState seatState;
 
     public SeatButton(SeatState seatState) {
@@ -28,9 +29,19 @@ public class SeatButton extends JButton {
                 zoneColor = new Color(232,232,232); break;
         }
         if (seatState.getSeating() != null){
-//            this.setBackground(pressedColor);
-            this.setEnabled(false);
-            this.setSelected(true);
+            //Different color for reserved seats
+            if(seatState.getSeating().getState().toLowerCase().equals("reserved")) {
+                this.pressedColor = new Color(204, 101, 254);
+            }
+            //Deactivation of reservations 2 hrs earlier
+            if(!((seatState.getSeating().getState().toLowerCase().equals("reserved"))
+                    && (seatState.getSeating().getShow().getTime().getHour()-2 < LocalTime.now().getHour()))
+                    || seatState.getSeating().getState().toLowerCase().equals("taken")) {
+                this.setEnabled(false);
+                this.setSelected(true);
+            }
+        } else {
+            pressedColor = new Color(255, 145, 164);
         }
         this.seatState = seatState;
         this.addActionListener(event->{
@@ -50,6 +61,10 @@ public class SeatButton extends JButton {
     @Override
     protected void paintComponent(Graphics g){
         if (getModel().isSelected() || getModel().isPressed()){
+            if (this.seatState.getSeating() != null && this.seatState.getSeating().getState().toLowerCase().equals("reserved"))
+                this.pressedColor = new Color(204,101,254);
+            else
+                this.pressedColor = new Color(255, 145, 164);
             g.setColor(pressedColor);
         } else {
             g.setColor(zoneColor);

@@ -1,7 +1,9 @@
 package Taquilla.View;
 
+import DataAccess.Implementations.SeatingDao;
 import DataAccess.Implementations.ShowDao;
 import Elements.Play;
+import Elements.Seating;
 import Elements.Show;
 import Taquilla.Controller.SaleWindowController;
 import Taquilla.View.Helpers.GUI;
@@ -14,6 +16,8 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableModel;
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.time.LocalTime;
+import java.util.List;
 
 public class SaleWindowView {
     //Windows and panels
@@ -21,7 +25,7 @@ public class SaleWindowView {
     private GUI gui;
 
     //Events
-    private ActionListener onPlaySelect, onPurchase, onReservation;
+    private ActionListener onPlaySelect, onPurchase, onReservation, onReclaim;
     private ListSelectionListener onShowSelect;
     //Controller
     private SaleWindowController saleWindowController;
@@ -50,17 +54,43 @@ public class SaleWindowView {
             fillShowList((Play)gui.getCurrentValueFrom("playsComboBox"));
             gui.$("purchaseButton").setEnabled(false);
             gui.$("reservationButton").setEnabled(false);
+            gui.$("reclaimButton").setEnabled(false);
         };
 
         onShowSelect = event -> {
             gui.$("purchaseButton").setEnabled(true);
             gui.$("reservationButton").setEnabled(true);
+            gui.$("reclaimButton").setEnabled(true);
         };
 
         onReservation = event->{
             ShowDao showDao = new ShowDao();
             Show currentShow = showDao.findById((int)gui.getCurrentValueFrom("showTable"));
-            new SeatsView(currentShow, "RESERVED");
+            if (currentShow.getTime().getHour()-2 < LocalTime.now().getHour())
+                JOptionPane.showMessageDialog(gui, "Cannot make reservations for this show anymore!");
+            else
+                new SeatsView(currentShow, "RESERVED");
+        };
+
+        onReclaim = event -> {
+            ShowDao showDao = new ShowDao();
+            Show currentShow = showDao.findById((int)gui.getCurrentValueFrom("showTable"));
+            if (currentShow.getTime().getHour()-2 < LocalTime.now().getHour())
+                JOptionPane.showMessageDialog(gui, "Too late for reservations!!");
+            else {
+                SeatingDao seatingDao = new SeatingDao();
+                List<Seating> seatings = seatingDao.findByShow(currentShow);
+                if (seatings.size() > 0) {
+                    JFrame list = new JFrame();
+                    for (Seating seating : seatings) {
+                        if (seating.getState().toLowerCase().equals("reserved"))
+                            list.add(new JLabel(seating.getSeat().toString()));
+                    }
+                    list.setVisible(true);
+                } else {
+                    JOptionPane.showMessageDialog(gui, "No reservations on this show!");
+                }
+            }
         };
 
         onPurchase = event->{
@@ -126,15 +156,19 @@ public class SaleWindowView {
         purchaseButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         JButton reservationButton = (JButton)gui.add("reservationButton", new JButton("Reservation"));
         reservationButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        JButton reclaimReservation =  (JButton)gui.add("reclaimButton", new JButton("  Reclaim  "));
 
         purchaseButton.addActionListener(onPurchase);
         reservationButton.addActionListener(onReservation);
+        reclaimReservation.addActionListener(onReclaim);
 
         purchaseButton.setEnabled(false);
         reservationButton.setEnabled(false);
+        reclaimReservation.setEnabled(false);
 
         sidebar.add(purchaseButton);
         sidebar.add(reservationButton);
+        sidebar.add(reclaimReservation);
 
         sidebar.setPreferredSize(new Dimension(130,200));
         return sidebar;
