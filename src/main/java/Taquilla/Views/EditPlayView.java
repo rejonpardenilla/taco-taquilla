@@ -23,7 +23,6 @@ public class EditPlayView extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel playStatusLabel;
     private javax.swing.JButton rescheduleShowButton;
-    private javax.swing.JButton saveButton;
     public javax.swing.JTable showsTable;
     private DefaultTableModel showsTableModel;
 
@@ -45,7 +44,6 @@ public class EditPlayView extends javax.swing.JFrame {
         deleteShowButton = new javax.swing.JButton();
         rescheduleShowButton = new javax.swing.JButton();
         cancelButton = new javax.swing.JButton();
-        saveButton = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         playStatusLabel = new javax.swing.JLabel();
@@ -112,8 +110,6 @@ public class EditPlayView extends javax.swing.JFrame {
 
         cancelButton.setText("Cancelar");
 
-        saveButton.setText("Guardar");
-
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Acciones"));
 
         jLabel2.setText("Estado de la obra:");
@@ -168,7 +164,6 @@ public class EditPlayView extends javax.swing.JFrame {
                                                 .addGap(0, 0, Short.MAX_VALUE)
                                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                                         .addGroup(jPanel1Layout.createSequentialGroup()
-                                                                .addComponent(saveButton)
                                                                 .addGap(18, 18, 18)
                                                                 .addComponent(cancelButton))
                                                         .addGroup(jPanel1Layout.createSequentialGroup()
@@ -204,8 +199,7 @@ public class EditPlayView extends javax.swing.JFrame {
                                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(16, 16, 16)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(cancelButton)
-                                        .addComponent(saveButton)))
+                                        .addComponent(cancelButton)))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -266,10 +260,6 @@ public class EditPlayView extends javax.swing.JFrame {
 
     public JButton getRescheduleShowButton() {
         return rescheduleShowButton;
-    }
-
-    public JButton getSaveButton() {
-        return saveButton;
     }
 
     public DefaultTableModel getTableModel() {

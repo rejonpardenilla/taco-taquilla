@@ -19,7 +19,6 @@ public class EditPlayController implements ActionListener {
     public EditPlayController(EditPlayView view, EditPlayModel model) {
         this.view = view;
         this.view.getFindPlayButton().addActionListener(this);
-        this.view.getSaveButton().addActionListener(this);
         this.view.getCancelButton().addActionListener(this);
         this.view.getCancelledPlaysButton().addActionListener(this);
         this.view.getCancelledShowsButton().addActionListener(this);
@@ -255,8 +254,6 @@ public class EditPlayController implements ActionListener {
             cancelShow();
         } else if (selectedButton == view.getRescheduleShowButton()) {
             rescheduleShow();
-        } else if (selectedButton == view.getSaveButton()) {
-            //Posiblemente se elimine el botón de guardar, pues los cambios se hacen al momento dependiendo del evento.
         } else if (selectedButton == view.getCancelButton()) {
             cancelButton();
         }
