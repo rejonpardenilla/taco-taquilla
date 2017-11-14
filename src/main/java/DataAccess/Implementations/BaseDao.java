@@ -42,7 +42,7 @@ public abstract class BaseDao<T extends SerializedObject> implements BaseDaoInte
                 T result = extractFromResultSet(resultSet);
                 results.add(result);
             }
-
+            connection.close();
             return results;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -59,7 +59,7 @@ public abstract class BaseDao<T extends SerializedObject> implements BaseDaoInte
         try {
             statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery("SELECT * FROM " + tableName + " WHERE id=" + id);
-
+            connection.close();
             if (resultSet.next())
                 return extractFromResultSet(resultSet);
 
@@ -132,6 +132,7 @@ public abstract class BaseDao<T extends SerializedObject> implements BaseDaoInte
             throw new SQLException("No rows affected");
         }
         ResultSet generatedKeys = statement.getGeneratedKeys();
+        connection.close();
         if (generatedKeys.next()){
             int id = generatedKeys.getInt("id");
             return id;

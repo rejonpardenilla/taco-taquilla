@@ -1,7 +1,9 @@
 package Taquilla.View;
 
+import DataAccess.Implementations.ShowDao;
 import Elements.Play;
 import Taquilla.Controller.SaleWindowController;
+import Taquilla.Controller.SeatsController;
 import Taquilla.View.Helpers.GUI;
 import Taquilla.View.Helpers.PanelFactory;
 
@@ -64,6 +66,13 @@ public class SaleWindowView {
 //            int show_id = (int) gui.getCurrentValueFrom("showTable");
 //            //TODO: LLAMAR LA PANTALLA DE ASIENTOS DEL SHOW INDICADO
 //        };
+        onShowSelect = event -> {
+            ShowDao showDao = new ShowDao();
+            SeatsController seatsController = new SeatsController(showDao.findById((int)gui.getCurrentValueFrom("showTable")), "TAKEN");
+            gui.$("showList").setVisible(false);
+            gui.add(seatsController.generateGrid(), BorderLayout.CENTER);
+            window.pack();
+        };
 
         onSeatSelect = new ActionListener() {//EVENTO AL SELECCIONAR UN ASIENTO
             private int seatCount = 0;
@@ -87,7 +96,7 @@ public class SaleWindowView {
         gui.setBorder(new TitledBorder("Taco Taquilla GUI"));
 
         gui.add(generatePlaySelector(), BorderLayout.NORTH);
-        gui.add(generateShowList(), BorderLayout.CENTER);
+        gui.add("showList", generateShowList(), BorderLayout.CENTER);
         gui.add(generateSeatList(), BorderLayout.WEST);
 //        gui.add(generatePurchaseFields(), BorderLayout.CENTER);
 //        return gui;

@@ -41,6 +41,7 @@ public class SeatDao extends BaseDao<Seat> implements SeatDaoInterface {
         }
 
         try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
+            connection.close();
             if (generatedKeys.next()) {
                 return generatedKeys.getInt("id");
             } else {

@@ -1,15 +1,16 @@
-package Taquilla.Controller;
+package Taquilla.Model;
 
 import DataAccess.Implementations.SeatDao;
 import DataAccess.Implementations.SeatingDao;
 import DataAccess.Implementations.ShowDao;
+import DataAccess.Implementations.ZoneDao;
 import Elements.Seat;
 import Elements.Seating;
 import Elements.Show;
+import Elements.Zone;
 import Taquilla.Auxiliary.SeatState;
 
-import java.util.ArrayList;
-import java.util.Objects;
+import java.util.*;
 
 public class SeatsModel {
     SeatDao seatdao = new SeatDao();
@@ -17,6 +18,7 @@ public class SeatsModel {
     String[] rowOrder = {"A", "B", "C", "D", "E", "F", "G", "H"};
     SeatState[][] grid;
     public SeatState[][] generateGrid(Show show){
+        Collections.reverse(Arrays.asList(rowOrder));
         grid = new SeatState[8][20];
         ArrayList<Seat> seats = new ArrayList<>(seatdao.findAll());
         ArrayList<Seating> seatings = new ArrayList<Seating>(seatingDao.findByShow(show));
@@ -49,6 +51,11 @@ public class SeatsModel {
                 grid[i][seat.getNumber()-1] = new SeatState(seat);
             }
         }
+    }
+
+    public List<Zone> getAllZones(){
+        ZoneDao zoneDao = new ZoneDao();
+        return zoneDao.findAll();
     }
 
     public static void main(String[] args) {

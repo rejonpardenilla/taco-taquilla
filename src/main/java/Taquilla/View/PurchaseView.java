@@ -14,10 +14,10 @@ import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class ClientRegisterView {
+public class PurchaseView {
     public GUI gui;
 
-    public ClientRegisterView(ArrayList<SeatState> seats) {
+    public PurchaseView(ArrayList<SeatState> seats) {
         JFrame frame = JFrameHelper.createFrame();
         frame.setSize(new Dimension(200, 250));
 
@@ -68,7 +68,6 @@ public class ClientRegisterView {
     }
 
     private void proceedToPurchase(Person client, ArrayList<SeatState> seats) {
-        PurchaseDao purchaseDao = new PurchaseDao();
         Purchase purchase = new Purchase();
         BigDecimal total = new BigDecimal(0);
         for (SeatState state : seats){
@@ -95,12 +94,30 @@ public class ClientRegisterView {
                 ticket.setPrice(cost);
                 tickets.add(ticket.save());
             }
+            finalizePurchase(tickets);
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
+    private void finalizePurchase(ArrayList<Ticket> tickets) {
+        JFrame frame = JFrameHelper.createFrame();
+        GUI minigui = JFrameHelper.createCenteredGUI("Thank you for your purchase");
+        JPanel report = new JPanel();
+        report.setLayout(new BoxLayout(report, BoxLayout.Y_AXIS));
+        JLabel header = new JLabel("The total for " + tickets.size() + " tickets is: " + tickets.get(0).getPurchase().getTotal().toString());
+        header.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 10));
+        report.add(header);
+        for(Ticket ticket : tickets){
+            report.add(new JLabel(ticket.getSeating().getSeat().toString() + " - " + ticket.getPrice()));
+        }
+        minigui.add(report);
+        frame.setContentPane(minigui);
+        frame.pack();
+        frame.setVisible(true);
+    }
+
     public static void main(String[] args) {
-        new ClientRegisterView();
+//        new PurchaseView();
     }
 }
