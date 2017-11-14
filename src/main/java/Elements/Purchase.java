@@ -35,15 +35,11 @@ public class Purchase extends SerializedObject implements DataAccessMethods {
 
     public Date getDate() { return date; }
 
+    public void setDate(Date date) { this.date = date; }
+
     public Time getTime() { return time; }
 
-    public void setDate(Date date) {
-        this.date = date;
-    }
-
-    public void setTime(Time time) {
-        this.time = time;
-    }
+    public void setTime(Time time) { this.time = time; }
 
     @Override
     public Purchase save() throws SQLException {
