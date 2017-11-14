@@ -70,8 +70,7 @@ public class EditPlayModel {
     }
 
     public boolean checkDisponibility(LocalDate date, LocalTime time) {
-        ShowDao dao = new ShowDao();
-        List<Show> showsToCheck = dao.findByDate(date);
+        List<Show> showsToCheck = new ShowDao().findByDate(date);
 
         for (Show show : showsToCheck) {
             if (show.getTime().equals(time) && show.isCancelled() == false) {
@@ -83,10 +82,6 @@ public class EditPlayModel {
     }
 
     public boolean rescheduleShow(LocalDate oldDate, LocalTime oldTime, LocalDate newDate, LocalTime newTime) {
-        System.out.println(oldDate);
-        System.out.println(oldTime);
-        System.out.println(newDate);
-        System.out.println(newTime);
         for (int i = 0; i < shows.size(); i++) {
             if (shows.get(i).getDate().equals(oldDate) && shows.get(i).getTime().equals(oldTime)) {
 

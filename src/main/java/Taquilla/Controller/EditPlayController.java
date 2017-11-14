@@ -69,8 +69,7 @@ public class EditPlayController implements ActionListener {
     private void cleanShowsTable() {
         int rows = view.getTableModel().getRowCount();
         if (rows > 0) {
-            for (int i = rows; i >= 0; i--) {
-                System.out.println("Row " + i);
+            for (int i = rows-1; i >= 0; i--) {
                 view.getTableModel().removeRow(i);
             }
         }
@@ -170,6 +169,9 @@ public class EditPlayController implements ActionListener {
                                 "Disponible!\nRecalendarización exitosa!",
                                 "Recalendarizacion exitosa",
                                 JOptionPane.WARNING_MESSAGE);
+
+                        cleanShowsTable();
+                        fillShowsTable(model.getActiveShows());
                     } else {
                         JOptionPane.showMessageDialog(
                                 null,
