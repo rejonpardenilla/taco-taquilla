@@ -4,7 +4,6 @@ import DataAccess.ConnectionFactory;
 import DataAccess.Interfaces.PlayDaoInterface;
 import Elements.Person;
 import Elements.Play;
-
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -83,6 +82,95 @@ public class PlayDao extends BaseDao<Play> implements PlayDaoInterface {
         }
 
         return null;
+    }
+
+    public int insertPlay(Play play, int responsibleId) throws SQLException{
+        Connection connection = ConnectionFactory.getConnection();
+        PreparedStatement statement = null;
+
+        String query = "INSERT INTO play (name, responsible, description, cancelled) VALUES (?, ?, ?, ?)";
+        statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+
+        statement.setString(1, String.valueOf(play.getName()));
+        statement.setInt(2, responsibleId);
+        statement.setString(3, String.valueOf(play.getDescription()));
+        statement.setBoolean(4, play.isCancelled());
+
+        int rowsAffected = statement.executeUpdate();
+        if(rowsAffected == 0){
+            throw new SQLException("No rows affected");
+        }
+
+        try(ResultSet generatedKeys = statement.getGeneratedKeys()){
+            if (generatedKeys.next()){
+                int id = generatedKeys.getInt("id");
+                return id;
+            } else {
+                throw new SQLException("No id obtained");
+            }
+        }
+    }
+
+    public boolean isRegistered(String name) {
+        Connection connection = ConnectionFactory.getConnection();
+        Statement statement = null;
+
+        try {
+            statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM play WHERE name='" + name + "'");
+
+            if (resultSet.next())
+                return true;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+    public Play findPlayByName(String name) {
+        Play play = null;
+        Connection connection = ConnectionFactory.getConnection();
+        Statement statement = null;
+
+        try {
+            statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM play WHERE name='" + name + "'");
+
+            if (resultSet.next()) {
+                play = extractFromResultSet(resultSet);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return play;
+    }
+
+    public boolean updatePlay(Play play) {
+        Connection connection = ConnectionFactory.getConnection();
+        Statement statement = null;
+
+        try{
+            statement = connection.createStatement();
+            String query = "UPDATE play SET "+
+                    "name='" + play.getName() + "', " +
+                    "responsible=" + play.getResponsible().getId() + ", " +
+                    "description='" + play.getDescription() + "', " +
+                    "cancelled=" + play.isCancelled() +
+                    " WHERE id=" + play.getId();
+
+            int rowsAffected = statement.executeUpdate(query);
+
+            if(rowsAffected == 1){
+                return true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return false;
     }
 
     public static void main(String[] args) {

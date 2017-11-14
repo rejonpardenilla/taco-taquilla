@@ -65,8 +65,11 @@ public class PersonDao extends BaseDao<Person> implements PersonDaoInterface {
                     "phone="     + person.getPhone()    + ", " +
                     "phone_alt=" + person.getPhoneAlt() + ", " +
                     "type="      + person.getType()     + ", " +
-                    "email="     + person.getEmail();
+                    "email="     + person.getEmail() +
+                    " WHERE id=" + person.getId();
+
             int rowsAffected = statement.executeUpdate(query);
+
             if(rowsAffected == 1){
                 return true;
             }
@@ -90,6 +93,44 @@ public class PersonDao extends BaseDao<Person> implements PersonDaoInterface {
             e.printStackTrace();
         }
         return false;
+    }
+
+    public boolean isRegistered(String firstName, String lastName) {
+        Connection connection = ConnectionFactory.getConnection();
+        Statement statement = null;
+
+        try {
+            statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(
+                    "SELECT * FROM person WHERE name='" + firstName + "' AND last_name='" + lastName + "'");
+
+            if (resultSet.next())
+                return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+    public Person findByName(String firstName, String lastName) {
+        Person person = null;
+        Connection connection = ConnectionFactory.getConnection();
+        Statement statement = null;
+
+        try {
+            statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(
+                    "SELECT * FROM person WHERE name='" + firstName + "' AND last_name='" + lastName + "'");
+
+            if (resultSet.next())
+                person = extractFromResultSet(resultSet);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return person;
     }
 
     public static void main(String[] args) {

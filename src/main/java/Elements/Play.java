@@ -10,6 +10,7 @@ public class Play extends SerializedObject{
     private String description;
     private List<Person> actors;
     private boolean cancelled;
+    private String comments;
 
     public Play() {
     }
@@ -57,6 +58,10 @@ public class Play extends SerializedObject{
     public void setCancelled(boolean cancelled) {
         this.cancelled = cancelled;
     }
+
+    public void setComments(String comments) { this.comments = comments; }
+
+    public String getComments() { return comments; }
 
     @Override
     public String toString() {

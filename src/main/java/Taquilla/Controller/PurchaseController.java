@@ -10,7 +10,6 @@ import java.util.ArrayList;
 public class PurchaseController {
     private ArrayList<Seat> availableSeats, selectedSeats;
     private Person client;
-
     private ShowDao showDao;
     private ArrayList<Show> shows;
 
@@ -22,6 +21,4 @@ public class PurchaseController {
         shows = new ArrayList<>(showDao.findAll());
         return shows;
     }
-
-
 }

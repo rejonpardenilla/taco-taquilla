@@ -11,7 +11,6 @@ import java.time.LocalDate;
 import java.util.List;
 
 public class SaleWindowModel {
-
     private PlayDao playDao;
     private ShowDao showDao;
     private SeatDao seatDao;

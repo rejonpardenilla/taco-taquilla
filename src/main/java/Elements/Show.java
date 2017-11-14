@@ -7,11 +7,11 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 public class Show extends SerializedObject {
-    LocalDate date;
-    LocalTime time;
-    Play play;
-    BigDecimal price;
-    boolean cancelled;
+    private LocalDate date;
+    private LocalTime time;
+    private Play play;
+    private BigDecimal price;
+    private boolean cancelled;
 
     public LocalDate getDate() {
         return date;

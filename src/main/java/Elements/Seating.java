@@ -7,9 +7,9 @@ import Elements.Base.SerializedObject;
 import java.sql.SQLException;
 
 public class Seating extends SerializedObject implements DataAccessMethods {
-    String state; //FREE, TAKEN, RESERVED
-    Seat seat;
-    Show show;
+    private String state; //FREE, TAKEN, RESERVED
+    private Seat seat;
+    private Show show;
 
     public String getState() {
         return state;
