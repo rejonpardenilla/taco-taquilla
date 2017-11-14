@@ -7,9 +7,6 @@ import Taquilla.View.Helpers.GUI;
 import Taquilla.View.Helpers.JFrameHelper;
 
 import javax.swing.*;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class PurchaseHistoryView {
@@ -21,11 +18,11 @@ public class PurchaseHistoryView {
         gui = JFrameHelper.createLeftAlignedGUI("Purchase History");
 
         gui.add(new JTextArea("NAME"));
-        JFrameHelper.addSeparator(gui, 20);
-        gui.add(new JTextArea("DATE"));
-        JFrameHelper.addSeparator(gui, 20);
-        gui.add(new JTextArea("TIME"));
-        JFrameHelper.addSeparator(gui, 20);
+        JFrameHelper.addSeparator(gui, 40);
+        //gui.add(new JTextArea("DATE"));
+        //JFrameHelper.addSeparator(gui, 20);
+        //gui.add(new JTextArea("TIME"));
+        //JFrameHelper.addSeparator(gui, 20);
         gui.add(new JTextArea("TOTAL"));
         JFrameHelper.addSeparator(gui, 180);
 
@@ -38,21 +35,31 @@ public class PurchaseHistoryView {
             JTextArea nameTextArea = new JTextArea(clientName);
             String nameId = "nameText" + Integer.toString(purchase.getId());
             gui.add(nameId, nameTextArea);
-            JFrameHelper.addSeparator(gui, 15);
+            JFrameHelper.addSeparator(gui, 35);
 
+            // TODO: Add Dates and Times
             // Date
-            if (purchase.getDate() == null) break;
-            JTextArea dateTextArea = new JTextArea(JFrameHelper.formatDate(purchase.getDate()));
+            /*
+            if (purchase.getDate() == null) {
+                System.out.println("Date null");
+                break;
+            }
+            JTextArea dateTextArea = new JTextArea(purchase.getDate().toString());
             String dateId = "dateText" + Integer.toString(purchase.getId());
             gui.add(dateId, dateTextArea);
             JFrameHelper.addSeparator(gui, 15);
-            JFrameHelper.addSeparator(gui, 100);
+            JFrameHelper.addSeparator(gui, 180);
+            */
 
             // Time
             // some code {...}
 
             // Total
-            // some code {...}
+            String total = "$" + purchase.getTotal().toString();
+            String totalId = "totalTextArea" + Integer.toString(purchase.getId());
+            JTextArea totalTextArea = new JTextArea(total);
+            gui.add(totalId, totalTextArea);
+            JFrameHelper.addSeparator(gui, 400);
         }
 
         JFrameHelper.showFrameAndGui(frame, gui);
