@@ -5,12 +5,17 @@ import Elements.Base.DataAccessMethods;
 import Elements.Base.SerializedObject;
 
 import java.math.BigDecimal;
+import java.sql.Date;
 import java.sql.SQLException;
+import java.sql.Time;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 public class Purchase extends SerializedObject implements DataAccessMethods {
     private Person client;
     private BigDecimal total;
-
+    private Date date;
+    private Time time;
 
     public Person getClient() {
         return client;
@@ -28,9 +33,15 @@ public class Purchase extends SerializedObject implements DataAccessMethods {
         this.total = total;
     }
 
+    public Date getDate() { return date; }
+
+    public Time getTime() { return time; }
+
     @Override
     public Purchase save() throws SQLException {
         PurchaseDao purchaseDao = new PurchaseDao();
+        this.date = Date.valueOf(LocalDate.now());
+        this.time = Time.valueOf(LocalTime.now());
         this.id = purchaseDao.insertPurchase(this);
         return this;
     }
