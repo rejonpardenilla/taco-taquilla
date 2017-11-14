@@ -79,21 +79,27 @@ public class SeatingDao extends BaseDao<Seating> implements SeatingDaoInterface{
 
     public static void main(String[] args) {
         SeatingDao seatingDao = new SeatingDao();
-        SeatDao seatDao = new SeatDao();
         ShowDao showDao = new ShowDao();
 
-        Seating seating = new Seating();
-        seating.setSeat(seatDao.findById(1));
-        seating.setState("TAKEN");
-        seating.setShow(showDao.findById(1));
+        for (int i = 1; i <= 15; i++) {
+            SeatDao seatDao = new SeatDao();
+            Seating seating = new Seating();
+            seating.setSeat(seatDao.findById(i));
+            if (i % 2 == 0) {
+                seating.setState("TAKEN");
+            } else {
+                seating.setState("AVAILABLE");
+            }
+            seating.setShow(showDao.findById(1));
 
-
-        try {
-            seating.save();
+            try {
+                seating.save();
 //            int id = seatingDao.insertSeating(seating);
 //            seating.setId(id);
-        } catch (SQLException e) {
-            e.printStackTrace();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
+
     }
 }

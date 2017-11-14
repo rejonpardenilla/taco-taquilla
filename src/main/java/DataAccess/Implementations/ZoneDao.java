@@ -1,10 +1,11 @@
 package DataAccess.Implementations;
 
+import DataAccess.ConnectionFactory;
 import DataAccess.Interfaces.ZoneDaoInterface;
+import Elements.Seating;
 import Elements.Zone;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class ZoneDao extends BaseDao<Zone> implements ZoneDaoInterface {
 
@@ -13,10 +14,34 @@ public class ZoneDao extends BaseDao<Zone> implements ZoneDaoInterface {
 
         Zone zone = new Zone();
         zone.setId(rs.getInt("id"));
+        zone.setName(rs.getString("name"));
         zone.setDiscountPercent(rs.getInt("discount_percent"));
 
         return zone;
+    }
 
+    public int insertZone(Zone zone) throws SQLException{
+        Connection connection = ConnectionFactory.getConnection();
+        PreparedStatement statement = null;
+
+        String query = "INSERT INTO zone (name, discount_percent) VALUES (?, ?)";
+        statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+
+        statement.setString(1, zone.getName());
+        statement.setInt(2, zone.getDiscountPercent());
+
+        int rowsAffected = statement.executeUpdate();
+        if(rowsAffected == 0){
+            throw new SQLException("No rows affected");
+        }
+
+        try(ResultSet generatedKeys = statement.getGeneratedKeys()){
+            if (generatedKeys.next()){
+                return generatedKeys.getInt("id");
+            } else {
+                throw new SQLException("No id obtained");
+            }
+        }
     }
 
 }
