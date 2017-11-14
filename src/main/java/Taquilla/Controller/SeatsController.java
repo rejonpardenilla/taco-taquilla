@@ -25,37 +25,13 @@ public class SeatsController {
     Show show;
 
     /**
-     *
+     * Contains the underlying state of the seat view
      * @param type purchase, reservation, preorder
      * @param show the show
      */
     public SeatsController(Show show, String type){
         this.type = type;
         this.show = show;
-    }
-    public JPanel generateGrid(){
-        seatGrid = seatsModel.generateGrid(show);
-        JPanel panel = new JPanel(new GridLayout(8,20));
-        for (int i = 0; i < seatGrid.length; i++){
-            for(int j = 0; j < seatGrid[0].length; j++){
-                SeatState seatState = seatGrid[i][j];
-                SeatButton sb = new SeatButton(seatState);
-
-                //Se agrega el estado al array modified
-                sb.addActionListener(event->{
-                    SeatState selfState = sb.getSeatState();
-                    if (!sb.isSelected()){
-                        selfState.modifySeatState(this.type, this.show);
-                        modified.add(selfState);
-                    } else {
-                        modified.remove(selfState);
-                    }
-                });
-
-                panel.add(sb);
-            }
-        }
-        return panel;
     }
 
     public JPanel generateGridWithEvent(ActionListener actionListener){
@@ -66,8 +42,8 @@ public class SeatsController {
                 SeatState seatState = seatGrid[i][j];
                 SeatButton sb = new SeatButton(seatState);
 
-                //Se agrega el estado al array modified
                 sb.addActionListener(actionListener);
+                //Se agrega el estado al array modified
                 sb.addActionListener(event->{
                     SeatState selfState = sb.getSeatState();
                     if (!sb.isSelected()){
@@ -77,8 +53,6 @@ public class SeatsController {
                         modified.remove(selfState);
                     }
                 });
-
-
                 panel.add(sb);
             }
         }
@@ -106,17 +80,6 @@ public class SeatsController {
 
     public Show getShow() {
         return show;
-    }
-
-    public static void main(String[] args) {
-        ShowDao showDao = new ShowDao();
-        SeatsController seatsController = new SeatsController(showDao.findById(1), "TAKEN");
-
-        JFrame jFrame = new JFrame();
-        jFrame.setVisible(true);
-        JPanel jPanel = new JPanel();
-        jPanel.add(seatsController.generateGrid());
-        jFrame.setContentPane(jPanel);
     }
 
     public ArrayList<SeatState> getModified() {

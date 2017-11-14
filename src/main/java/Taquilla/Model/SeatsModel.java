@@ -58,10 +58,4 @@ public class SeatsModel {
         return zoneDao.findAll();
     }
 
-    public static void main(String[] args) {
-        SeatsModel seatsModel = new SeatsModel();
-        ShowDao showDao = new ShowDao();
-        SeatState[][] arr = seatsModel.generateGrid(showDao.findById(1));
-        System.out.println("s");
-    }
 }

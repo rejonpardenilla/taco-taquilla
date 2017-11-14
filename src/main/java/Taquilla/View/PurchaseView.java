@@ -16,52 +16,59 @@ import java.util.ArrayList;
 
 public class PurchaseView {
     public GUI gui;
+    JFrame frame;
 
     public PurchaseView(ArrayList<SeatState> seats) {
-        JFrame frame = JFrameHelper.createFrame();
-        frame.setSize(new Dimension(200, 250));
+        frame = JFrameHelper.createFrame();
+        frame.setSize(new Dimension(200, 200));
 
-        gui = JFrameHelper.createCenteredGUI("Register Client");
-        gui.setLayout(new FlowLayout(FlowLayout.LEFT));
+        GUI leftPanel;
+        leftPanel = JFrameHelper.createCenteredGUI("Register Client");
+        leftPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
 
         // Name
         JTextField nameField = new JTextField();
-        nameField.setColumns(10);
-        gui.addLabeledField("nameField", "Name: ", nameField);
+        nameField.setColumns(11);
+        leftPanel.addLabeledField("nameField", "Name: ", nameField);
 
         // Last Name
         JTextField lastNameField = new JTextField();
-        lastNameField.setColumns(10);
-        gui.addLabeledField("lastNameField", "Last Name: ", lastNameField);
+        lastNameField.setColumns(9);
+        leftPanel.addLabeledField("lastNameField", "Last Name: ", lastNameField);
 
         // Phone
         JTextField phoneField = new JTextField();
-        phoneField.setColumns(10);
-        gui.addLabeledField("phoneField", "Phone: ", phoneField);
+        phoneField.setColumns(11);
+        leftPanel.addLabeledField("phoneField", "Phone: ", phoneField);
 
         // Email
         JTextField emailField = new JTextField();
-        emailField.setColumns(10);
-        gui.addLabeledField("emailField", "Email: ", emailField);
+        emailField.setColumns(12);
+        leftPanel.addLabeledField("emailField", "Email: ", emailField);
 
         JToggleButton sendButton = new JToggleButton();
         sendButton.setText("Register");
         sendButton.addActionListener(actionEvent -> {
             Person client = new Person();
             client.setType("client");
-            client.setName((String) gui.getCurrentValueFrom("nameField"));
-            client.setLastName((String) gui.getCurrentValueFrom("lastNameField"));
-            client.setPhone((String) gui.getCurrentValueFrom("phoneField"));
-            client.setEmail((String) gui.getCurrentValueFrom("emailField"));
+            client.setName((String) leftPanel.getCurrentValueFrom("nameField"));
+            client.setLastName((String) leftPanel.getCurrentValueFrom("lastNameField"));
+            client.setPhone((String) leftPanel.getCurrentValueFrom("phoneField"));
+            client.setEmail((String) leftPanel.getCurrentValueFrom("emailField"));
             try {
                 client.save();
+//                frame.dispose();
                 proceedToPurchase(client, seats);
 //                JFrameHelper.showMessageAndClose(frame, sendButton, "Client saved!");
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         });
-        gui.add(sendButton);
+        leftPanel.add(sendButton);
+        leftPanel.setPreferredSize(new Dimension(200, 300));
+
+        gui = new GUI(new BorderLayout());
+        gui.add("left", leftPanel, BorderLayout.WEST);
 
         frame.setContentPane(gui);
         frame.setVisible(true);
@@ -94,30 +101,30 @@ public class PurchaseView {
                 ticket.setPrice(cost);
                 tickets.add(ticket.save());
             }
-            finalizePurchase(tickets);
+            gui.add(finalizePurchase(tickets), BorderLayout.CENTER);
+            gui.revalidate();
+            gui.repaint();
+            frame.pack();
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    private void finalizePurchase(ArrayList<Ticket> tickets) {
-        JFrame frame = JFrameHelper.createFrame();
-        GUI minigui = JFrameHelper.createCenteredGUI("Thank you for your purchase");
+    private GUI finalizePurchase(ArrayList<Ticket> tickets) {
+        String type = tickets.get(0).getSeating().getState().toLowerCase().equals("taken")
+                        ? "Purchase"
+                        : "Reservation";
+        GUI minigui = JFrameHelper.createCenteredGUI("Thank you for your " + type);
         JPanel report = new JPanel();
         report.setLayout(new BoxLayout(report, BoxLayout.Y_AXIS));
         JLabel header = new JLabel("The total for " + tickets.size() + " tickets is: " + tickets.get(0).getPurchase().getTotal().toString());
-        header.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 10));
+        header.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 24));
         report.add(header);
         for(Ticket ticket : tickets){
             report.add(new JLabel(ticket.getSeating().getSeat().toString() + " - " + ticket.getPrice()));
         }
         minigui.add(report);
-        frame.setContentPane(minigui);
-        frame.pack();
-        frame.setVisible(true);
-    }
-
-    public static void main(String[] args) {
-//        new PurchaseView();
+        return minigui;
     }
 }

@@ -17,33 +17,45 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 
 public class SeatsView {
-//    SeatgenerateSeatMatrix()
-    SeatsController seatsController;
-    GUI gui = new GUI(new BorderLayout());
-    JFrame window;
+    private SeatsController seatsController;
+    private JFrame window;
+    private GUI gui = new GUI(new BorderLayout());
+    private ActionListener purchaseSelection, fillSeats;
+
     public SeatsView(Show show, String type){
         window = new JFrame();
-        window.setSize(new Dimension(1000, 800));
         this.seatsController = new SeatsController(show, type);
-//        gui.add(showInfoBar(show), BorderLayout.NORTH);
-//        gui.add(seatList(), BorderLayout.EAST);
-        gui.add(new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,showInfoBar(show), seatList()), BorderLayout.NORTH);
-        gui.add(seatsController.generateGridWithEvent(e -> fillSeatList()), BorderLayout.CENTER);
+        generateEvents();
+
+        JSplitPane header = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,showInfoBar(show), seatList());
+        gui.add(header, BorderLayout.NORTH);
+        gui.add(seatsController.generateGridWithEvent(fillSeats), BorderLayout.CENTER);
+
         window.add(gui);
+        window.setSize(new Dimension(1000, 800));
         window.pack();
         window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         window.setVisible(true);
     }
 
+    private void generateEvents() {
+        //Nos lleva a la pantall de venta y registro de cliente
+        purchaseSelection = event->{
+            new PurchaseView(seatsController.getModified());
+            window.dispose();
+        };
+        fillSeats = event -> fillSeatList();
+    }
+
     private JPanel seatList() {
         JPanel seatContainer = new JPanel(new BorderLayout(4,4));
         seatContainer.setBorder(new TitledBorder("Selected Seats"));
+
         JPanel seatList = new JPanel(new GridLayout(2,6,0,0));
+
         JButton proceed = new JButton("Proceed to Purchase");
-        proceed.addActionListener(e->{
-            new PurchaseView(seatsController.getModified());
-            window.dispose();
-        });
+        proceed.addActionListener(purchaseSelection);
+
         gui.add("proceedButton", proceed);
         gui.add("seatList", seatList);
         seatContainer.add(seatList);
@@ -54,10 +66,10 @@ public class SeatsView {
     }
 
     private void fillSeatList(){
-        System.out.println("w");
-        System.out.println(seatsController.getModified().size());
         JPanel seatList = (JPanel)gui.$("seatList");
         seatList.removeAll();
+
+        //calculate prices and total
         BigDecimal total = new BigDecimal(0);
         for (SeatState state : seatsController.getModified()){
             System.out.println(state.getSeat().toString());
@@ -92,10 +104,5 @@ public class SeatsView {
         panel.add(zonaCobre);
         panel.add(zonaLata);
         return panel;
-    }
-
-    public static void main(String[] args) {
-        ShowDao showDao = new ShowDao();
-        new SeatsView(showDao.findById(1), "TAKEN");
     }
 }
