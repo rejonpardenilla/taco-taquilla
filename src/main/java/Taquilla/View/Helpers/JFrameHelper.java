@@ -4,6 +4,10 @@ import com.sun.istack.internal.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
+import java.sql.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 
 public class JFrameHelper {
     public static JFrame createFrame() {
@@ -26,6 +30,8 @@ public class JFrameHelper {
         return new GUI(new FlowLayout(FlowLayout.CENTER), title);
     }
 
+    public static GUI createLeftAlignedGUI(String title) { return new GUI(new FlowLayout(FlowLayout.LEFT), title); }
+
     public static void showFrameAndGui(JFrame frame, GUI gui) {
         frame.setContentPane(gui);
         frame.setVisible(true);
@@ -37,5 +43,10 @@ public class JFrameHelper {
             separator = separator.concat(" ");
         }
         gui.add(new JLabel(separator));
+    }
+
+    public static String formatDate(Date date) {
+        DateFormat df = new SimpleDateFormat("dd MMMM yyyy");
+        return df.format(date);
     }
 }
