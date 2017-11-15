@@ -96,4 +96,8 @@ public class EditPlayModel {
         return false;
     }
 
+    public void cancelledReport() {
+        
+    }
+
 }
