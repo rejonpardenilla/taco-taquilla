@@ -44,9 +44,28 @@ public class Purchase extends SerializedObject implements DataAccessMethods {
     @Override
     public Purchase save() throws SQLException {
         PurchaseDao purchaseDao = new PurchaseDao();
-        this.date = Date.valueOf(LocalDate.now());
-        this.time = Time.valueOf(LocalTime.now());
+        setDate(Date.valueOf(LocalDate.now()));
+        System.out.println("date: " + this.date);
+        setTime(Time.valueOf(LocalTime.now()));
+        System.out.println("time: " + this.time);
         this.id = purchaseDao.insertPurchase(this);
         return this;
+    }
+
+    public static void main(String[] args) {
+        Purchase purchase = new Purchase();
+        Person client = new Person();
+        client.setName("Daniel");
+        client.setLastName("Rejon");
+        client.setPhone("9991234567");
+        client.setEmail("rejonpardenilla@codn.mx");
+        client.setType("client");
+        purchase.setTotal(new BigDecimal(420));
+        try {
+            purchase.setClient(client.save());
+            purchase.save();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }
