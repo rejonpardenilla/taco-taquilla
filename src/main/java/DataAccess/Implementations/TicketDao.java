@@ -2,9 +2,7 @@ package DataAccess.Implementations;
 
 import DataAccess.ConnectionFactory;
 import DataAccess.Interfaces.TicketDaoInterface;
-import Elements.Play;
-import Elements.Show;
-import Elements.Ticket;
+import Elements.*;
 
 import java.math.BigDecimal;
 import java.sql.*;
@@ -16,11 +14,13 @@ public class TicketDao extends BaseDao<Ticket> implements TicketDaoInterface {
     @Override
     public Ticket extractFromResultSet(ResultSet rs) throws SQLException{
         SeatingDao seatingDao = new SeatingDao();
+        PurchaseDao purchaseDao = new PurchaseDao();
         Ticket ticket = new Ticket();
         ticket.setId(rs.getInt("id"));
         ticket.setPrice(rs.getBigDecimal("price"));
         ticket.setReturned(rs.getBoolean("returned"));
         ticket.setSeating(seatingDao.findById(rs.getInt("seating")));
+        ticket.setPurchase(purchaseDao.findById(rs.getInt("purchase")));
         return ticket;
     }
 
@@ -70,7 +70,16 @@ public class TicketDao extends BaseDao<Ticket> implements TicketDaoInterface {
 
             ArrayList<Ticket> results = new ArrayList<Ticket>();
             while(resultSet.next()){
-                Ticket result = extractFromResultSet(resultSet);
+                Ticket result = new Ticket();
+                result.setId(resultSet.getInt("id"));
+                result.setPrice(resultSet.getBigDecimal("price"));
+                result.setReturned(resultSet.getBoolean("returned"));
+                Seating seating = new Seating();
+                seating.setId(resultSet.getInt("seating"));
+                result.setSeating(seating);
+                Purchase purchase = new Purchase();
+                purchase.setId(resultSet.getInt("purchase"));
+                result.setPurchase(purchase);
                 results.add(result);
             }
 
@@ -103,7 +112,16 @@ public class TicketDao extends BaseDao<Ticket> implements TicketDaoInterface {
 
             ArrayList<Ticket> results = new ArrayList<Ticket>();
             while(resultSet.next()){
-                Ticket result = extractFromResultSet(resultSet);
+                Ticket result = new Ticket();
+                result.setId(resultSet.getInt("id"));
+                result.setPrice(resultSet.getBigDecimal("price"));
+                result.setReturned(resultSet.getBoolean("returned"));
+                Seating seating = new Seating();
+                seating.setId(resultSet.getInt("seating"));
+                result.setSeating(seating);
+                Purchase purchase = new Purchase();
+                purchase.setId(resultSet.getInt("purchase"));
+                result.setPurchase(purchase);
                 results.add(result);
             }
 
@@ -132,7 +150,7 @@ public class TicketDao extends BaseDao<Ticket> implements TicketDaoInterface {
         try {
             int id = ticketDao.insertTicket(ticket);
             ticket.setId(id);
-            List<Ticket> tickets = ticketDao.findByShow(showDao.findById(1));
+            List<Ticket> tickets = ticketDao.findByPlay(playDao.findById(2));
             System.out.println(tickets);
         } catch (SQLException e) {
             e.printStackTrace();

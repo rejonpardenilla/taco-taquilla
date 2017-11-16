@@ -30,13 +30,13 @@ public class SeatButton extends JButton {
         }
         if (seatState.getSeating() != null){
             //Different color for reserved seats
-            if(seatState.getSeating().getState().toLowerCase().equals("reserved")) {
+            if(seatState.getSeatingType().equals("reserved")) {
                 this.pressedColor = new Color(204, 101, 254);
             }
             //Deactivation of reservations 2 hrs earlier
-            if(!((seatState.getSeating().getState().toLowerCase().equals("reserved"))
-                    && (seatState.getSeating().getShow().getTime().getHour()-2 < LocalTime.now().getHour()))
-                    || seatState.getSeating().getState().toLowerCase().equals("taken")) {
+            if(!(seatState.getSeating().getShow().getTime().getHour()-2 < LocalTime.now().getHour()
+                    && seatState.getSeatingType().equals("reserved"))
+                    || seatState.getSeatingType().equals("taken")) {
                 this.setEnabled(false);
                 this.setSelected(true);
             }
@@ -61,7 +61,7 @@ public class SeatButton extends JButton {
     @Override
     protected void paintComponent(Graphics g){
         if (getModel().isSelected() || getModel().isPressed()){
-            if (this.seatState.getSeating() != null && this.seatState.getSeating().getState().toLowerCase().equals("reserved"))
+            if (this.seatState.getSeating() != null && this.seatState.getSeatingType().equals("reserved"))
                 this.pressedColor = new Color(204,101,254);
             else
                 this.pressedColor = new Color(255, 145, 164);
