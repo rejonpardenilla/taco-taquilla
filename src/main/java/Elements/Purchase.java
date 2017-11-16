@@ -61,8 +61,6 @@ public class Purchase extends SerializedObject implements DataAccessMethods {
         client.setEmail("rejonpardenilla@codn.mx");
         client.setType("client");
         purchase.setTotal(new BigDecimal(420));
-        purchase.setDate(Date.valueOf(LocalDate.now()));
-        purchase.setTime(Time.valueOf(LocalTime.now()));
         try {
             purchase.setClient(client.save());
             purchase.save();

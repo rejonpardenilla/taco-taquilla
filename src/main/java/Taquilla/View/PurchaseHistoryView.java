@@ -7,59 +7,65 @@ import Taquilla.View.Helpers.GUI;
 import Taquilla.View.Helpers.JFrameHelper;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
+import java.awt.*;
 import java.util.ArrayList;
 
 public class PurchaseHistoryView {
     GUI gui;
-    PurchaseDao purchaseDao = new PurchaseDao();
 
     public PurchaseHistoryView() {
         JFrame frame = JFrameHelper.createFrame();
-        gui = JFrameHelper.createLeftAlignedGUI("Purchase History");
+        gui = JFrameHelper.createCenteredGUI("Purchase History");
 
-        gui.add(new JTextArea("NAME"));
-        JFrameHelper.addSeparator(gui, 40);
-        //gui.add(new JTextArea("DATE"));
-        //JFrameHelper.addSeparator(gui, 20);
-        //gui.add(new JTextArea("TIME"));
-        //JFrameHelper.addSeparator(gui, 20);
-        gui.add(new JTextArea("TOTAL"));
-        JFrameHelper.addSeparator(gui, 180);
-
-        ArrayList<Purchase> purchases = new ArrayList<>(purchaseDao.findAll());
-
-        for (Purchase purchase : purchases) {
-            // Client name
-            Person client = purchase.getClient();
-            String clientName = client.getName() + " " + client.getLastName();
-            JTextArea nameTextArea = new JTextArea(clientName);
-            String nameId = "nameText" + Integer.toString(purchase.getId());
-            gui.add(nameId, nameTextArea);
-            JFrameHelper.addSeparator(gui, 15);
-
-            // TODO: Add Dates and Times
-            // Date
-            JTextArea dateTextArea = new JTextArea(purchase.getDate().toString());
-            String dateId = "dateText" + Integer.toString(purchase.getId());
-            gui.add(dateId, dateTextArea);
-            JFrameHelper.addSeparator(gui, 15);
-            JFrameHelper.addSeparator(gui, 15);
-
-            // Time
-            // some code {...}
-
-            // Total
-            String total = "$" + purchase.getTotal().toString();
-            String totalId = "totalTextArea" + Integer.toString(purchase.getId());
-            JTextArea totalTextArea = new JTextArea(total);
-            gui.add(totalId, totalTextArea);
-            JFrameHelper.addSeparator(gui, 400);
-        }
+        JTable table = createTable();
+        gui.add("table", table);
 
         JFrameHelper.showFrameAndGui(frame, gui);
     }
 
     public static void main(String[] args) {
         new PurchaseHistoryView();
+    }
+
+    private static JTable createTable() {
+        DefaultTableModel model = new DefaultTableModel();
+        JTable table = new JTable(model);
+
+        model.addColumn("Client");
+        model.addColumn("Date");
+        model.addColumn("Time");
+        model.addColumn("Total");
+
+        model.addRow(new String[]{"CLIENT", "DATE", "TIME", "TOTAL"});
+
+        PurchaseDao purchaseDao = new PurchaseDao();
+        ArrayList<Purchase> purchases = new ArrayList<>(purchaseDao.findAll());
+
+        for (Purchase purchase : purchases) {
+            String[] results = new String[4];
+
+            //Client
+            Person client = purchase.getClient();
+            String clientName = client.getName() + " " + client.getLastName();
+            results[0] = clientName;
+
+            // Date
+            String date = purchase.getDate().toString();
+            results[1] = date;
+
+            // Time
+            String time = purchase.getTime().toString();
+            results[2] = time;
+
+            // Total
+            String total = purchase.getTotal().toString();
+            results[3] = total;
+
+            model.addRow(results);
+        }
+
+        return table;
     }
 }
