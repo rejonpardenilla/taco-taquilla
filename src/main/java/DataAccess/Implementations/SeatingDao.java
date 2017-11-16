@@ -91,6 +91,24 @@ public class SeatingDao extends BaseDao<Seating> implements SeatingDaoInterface{
         }
     }
 
+    @Override
+    public Seating findById(int id) {
+        Connection connection = ConnectionFactory.getConnection();
+        Statement statement = null;
+
+        try {
+            statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM seating WHERE id=" + id);
+            connection.close();
+            if (resultSet.next())
+                return extractFromResultSet(resultSet);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public static void main(String[] args) {
         SeatingDao seatingDao = new SeatingDao();
         ShowDao showDao = new ShowDao();

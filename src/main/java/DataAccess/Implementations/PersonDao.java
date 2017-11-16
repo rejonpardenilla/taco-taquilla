@@ -133,6 +133,24 @@ public class PersonDao extends BaseDao<Person> implements PersonDaoInterface {
         return person;
     }
 
+    @Override
+    public Person findById(int id) {
+        Connection connection = ConnectionFactory.getConnection();
+        Statement statement = null;
+
+        try {
+            statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM person WHERE id=" + id);
+            connection.close();
+            if (resultSet.next())
+                return extractFromResultSet(resultSet);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public static void main(String[] args) {
         ArrayList<String> names = new ArrayList<>(Arrays.asList(
                 "John", "Jane", "Joe", "Jim"

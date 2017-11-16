@@ -18,8 +18,6 @@ public class PurchaseDao extends BaseDao<Purchase> implements PurchaseDaoInterfa
         purchase.setId(rs.getInt("id"));
         purchase.setClient(personDao.findById(rs.getInt("client")));
         purchase.setTotal(rs.getBigDecimal("total"));
-        purchase.setDate(rs.getDate("date"));
-        purchase.setTime(rs.getTime("time"));
         return purchase;
     }
 
@@ -48,6 +46,24 @@ public class PurchaseDao extends BaseDao<Purchase> implements PurchaseDaoInterfa
                 throw new SQLException("No id obtained");
             }
         }
+    }
+
+    @Override
+    public Purchase findById(int id) {
+        Connection connection = ConnectionFactory.getConnection();
+        Statement statement = null;
+
+        try {
+            statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM purchase WHERE id=" + id);
+            connection.close();
+            if (resultSet.next())
+                return extractFromResultSet(resultSet);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @Override

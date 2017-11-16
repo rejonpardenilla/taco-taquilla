@@ -49,6 +49,25 @@ public class SeatDao extends BaseDao<Seat> implements SeatDaoInterface {
             }
         }
     }
+
+    @Override
+    public Seat findById(int id) {
+        Connection connection = ConnectionFactory.getConnection();
+        Statement statement = null;
+
+        try {
+            statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM seat WHERE id=" + id);
+            connection.close();
+            if (resultSet.next())
+                return extractFromResultSet(resultSet);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public static void main(String[] args) {
         SeatDao seatDao = new SeatDao();
         Seat seat = new Seat();

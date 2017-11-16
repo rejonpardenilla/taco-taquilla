@@ -19,7 +19,6 @@ public class RegisterPlayController implements ActionListener {
     private final RegisterPlayView view;
     private final RegisterPlayModel model;
     private final DateTimeFormatter dateFormat;
-    private final DateTimeFormatter timeFormat;
 
     public RegisterPlayController(RegisterPlayView view, RegisterPlayModel model) {
         this.view = view;
@@ -28,7 +27,6 @@ public class RegisterPlayController implements ActionListener {
         this.view.getCancelButton().addActionListener(this);
         this.model = model;
         this.dateFormat = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        this.timeFormat = DateTimeFormatter.ofPattern("HH:mm");
     }
 
     private Person setResponsible() {

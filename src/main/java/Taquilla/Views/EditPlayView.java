@@ -10,7 +10,6 @@ import java.awt.*;
 public class EditPlayView extends javax.swing.JFrame {
     private javax.swing.JButton cancelButton;
     private javax.swing.JButton cancelledPlaysButton;
-    private javax.swing.JButton cancelledShowsButton;
     private javax.swing.JButton deletePlayButton;
     private javax.swing.JButton deleteShowButton;
     private javax.swing.JButton findPlayButton;
@@ -24,7 +23,6 @@ public class EditPlayView extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel playStatusLabel;
     private javax.swing.JButton rescheduleShowButton;
-    private javax.swing.JButton saveButton;
     public javax.swing.JTable showsTable;
     private DefaultTableModel showsTableModel;
 
@@ -46,11 +44,9 @@ public class EditPlayView extends javax.swing.JFrame {
         deleteShowButton = new javax.swing.JButton();
         rescheduleShowButton = new javax.swing.JButton();
         cancelButton = new javax.swing.JButton();
-        saveButton = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         playStatusLabel = new javax.swing.JLabel();
-        cancelledShowsButton = new javax.swing.JButton();
         cancelledPlaysButton = new javax.swing.JButton();
         deletePlayButton = new javax.swing.JButton();
 
@@ -113,17 +109,13 @@ public class EditPlayView extends javax.swing.JFrame {
 
         cancelButton.setText("Cancelar");
 
-        saveButton.setText("Guardar");
-
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Acciones"));
 
         jLabel2.setText("Estado de la obra:");
 
         playStatusLabel.setText("");
 
-        cancelledShowsButton.setText("Shows cancelados");
-
-        cancelledPlaysButton.setText("Obras canceladas");
+        cancelledPlaysButton.setText("Reporte de cancelaciones...");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -139,8 +131,7 @@ public class EditPlayView extends javax.swing.JFrame {
                                                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                         .addGroup(jPanel3Layout.createSequentialGroup()
                                                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                        .addComponent(cancelledPlaysButton)
-                                                        .addComponent(cancelledShowsButton))
+                                                        .addComponent(cancelledPlaysButton))
                                                 .addGap(0, 0, Short.MAX_VALUE))))
         );
         jPanel3Layout.setVerticalGroup(
@@ -152,7 +143,6 @@ public class EditPlayView extends javax.swing.JFrame {
                                 .addGap(18, 18, 18)
                                 .addComponent(cancelledPlaysButton)
                                 .addGap(18, 18, 18)
-                                .addComponent(cancelledShowsButton)
                                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -169,7 +159,6 @@ public class EditPlayView extends javax.swing.JFrame {
                                                 .addGap(0, 0, Short.MAX_VALUE)
                                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                                         .addGroup(jPanel1Layout.createSequentialGroup()
-                                                                .addComponent(saveButton)
                                                                 .addGap(18, 18, 18)
                                                                 .addComponent(cancelButton))
                                                         .addGroup(jPanel1Layout.createSequentialGroup()
@@ -205,8 +194,7 @@ public class EditPlayView extends javax.swing.JFrame {
                                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(16, 16, 16)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(cancelButton)
-                                        .addComponent(saveButton)))
+                                        .addComponent(cancelButton)))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -245,10 +233,6 @@ public class EditPlayView extends javax.swing.JFrame {
         return cancelledPlaysButton;
     }
 
-    public JButton getCancelledShowsButton() {
-        return cancelledShowsButton;
-    }
-
     public JButton getDeletePlayButton() {
         return deletePlayButton;
     }
@@ -267,10 +251,6 @@ public class EditPlayView extends javax.swing.JFrame {
 
     public JButton getRescheduleShowButton() {
         return rescheduleShowButton;
-    }
-
-    public JButton getSaveButton() {
-        return saveButton;
     }
 
     public DefaultTableModel getTableModel() {

@@ -113,6 +113,22 @@ public class ShowDao extends BaseDao<Show> implements ShowDaoInterface {
         }
     }
 
+    public void insertActor(int showId, int actorId) throws SQLException {
+        Connection connection = ConnectionFactory.getConnection();
+        PreparedStatement statement = null;
+
+        String query = "INSERT INTO actor_list (show, actor) VALUES (?, ?)";
+        statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+
+        statement.setInt(1, showId);
+        statement.setInt(2, actorId);
+
+        int rowsAffected = statement.executeUpdate();
+        if(rowsAffected == 0){
+            throw new SQLException("No rows affected");
+        }
+    }
+
     public boolean updateShow(Show show) {
         Connection connection = ConnectionFactory.getConnection();
         Statement statement = null;
@@ -139,21 +155,21 @@ public class ShowDao extends BaseDao<Show> implements ShowDaoInterface {
         return false;
     }
 
-    public boolean deleteShowById(int id) {
+    @Override
+    public Show findById(int id) {
         Connection connection = ConnectionFactory.getConnection();
         Statement statement = null;
 
-        try{
+        try {
             statement = connection.createStatement();
-            int rowsAffected = statement.executeUpdate("DELETE FROM show WHERE id=" + id);
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM show WHERE id=" + id);
+            connection.close();
+            if (resultSet.next())
+                return extractFromResultSet(resultSet);
 
-            if(rowsAffected == 1){
-                return true;
-            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
-        return false;
+        return null;
     }
 }
