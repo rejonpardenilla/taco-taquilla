@@ -10,7 +10,6 @@ import Taquilla.Views.EditPlayView;
 import Taquilla.Views.RegisterPlayView;
 
 import javax.swing.*;
-import javax.swing.border.TitledBorder;
 
 public class MainView {
     public GUI gui;
