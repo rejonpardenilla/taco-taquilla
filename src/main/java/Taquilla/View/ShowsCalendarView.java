@@ -9,10 +9,10 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.util.ArrayList;
 
-public class ShowsView {
+public class ShowsCalendarView {
     public GUI gui;
 
-    public ShowsView() {
+    public ShowsCalendarView() {
         JFrame frame = JFrameHelper.createFrame();
         gui = JFrameHelper.createCenteredGUI("Shows");
         JComboBox<String> startDateCombo = new JComboBox<>();
@@ -32,7 +32,7 @@ public class ShowsView {
     }
 
     public static void main(String[] args) {
-        new ShowsView();
+        new ShowsCalendarView();
     }
 
     private static void addDatesToComboBox(JComboBox<String> comboBox) {

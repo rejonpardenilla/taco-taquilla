@@ -30,7 +30,7 @@ public class SaleWindowView {
     //Controller
     private SaleWindowController saleWindowController;
 
-    private SaleWindowView(){
+    public SaleWindowView(){
         init();
     }
 
