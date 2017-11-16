@@ -18,6 +18,8 @@ public class PurchaseDao extends BaseDao<Purchase> implements PurchaseDaoInterfa
         purchase.setId(rs.getInt("id"));
         purchase.setClient(personDao.findById(rs.getInt("client")));
         purchase.setTotal(rs.getBigDecimal("total"));
+        purchase.setDate(rs.getDate("date"));
+        purchase.setTime(rs.getTime("time"));
         return purchase;
     }
 
