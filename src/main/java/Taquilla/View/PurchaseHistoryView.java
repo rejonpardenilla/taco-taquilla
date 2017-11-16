@@ -1,15 +1,13 @@
 package Taquilla.View;
 
 import DataAccess.Implementations.PurchaseDao;
-import Elements.Purchase;
 import Elements.Person;
+import Elements.Purchase;
 import Taquilla.View.Helpers.GUI;
 import Taquilla.View.Helpers.JFrameHelper;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumn;
-import java.awt.*;
 import java.util.ArrayList;
 
 public class PurchaseHistoryView {
@@ -21,6 +19,8 @@ public class PurchaseHistoryView {
 
         JTable table = createTable();
         gui.add("table", table);
+
+        JFrameHelper.addCancelButton(frame, gui, "Back");
 
         JFrameHelper.showFrameAndGui(frame, gui);
     }

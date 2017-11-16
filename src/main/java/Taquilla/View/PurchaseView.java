@@ -1,6 +1,5 @@
 package Taquilla.View;
 
-import DataAccess.Implementations.PurchaseDao;
 import Elements.Person;
 import Elements.Purchase;
 import Elements.Ticket;

@@ -7,17 +7,14 @@ import Elements.Show;
 public class SeatState {
     Seat seat;
     Seating seating;
-    boolean modified;
 
     public SeatState(Seat seat) {
         this.seat = seat;
-        this.modified = false;
     }
 
     public SeatState(Seat seat, Seating seating) {
         this.seat = seat;
         this.seating = seating;
-        this.modified = false;
     }
 
     public void modifySeatState(String status, Show show){
@@ -26,7 +23,6 @@ public class SeatState {
         } else {
             this.seating.setState(status);
         }
-        this.modified = true;
     }
 
     public Seating getSeating(){

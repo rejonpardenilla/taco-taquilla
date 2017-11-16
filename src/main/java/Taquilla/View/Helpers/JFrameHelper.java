@@ -49,4 +49,13 @@ public class JFrameHelper {
         DateFormat df = new SimpleDateFormat("dd MMMM yyyy");
         return df.format(date);
     }
+
+    public static void addCancelButton(JFrame frame, GUI gui, String text) {
+        JFrameHelper.addSeparator(gui, 600);
+        JFrameHelper.addSeparator(gui, 600);
+        JFrameHelper.addSeparator(gui, 600);
+
+        JButton cancelButton = (JButton) gui.add(new JButton(text));
+        cancelButton.addActionListener(actionEvent -> frame.dispose());
+    }
 }

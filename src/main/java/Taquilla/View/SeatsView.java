@@ -1,8 +1,5 @@
 package Taquilla.View;
 
-import DataAccess.Implementations.SeatDao;
-import DataAccess.Implementations.ShowDao;
-import Elements.Seat;
 import Elements.Show;
 import Elements.Zone;
 import Taquilla.Auxiliary.SeatState;

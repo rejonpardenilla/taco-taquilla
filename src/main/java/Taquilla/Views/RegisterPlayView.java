@@ -2,6 +2,7 @@ package Taquilla.Views;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.awt.*;
 
 public class RegisterPlayView extends javax.swing.JFrame {
 
@@ -88,7 +89,7 @@ public class RegisterPlayView extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Registrar obra - Taco Taquilla (TM)");
         setResizable(false);
-        setLocationRelativeTo(null);
+        setLocation(new Point(300, 200));
         setVisible(true);
 
         panelResponsible.setBorder(javax.swing.BorderFactory.createTitledBorder("Datos del responsable:"));

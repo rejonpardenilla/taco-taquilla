@@ -5,6 +5,7 @@ import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
+import java.awt.*;
 
 public class EditPlayView extends javax.swing.JFrame {
     private javax.swing.JButton cancelButton;
@@ -52,7 +53,7 @@ public class EditPlayView extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Editar obra - Taco Taquilla (TM)");
         setResizable(false);
-        setLocationRelativeTo(null);
+        setLocation(new Point(400, 200));
         setVisible(true);
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Editar obra:"));

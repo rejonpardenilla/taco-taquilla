@@ -100,6 +100,7 @@ public class Setup {
             e.printStackTrace();
         }
 
+        new Faker();
     }
 
 }

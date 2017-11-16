@@ -11,6 +11,10 @@ public class Faker {
     private static final int COLUMNS = 20;
     private static final String[] ROW_LETTERS = {"A", "B", "C", "D", "E", "F", "G", "H"};
 
+    public Faker() {
+        populateSeats();
+    }
+
     private static Zone makeZone(String name, int discount){
         Zone zone = new Zone();
         zone.setDiscountPercent(discount);
@@ -65,6 +69,6 @@ public class Faker {
     }
 
     public static void main(String[] args) {
-        populateSeats();
+        new Faker();
     }
 }
