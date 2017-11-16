@@ -12,7 +12,11 @@ import java.util.List;
 public class SeatingDao extends BaseDao<Seating> implements SeatingDaoInterface{
 
     @Override
-    public Seating extractFromResultSet(ResultSet rs) throws SQLException{
+    public Seating extractFromResultSet(ResultSet rs) throws SQLException {
+        return extractFromResultSet(rs, ConnectionFactory.getConnection());
+    }
+
+    public Seating extractFromResultSet(ResultSet rs, Connection connection) throws SQLException{
         SeatDao seatDao = new SeatDao();
         ShowDao showDao = new ShowDao();
 
@@ -21,16 +25,20 @@ public class SeatingDao extends BaseDao<Seating> implements SeatingDaoInterface{
         seating.setState(rs.getString("state"));
         seating.setSeat(
                 seatDao.findById(
-                        rs.getInt("seat")));
+                        rs.getInt("seat"), connection));
         seating.setShow(
                 showDao.findById(
-                        rs.getInt("show")));
+                        rs.getInt("show"), connection));
         return seating;
     }
 
     @Override
     public List<Seating> findByShow(Show show) {
-        Connection connection = ConnectionFactory.getConnection();
+        return findByShow(show, ConnectionFactory.getConnection());
+    }
+
+    public List<Seating> findByShow(Show show, Connection connection){
+        this.connection = connection;
         Statement statement = null;
 
         try {
@@ -40,9 +48,10 @@ public class SeatingDao extends BaseDao<Seating> implements SeatingDaoInterface{
             ArrayList<Seating> seatings = new ArrayList<>();
 
             while (resultSet.next()) {
-                Seating seating =  extractFromResultSet(resultSet);
+                Seating seating =  extractFromResultSet(resultSet, connection);
                 seatings.add(seating);
             }
+            connection.close();
             return seatings;
 
         } catch (SQLException e) {
@@ -52,8 +61,11 @@ public class SeatingDao extends BaseDao<Seating> implements SeatingDaoInterface{
     }
 
     @Override
-    public int insertSeating(Seating seating) throws SQLException{
-        Connection connection = ConnectionFactory.getConnection();
+    public int insertSeating(Seating seating) throws SQLException {
+        return insertSeating(seating, connection);
+    }
+    public int insertSeating(Seating seating, Connection connection) throws SQLException{
+        this.connection = connection;
         PreparedStatement statement = null;
 
         String query = "INSERT INTO seating (seat, state, show) VALUES (?, ?, ?)";
@@ -70,8 +82,10 @@ public class SeatingDao extends BaseDao<Seating> implements SeatingDaoInterface{
 
         try(ResultSet generatedKeys = statement.getGeneratedKeys()){
             if (generatedKeys.next()){
+                connection.close();
                 return generatedKeys.getInt("id");
             } else {
+                connection.close();
                 throw new SQLException("No id obtained");
             }
         }

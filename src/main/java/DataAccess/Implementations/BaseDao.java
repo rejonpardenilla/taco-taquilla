@@ -17,6 +17,9 @@ public abstract class BaseDao<T extends SerializedObject> implements BaseDaoInte
 
     private Class<T> typeOfT;
     private String tableName;
+    public Connection connection;
+
+    public Connection getConnection(){ return this.connection;}
 
     @SuppressWarnings("unchecked")
     public BaseDao() {
@@ -28,9 +31,19 @@ public abstract class BaseDao<T extends SerializedObject> implements BaseDaoInte
     }
 
     @Override
-    public List<T> findAll() {
+    public List<T> findAll(){
+        Connection newConnection = ConnectionFactory.getConnection();
+        List<T> result = findAll(newConnection);
+        try {
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
 
-        Connection connection = ConnectionFactory.getConnection();
+    public List<T> findAll(Connection connection) {
+        this.connection = connection;
         Statement statement = null;
 
         try {
@@ -53,13 +66,23 @@ public abstract class BaseDao<T extends SerializedObject> implements BaseDaoInte
 
     @Override
     public T findById(int id) {
-        Connection connection = ConnectionFactory.getConnection();
+        Connection newConnection = ConnectionFactory.getConnection();
+        T result = findById(id, newConnection);
+        try {
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public T findById(int id, Connection connection){
+        this.connection = connection;
         Statement statement = null;
 
         try {
             statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery("SELECT * FROM " + tableName + " WHERE id=" + id);
-            connection.close();
             if (resultSet.next())
                 return extractFromResultSet(resultSet);
 
@@ -71,7 +94,18 @@ public abstract class BaseDao<T extends SerializedObject> implements BaseDaoInte
 
     @Override
     public int insert(T object) throws SQLException{
-        Connection connection = ConnectionFactory.getConnection();
+        Connection newConnection = ConnectionFactory.getConnection();
+        int result = insert(object, newConnection);
+        try {
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public int insert(T object, Connection connection) throws SQLException{
+        this.connection = connection;
         PreparedStatement statement = null;
         Class<?> objClass = object.getClass();
         String query = "INSERT INTO " + tableName + "(";
@@ -132,7 +166,6 @@ public abstract class BaseDao<T extends SerializedObject> implements BaseDaoInte
             throw new SQLException("No rows affected");
         }
         ResultSet generatedKeys = statement.getGeneratedKeys();
-        connection.close();
         if (generatedKeys.next()){
             int id = generatedKeys.getInt("id");
             return id;
