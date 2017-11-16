@@ -6,6 +6,7 @@ import Taquilla.View.Helpers.GUI;
 import Taquilla.View.Helpers.JFrameHelper;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.util.ArrayList;
 
 public class ShowsView {
@@ -24,7 +25,8 @@ public class ShowsView {
 
         JFrameHelper.addSeparator(gui, 200);
 
-        addShowsDetails(gui);
+        JTable table = createShowsDetailsTable();
+        gui.add("table", table);
 
         JFrameHelper.showFrameAndGui(frame, gui);
     }
@@ -58,16 +60,26 @@ public class ShowsView {
         }
     }
 
-    private static void addShowsDetails(GUI gui) {
+    public static JTable createShowsDetailsTable() {
+        DefaultTableModel model = new DefaultTableModel();
+        JTable table = new JTable(model);
+
+        model.addColumn("Play");
+        model.addColumn("Date");
+        model.addColumn("Time");
+
+        model.addRow(new String[]{"PLAY", "DATE", "TIME"});
+
         ShowDao showDao = new ShowDao();
         ArrayList<Show> shows = new ArrayList<>(showDao.findAll());
         for (Show show : shows) {
-            gui.add(new JTextArea(show.getPlay().getName()));
-            JFrameHelper.addSeparator(gui, 5);
-            gui.add(new JTextArea(show.getDate().toString()));
-            JFrameHelper.addSeparator(gui, 5);
-            gui.add(new JTextArea(show.getTime().toString()));
-            JFrameHelper.addSeparator(gui, 200);
+            String[] showDetails = new String[3];
+            showDetails[0] = show.getPlay().getName();
+            showDetails[1] = show.getDate().toString();
+            showDetails[2] = show.getTime().toString();
+            model.addRow(showDetails);
         }
+
+        return table;
     }
 }
