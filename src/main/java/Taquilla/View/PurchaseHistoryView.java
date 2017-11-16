@@ -22,6 +22,8 @@ public class PurchaseHistoryView {
         JTable table = createTable();
         gui.add("table", table);
 
+        JFrameHelper.addCancelButton(frame, gui, "Back");
+
         JFrameHelper.showFrameAndGui(frame, gui);
     }
 

@@ -59,12 +59,7 @@ public class MainView {
         );
         gui.add(zonesGUI);
 
-        JFrameHelper.addSeparator(gui, 600);
-        JFrameHelper.addSeparator(gui, 600);
-        JFrameHelper.addSeparator(gui, 600);
-
-        JButton cancelButton = (JButton) gui.add(new JButton("Cancel"));
-        cancelButton.addActionListener(actionEvent -> frame.dispose());
+        JFrameHelper.addCancelButton(frame, gui, "Exit");
 
         JFrameHelper.showFrameAndGui(frame, gui);
     }

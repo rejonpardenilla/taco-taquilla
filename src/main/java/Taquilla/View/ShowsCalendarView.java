@@ -28,6 +28,8 @@ public class ShowsCalendarView {
         JTable table = createShowsDetailsTable();
         gui.add("table", table);
 
+        JFrameHelper.addCancelButton(frame, gui, "Back");
+
         JFrameHelper.showFrameAndGui(frame, gui);
     }
 
