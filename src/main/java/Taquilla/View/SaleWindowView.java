@@ -25,7 +25,7 @@ public class SaleWindowView {
     private GUI gui;
 
     //Events
-    private ActionListener onPlaySelect, onPurchase, onReservation, onReclaim;
+    private ActionListener onPlaySelect, onPurchase, onReservation, onReclaim, onClose;
     private ListSelectionListener onShowSelect;
     //Controller
     private SaleWindowController saleWindowController;
@@ -99,6 +99,10 @@ public class SaleWindowView {
             new SeatsView(currentShow, "TAKEN");
         };
 
+        onClose = event->{
+            window.dispose();
+        };
+
     }
 
     private void generateGUI() {
@@ -157,10 +161,12 @@ public class SaleWindowView {
         JButton reservationButton = (JButton)gui.add("reservationButton", new JButton("Reservation"));
         reservationButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         JButton reclaimReservation =  (JButton)gui.add("reclaimButton", new JButton("  Reclaim  "));
+        JButton cancelButton = (JButton) gui.add("cancelButton", new JButton("   Cancel   "));
 
         purchaseButton.addActionListener(onPurchase);
         reservationButton.addActionListener(onReservation);
         reclaimReservation.addActionListener(onReclaim);
+        cancelButton.addActionListener(onClose);
 
         purchaseButton.setEnabled(false);
         reservationButton.setEnabled(false);
@@ -169,6 +175,7 @@ public class SaleWindowView {
         sidebar.add(purchaseButton);
         sidebar.add(reservationButton);
         sidebar.add(reclaimReservation);
+        sidebar.add(cancelButton);
 
         sidebar.setPreferredSize(new Dimension(130,200));
         return sidebar;
