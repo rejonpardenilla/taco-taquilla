@@ -62,7 +62,7 @@ public class SeatingDao extends BaseDao<Seating> implements SeatingDaoInterface{
 
     @Override
     public int insertSeating(Seating seating) throws SQLException {
-        return insertSeating(seating, connection);
+        return insertSeating(seating, ConnectionFactory.getConnection());
     }
     public int insertSeating(Seating seating, Connection connection) throws SQLException{
         this.connection = connection;

@@ -1,6 +1,5 @@
 package Taquilla.View;
 
-import DataAccess.Implementations.PurchaseDao;
 import Elements.Person;
 import Elements.Purchase;
 import Elements.Ticket;
@@ -20,7 +19,7 @@ public class PurchaseView {
 
     public PurchaseView(ArrayList<SeatState> seats) {
         frame = JFrameHelper.createFrame();
-        frame.setSize(new Dimension(200, 200));
+        frame.setSize(new Dimension(200, 300));
 
         GUI leftPanel;
         leftPanel = JFrameHelper.createCenteredGUI("Register Client");
@@ -45,6 +44,34 @@ public class PurchaseView {
         JTextField emailField = new JTextField();
         emailField.setColumns(12);
         leftPanel.addLabeledField("emailField", "Email: ", emailField);
+
+        JComboBox<String> typeField = new JComboBox<>();
+        typeField.addItem("Tarjeta de crédito");
+        typeField.addItem("Tarjeta de débito");
+        typeField.addItem("Efectivo");
+
+        typeField.addActionListener(e->{
+            if((String)typeField.getSelectedItem() == "Efectivo"){
+                leftPanel.$("montoField").setVisible(true);
+                leftPanel.$("montoFieldLabel").setVisible(true);
+            } else{
+                leftPanel.$("montoField").setVisible(false);
+                leftPanel.$("montoFieldLabel").setVisible(false);
+            }
+            leftPanel.validate();
+            leftPanel.repaint();
+            frame.pack();
+        });
+        leftPanel.addLabeledField("typeField", "Tipo", typeField);
+
+        JTextField montoField = new JTextField();
+        montoField.setColumns(10);
+        montoField.setVisible(false);
+        leftPanel.addLabeledField("montoField", "Monto", montoField);
+        leftPanel.$("montoFieldLabel").setVisible(false);
+
+
+
 
         JToggleButton sendButton = new JToggleButton();
         sendButton.setText("Register");
