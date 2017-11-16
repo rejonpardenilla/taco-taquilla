@@ -1,0 +1,703 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 9.6.5
+-- Dumped by pg_dump version 9.6.5
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+SET row_security = off;
+
+--
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
+--
+
+CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
+
+
+--
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
+
+
+SET search_path = public, pg_catalog;
+
+SET default_tablespace = '';
+
+SET default_with_oids = false;
+
+--
+-- Name: actor_list; Type: TABLE; Schema: public; Owner: daniel
+--
+
+CREATE TABLE actor_list (
+    show integer,
+    actor integer
+);
+
+
+ALTER TABLE actor_list OWNER TO daniel;
+
+--
+-- Name: person; Type: TABLE; Schema: public; Owner: daniel
+--
+
+CREATE TABLE person (
+    id integer NOT NULL,
+    name character varying(255),
+    last_name character varying(255),
+    phone character varying(50),
+    phone_alt character varying(50),
+    type character varying(50),
+    email character varying(255)
+);
+
+
+ALTER TABLE person OWNER TO daniel;
+
+--
+-- Name: person_id_seq; Type: SEQUENCE; Schema: public; Owner: daniel
+--
+
+CREATE SEQUENCE person_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE person_id_seq OWNER TO daniel;
+
+--
+-- Name: person_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: daniel
+--
+
+ALTER SEQUENCE person_id_seq OWNED BY person.id;
+
+
+--
+-- Name: play; Type: TABLE; Schema: public; Owner: daniel
+--
+
+CREATE TABLE play (
+    id integer NOT NULL,
+    name character varying(255),
+    responsible integer,
+    description character varying(510),
+    cancelled boolean DEFAULT false
+);
+
+
+ALTER TABLE play OWNER TO daniel;
+
+--
+-- Name: play_id_seq; Type: SEQUENCE; Schema: public; Owner: daniel
+--
+
+CREATE SEQUENCE play_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE play_id_seq OWNER TO daniel;
+
+--
+-- Name: play_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: daniel
+--
+
+ALTER SEQUENCE play_id_seq OWNED BY play.id;
+
+
+--
+-- Name: purchase; Type: TABLE; Schema: public; Owner: daniel
+--
+
+CREATE TABLE purchase (
+    id integer NOT NULL,
+    date date,
+    "time" time without time zone,
+    client integer,
+    total numeric(12,2)
+);
+
+
+ALTER TABLE purchase OWNER TO daniel;
+
+--
+-- Name: purchase_id_seq; Type: SEQUENCE; Schema: public; Owner: daniel
+--
+
+CREATE SEQUENCE purchase_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE purchase_id_seq OWNER TO daniel;
+
+--
+-- Name: purchase_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: daniel
+--
+
+ALTER SEQUENCE purchase_id_seq OWNED BY purchase.id;
+
+
+--
+-- Name: seat; Type: TABLE; Schema: public; Owner: daniel
+--
+
+CREATE TABLE seat (
+    id integer NOT NULL,
+    "row" character varying(10),
+    number integer,
+    zone integer
+);
+
+
+ALTER TABLE seat OWNER TO daniel;
+
+--
+-- Name: seat_id_seq; Type: SEQUENCE; Schema: public; Owner: daniel
+--
+
+CREATE SEQUENCE seat_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE seat_id_seq OWNER TO daniel;
+
+--
+-- Name: seat_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: daniel
+--
+
+ALTER SEQUENCE seat_id_seq OWNED BY seat.id;
+
+
+--
+-- Name: seating; Type: TABLE; Schema: public; Owner: daniel
+--
+
+CREATE TABLE seating (
+    id integer NOT NULL,
+    seat integer,
+    state character varying(50),
+    show integer
+);
+
+
+ALTER TABLE seating OWNER TO daniel;
+
+--
+-- Name: seating_id_seq; Type: SEQUENCE; Schema: public; Owner: daniel
+--
+
+CREATE SEQUENCE seating_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE seating_id_seq OWNER TO daniel;
+
+--
+-- Name: seating_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: daniel
+--
+
+ALTER SEQUENCE seating_id_seq OWNED BY seating.id;
+
+
+--
+-- Name: show; Type: TABLE; Schema: public; Owner: daniel
+--
+
+CREATE TABLE show (
+    id integer NOT NULL,
+    date date,
+    "time" time without time zone,
+    play integer,
+    price numeric(12,2),
+    cancelled boolean DEFAULT false
+);
+
+
+ALTER TABLE show OWNER TO daniel;
+
+--
+-- Name: show_id_seq; Type: SEQUENCE; Schema: public; Owner: daniel
+--
+
+CREATE SEQUENCE show_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE show_id_seq OWNER TO daniel;
+
+--
+-- Name: show_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: daniel
+--
+
+ALTER SEQUENCE show_id_seq OWNED BY show.id;
+
+
+--
+-- Name: ticket; Type: TABLE; Schema: public; Owner: daniel
+--
+
+CREATE TABLE ticket (
+    id integer NOT NULL,
+    seating integer,
+    returned boolean DEFAULT false,
+    price numeric(12,2),
+    purchase integer
+);
+
+
+ALTER TABLE ticket OWNER TO daniel;
+
+--
+-- Name: ticket_id_seq; Type: SEQUENCE; Schema: public; Owner: daniel
+--
+
+CREATE SEQUENCE ticket_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE ticket_id_seq OWNER TO daniel;
+
+--
+-- Name: ticket_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: daniel
+--
+
+ALTER SEQUENCE ticket_id_seq OWNED BY ticket.id;
+
+
+--
+-- Name: zone; Type: TABLE; Schema: public; Owner: daniel
+--
+
+CREATE TABLE zone (
+    id integer NOT NULL,
+    discount_percent integer,
+    name character varying(50)
+);
+
+
+ALTER TABLE zone OWNER TO daniel;
+
+--
+-- Name: zone_id_seq; Type: SEQUENCE; Schema: public; Owner: daniel
+--
+
+CREATE SEQUENCE zone_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE zone_id_seq OWNER TO daniel;
+
+--
+-- Name: zone_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: daniel
+--
+
+ALTER SEQUENCE zone_id_seq OWNED BY zone.id;
+
+
+--
+-- Name: person id; Type: DEFAULT; Schema: public; Owner: daniel
+--
+
+ALTER TABLE ONLY person ALTER COLUMN id SET DEFAULT nextval('person_id_seq'::regclass);
+
+
+--
+-- Name: play id; Type: DEFAULT; Schema: public; Owner: daniel
+--
+
+ALTER TABLE ONLY play ALTER COLUMN id SET DEFAULT nextval('play_id_seq'::regclass);
+
+
+--
+-- Name: purchase id; Type: DEFAULT; Schema: public; Owner: daniel
+--
+
+ALTER TABLE ONLY purchase ALTER COLUMN id SET DEFAULT nextval('purchase_id_seq'::regclass);
+
+
+--
+-- Name: seat id; Type: DEFAULT; Schema: public; Owner: daniel
+--
+
+ALTER TABLE ONLY seat ALTER COLUMN id SET DEFAULT nextval('seat_id_seq'::regclass);
+
+
+--
+-- Name: seating id; Type: DEFAULT; Schema: public; Owner: daniel
+--
+
+ALTER TABLE ONLY seating ALTER COLUMN id SET DEFAULT nextval('seating_id_seq'::regclass);
+
+
+--
+-- Name: show id; Type: DEFAULT; Schema: public; Owner: daniel
+--
+
+ALTER TABLE ONLY show ALTER COLUMN id SET DEFAULT nextval('show_id_seq'::regclass);
+
+
+--
+-- Name: ticket id; Type: DEFAULT; Schema: public; Owner: daniel
+--
+
+ALTER TABLE ONLY ticket ALTER COLUMN id SET DEFAULT nextval('ticket_id_seq'::regclass);
+
+
+--
+-- Name: zone id; Type: DEFAULT; Schema: public; Owner: daniel
+--
+
+ALTER TABLE ONLY zone ALTER COLUMN id SET DEFAULT nextval('zone_id_seq'::regclass);
+
+
+--
+-- Data for Name: actor_list; Type: TABLE DATA; Schema: public; Owner: daniel
+--
+
+COPY actor_list (show, actor) FROM stdin;
+\.
+
+
+--
+-- Data for Name: person; Type: TABLE DATA; Schema: public; Owner: daniel
+--
+
+COPY person (id, name, last_name, phone, phone_alt, type, email) FROM stdin;
+1	John	Doe	9991009988	\N	client	jdoe@mail.com
+2	Jane	Dao	9991000000	\N	client	jdae@mail.com
+3	Joe	Don	9992019080	\N	client	jdon@mail.com
+4	Jim	Doe	9999557788	\N	client	jimdoe@mail.com
+9	Julian	Gabu	999008239847	\N	client	julian@topstr.com
+\.
+
+
+--
+-- Name: person_id_seq; Type: SEQUENCE SET; Schema: public; Owner: daniel
+--
+
+SELECT pg_catalog.setval('person_id_seq', 9, true);
+
+
+--
+-- Data for Name: play; Type: TABLE DATA; Schema: public; Owner: daniel
+--
+
+COPY play (id, name, responsible, description, cancelled) FROM stdin;
+1	Frozen	\N	Frozen musical	f
+\.
+
+
+--
+-- Name: play_id_seq; Type: SEQUENCE SET; Schema: public; Owner: daniel
+--
+
+SELECT pg_catalog.setval('play_id_seq', 1, false);
+
+
+--
+-- Data for Name: purchase; Type: TABLE DATA; Schema: public; Owner: daniel
+--
+
+COPY purchase (id, date, "time", client, total) FROM stdin;
+1	2017-11-14	13:58:10	1	29.96
+2	2017-11-14	13:58:13	1	29.96
+3	2017-11-14	13:58:15	1	29.96
+4	2017-11-14	13:58:18	1	29.96
+\.
+
+
+--
+-- Name: purchase_id_seq; Type: SEQUENCE SET; Schema: public; Owner: daniel
+--
+
+SELECT pg_catalog.setval('purchase_id_seq', 4, true);
+
+
+--
+-- Data for Name: seat; Type: TABLE DATA; Schema: public; Owner: daniel
+--
+
+COPY seat (id, "row", number, zone) FROM stdin;
+1	A	1	4
+2	A	2	4
+3	A	3	4
+4	A	4	4
+5	A	5	4
+6	B	1	4
+7	B	2	4
+8	B	3	4
+9	B	4	4
+10	B	5	4
+\.
+
+
+--
+-- Name: seat_id_seq; Type: SEQUENCE SET; Schema: public; Owner: daniel
+--
+
+SELECT pg_catalog.setval('seat_id_seq', 10, true);
+
+
+--
+-- Data for Name: seating; Type: TABLE DATA; Schema: public; Owner: daniel
+--
+
+COPY seating (id, seat, state, show) FROM stdin;
+1	1	AVAILABLE	1
+2	2	TAKEN	1
+3	3	AVAILABLE	1
+4	4	TAKEN	1
+5	5	AVAILABLE	1
+6	6	TAKEN	1
+7	7	AVAILABLE	1
+8	8	TAKEN	1
+9	9	AVAILABLE	1
+10	10	TAKEN	1
+\.
+
+
+--
+-- Name: seating_id_seq; Type: SEQUENCE SET; Schema: public; Owner: daniel
+--
+
+SELECT pg_catalog.setval('seating_id_seq', 10, true);
+
+
+--
+-- Data for Name: show; Type: TABLE DATA; Schema: public; Owner: daniel
+--
+
+COPY show (id, date, "time", play, price, cancelled) FROM stdin;
+1	2017-11-12	08:00:00	1	100.00	f
+\.
+
+
+--
+-- Name: show_id_seq; Type: SEQUENCE SET; Schema: public; Owner: daniel
+--
+
+SELECT pg_catalog.setval('show_id_seq', 1, false);
+
+
+--
+-- Data for Name: ticket; Type: TABLE DATA; Schema: public; Owner: daniel
+--
+
+COPY ticket (id, seating, returned, price, purchase) FROM stdin;
+\.
+
+
+--
+-- Name: ticket_id_seq; Type: SEQUENCE SET; Schema: public; Owner: daniel
+--
+
+SELECT pg_catalog.setval('ticket_id_seq', 1, false);
+
+
+--
+-- Data for Name: zone; Type: TABLE DATA; Schema: public; Owner: daniel
+--
+
+COPY zone (id, discount_percent, name) FROM stdin;
+3	0	Silver
+1	0	Gold
+2	0	Platinum
+4	0	Bronze
+5	60	Scrap
+\.
+
+
+--
+-- Name: zone_id_seq; Type: SEQUENCE SET; Schema: public; Owner: daniel
+--
+
+SELECT pg_catalog.setval('zone_id_seq', 5, true);
+
+
+--
+-- Name: person person_pkey; Type: CONSTRAINT; Schema: public; Owner: daniel
+--
+
+ALTER TABLE ONLY person
+    ADD CONSTRAINT person_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: play play_pkey; Type: CONSTRAINT; Schema: public; Owner: daniel
+--
+
+ALTER TABLE ONLY play
+    ADD CONSTRAINT play_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: purchase purchase_pkey; Type: CONSTRAINT; Schema: public; Owner: daniel
+--
+
+ALTER TABLE ONLY purchase
+    ADD CONSTRAINT purchase_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: seat seat_pkey; Type: CONSTRAINT; Schema: public; Owner: daniel
+--
+
+ALTER TABLE ONLY seat
+    ADD CONSTRAINT seat_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: seating seating_pkey; Type: CONSTRAINT; Schema: public; Owner: daniel
+--
+
+ALTER TABLE ONLY seating
+    ADD CONSTRAINT seating_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: show show_pkey; Type: CONSTRAINT; Schema: public; Owner: daniel
+--
+
+ALTER TABLE ONLY show
+    ADD CONSTRAINT show_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: ticket ticket_pkey; Type: CONSTRAINT; Schema: public; Owner: daniel
+--
+
+ALTER TABLE ONLY ticket
+    ADD CONSTRAINT ticket_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: zone zone_pkey; Type: CONSTRAINT; Schema: public; Owner: daniel
+--
+
+ALTER TABLE ONLY zone
+    ADD CONSTRAINT zone_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: actor_list actor_list_actor_fkey; Type: FK CONSTRAINT; Schema: public; Owner: daniel
+--
+
+ALTER TABLE ONLY actor_list
+    ADD CONSTRAINT actor_list_actor_fkey FOREIGN KEY (actor) REFERENCES person(id);
+
+
+--
+-- Name: actor_list actor_list_show_fkey; Type: FK CONSTRAINT; Schema: public; Owner: daniel
+--
+
+ALTER TABLE ONLY actor_list
+    ADD CONSTRAINT actor_list_show_fkey FOREIGN KEY (show) REFERENCES show(id);
+
+
+--
+-- Name: play play_responsible_fkey; Type: FK CONSTRAINT; Schema: public; Owner: daniel
+--
+
+ALTER TABLE ONLY play
+    ADD CONSTRAINT play_responsible_fkey FOREIGN KEY (responsible) REFERENCES person(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: purchase purchase_client_fkey; Type: FK CONSTRAINT; Schema: public; Owner: daniel
+--
+
+ALTER TABLE ONLY purchase
+    ADD CONSTRAINT purchase_client_fkey FOREIGN KEY (client) REFERENCES person(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: seat seat_zone_fkey; Type: FK CONSTRAINT; Schema: public; Owner: daniel
+--
+
+ALTER TABLE ONLY seat
+    ADD CONSTRAINT seat_zone_fkey FOREIGN KEY (zone) REFERENCES zone(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: seating seating_seat_fkey; Type: FK CONSTRAINT; Schema: public; Owner: daniel
+--
+
+ALTER TABLE ONLY seating
+    ADD CONSTRAINT seating_seat_fkey FOREIGN KEY (seat) REFERENCES seat(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: seating seating_show_fkey; Type: FK CONSTRAINT; Schema: public; Owner: daniel
+--
+
+ALTER TABLE ONLY seating
+    ADD CONSTRAINT seating_show_fkey FOREIGN KEY (show) REFERENCES show(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: show show_play_fkey; Type: FK CONSTRAINT; Schema: public; Owner: daniel
+--
+
+ALTER TABLE ONLY show
+    ADD CONSTRAINT show_play_fkey FOREIGN KEY (play) REFERENCES play(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: ticket ticket_purchase_fkey; Type: FK CONSTRAINT; Schema: public; Owner: daniel
+--
+
+ALTER TABLE ONLY ticket
+    ADD CONSTRAINT ticket_purchase_fkey FOREIGN KEY (purchase) REFERENCES purchase(id);
+
+
+--
+-- Name: ticket ticket_seating_fkey; Type: FK CONSTRAINT; Schema: public; Owner: daniel
+--
+
+ALTER TABLE ONLY ticket
+    ADD CONSTRAINT ticket_seating_fkey FOREIGN KEY (seating) REFERENCES seating(id);
+
+
+--
+-- PostgreSQL database dump complete
+--
+
