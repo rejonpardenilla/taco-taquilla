@@ -18,6 +18,8 @@ public class PurchaseDao extends BaseDao<Purchase> implements PurchaseDaoInterfa
         purchase.setId(rs.getInt("id"));
         purchase.setClient(personDao.findById(rs.getInt("client")));
         purchase.setTotal(rs.getBigDecimal("total"));
+        purchase.setDate(rs.getDate("date"));
+        purchase.setTime(rs.getTime("time"));
         return purchase;
     }
 
@@ -26,10 +28,12 @@ public class PurchaseDao extends BaseDao<Purchase> implements PurchaseDaoInterfa
         Connection connection = ConnectionFactory.getConnection();
         PreparedStatement statement = null;
 
-        String query = "INSERT INTO purchase (client, total) VALUES (?,?)";
+        String query = "INSERT INTO purchase (client, total, date, time) VALUES (?,?,?,?)";
         statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
         statement.setInt(1, purchase.getClient().getId());
         statement.setBigDecimal(2, purchase.getTotal());
+        statement.setDate(3, purchase.getDate());
+        statement.setTime(4, purchase.getTime());
 
 
         int rowsAffected = statement.executeUpdate();

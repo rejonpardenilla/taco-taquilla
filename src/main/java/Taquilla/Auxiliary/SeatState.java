@@ -33,6 +33,10 @@ public class SeatState {
         return this.seating;
     }
 
+    public String getSeatingType(){
+        return this.getSeating().getState().toLowerCase();
+    }
+
     public Seat getSeat() {
         return seat;
     }
