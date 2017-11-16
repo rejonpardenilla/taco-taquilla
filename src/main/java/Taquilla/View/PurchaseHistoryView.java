@@ -35,21 +35,15 @@ public class PurchaseHistoryView {
             JTextArea nameTextArea = new JTextArea(clientName);
             String nameId = "nameText" + Integer.toString(purchase.getId());
             gui.add(nameId, nameTextArea);
-            JFrameHelper.addSeparator(gui, 35);
+            JFrameHelper.addSeparator(gui, 15);
 
             // TODO: Add Dates and Times
             // Date
-            /*
-            if (purchase.getDate() == null) {
-                System.out.println("Date null");
-                break;
-            }
             JTextArea dateTextArea = new JTextArea(purchase.getDate().toString());
             String dateId = "dateText" + Integer.toString(purchase.getId());
             gui.add(dateId, dateTextArea);
             JFrameHelper.addSeparator(gui, 15);
-            JFrameHelper.addSeparator(gui, 180);
-            */
+            JFrameHelper.addSeparator(gui, 15);
 
             // Time
             // some code {...}
