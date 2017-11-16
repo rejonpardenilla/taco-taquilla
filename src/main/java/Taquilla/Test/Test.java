@@ -15,8 +15,8 @@ import Taquilla.Views.RegisterPlayView;
 public class Test {
 
     public static void main(String[] args) {
-        RegisterPlayController controlador = new RegisterPlayController(new RegisterPlayView(), new RegisterPlayModel());
-        //EditPlayController controlador = new EditPlayController(new EditPlayView() , new EditPlayModel());
+        //RegisterPlayController controlador = new RegisterPlayController(new RegisterPlayView(), new RegisterPlayModel());
+        EditPlayController controlador = new EditPlayController(new EditPlayView() , new EditPlayModel());
 
     }
 

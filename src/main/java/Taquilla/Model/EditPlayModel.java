@@ -1,9 +1,10 @@
 package Taquilla.Model;
 
-import DataAccess.Implementations.PlayDao;
-import DataAccess.Implementations.ShowDao;
-import Elements.Play;
-import Elements.Show;
+import DataAccess.Implementations.*;
+import Elements.*;
+
+import java.io.*;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -11,12 +12,58 @@ import java.util.List;
 
 public class EditPlayModel {
 
+    private static final String COMMA_DELIMITER = ",";
+    private static final String NEW_LINE_SEPARATOR = "\n";
+    private static final String SHOW_SEPARATOR = "~";
+    private static final String FILE_HEADER = "play, date, time, row, number, price, client_name, client_last_name, show_total, play_total";
+
     private Play play;
     private List<Show> shows;
 
     public EditPlayModel() {
         this.play = null;
         this.shows = null;
+    }
+
+    private Seating getSeating(int seatingId) {
+        SeatingDao dao = new SeatingDao();
+        Seating seating = new Seating();
+
+        seating = dao.findById(seatingId);
+        seating.setSeat(getSeat(seating.getSeat().getId()));
+        seating.setShow(getShow(seating.getShow().getId()));
+
+        return seating;
+    }
+
+    private Show getShow(int showId) {
+        ShowDao dao = new ShowDao();
+        Show show = new Show();
+
+        show = dao.findById(showId);
+        show.setPlay(play);
+
+        return show;
+    }
+
+    private Seat getSeat(int seatId) {
+        return new SeatDao().findById(seatId);
+    }
+
+    private Purchase getPurchase(int purchaseId) {
+        PurchaseDao dao = new PurchaseDao();
+        Purchase purchase = new Purchase();
+        Person client = new Person();
+
+        purchase = dao.findById(purchaseId);
+        client = getClient(purchase.getClient().getId());
+        purchase.setClient(client);
+
+        return purchase;
+    }
+
+    private Person getClient(int clientId) {
+        return new PersonDao().findById(clientId);
     }
 
     public void setPlay(String playName) {
@@ -96,8 +143,92 @@ public class EditPlayModel {
         return false;
     }
 
-    public void cancelledReport() {
-        
+    public boolean generateReport() {
+        if (play == null) {
+            return false;
+        }
+
+        List<Ticket> tickets = new TicketDao().findByPlay(play);
+        String playName = play.getName();
+        String showDate = "";
+        String showTime = "";
+        String seatRow = "";
+        String seatNumber = "";
+        String seatPrice = "";
+        String clientName = "";
+        String clientLastName = "";
+        BigDecimal playTotal = new BigDecimal(0);
+        FileWriter fileWriter = null;
+
+        for (int i = 0; i < tickets.size(); i++) {
+            int seatingId = tickets.get(i).getSeating().getId();
+            int purchaseId = tickets.get(i).getPurchase().getId();
+            tickets.get(i).setSeating(getSeating(seatingId));
+            tickets.get(i).setPurchase(getPurchase(purchaseId));
+        }
+
+        try {
+            fileWriter = new FileWriter("reportes/reporte - " + playName + ".csv");
+            fileWriter.append(FILE_HEADER);
+            fileWriter.append(NEW_LINE_SEPARATOR);
+
+
+            for (Ticket ticket : tickets) {
+                boolean cancelledShow = ticket.getSeating().getShow().isCancelled();
+                String showTotalCell = "";
+
+                if (cancelledShow) {
+                    showDate = ticket.getSeating().getShow().getDate().toString();
+                    showTime = ticket.getSeating().getShow().getTime().toString();
+                    seatRow = ticket.getSeating().getSeat().getRow();
+                    seatNumber = String.valueOf(ticket.getSeating().getSeat().getNumber());
+                    seatPrice = String.valueOf(ticket.getPrice());
+                    clientName = ticket.getPurchase().getClient().getName();
+                    clientLastName = ticket.getPurchase().getClient().getLastName();
+                    playTotal = playTotal.add(ticket.getPrice());
+
+
+                    fileWriter.append(playName);
+                    fileWriter.append(COMMA_DELIMITER);
+                    fileWriter.append(showDate);
+                    fileWriter.append(COMMA_DELIMITER);
+                    fileWriter.append(showTime);
+                    fileWriter.append(COMMA_DELIMITER);
+                    fileWriter.append(seatRow);
+                    fileWriter.append(COMMA_DELIMITER);
+                    fileWriter.append(seatNumber);
+                    fileWriter.append(COMMA_DELIMITER);
+                    fileWriter.append(seatPrice);
+                    fileWriter.append(COMMA_DELIMITER);
+                    fileWriter.append(clientName);
+                    fileWriter.append(COMMA_DELIMITER);
+                    fileWriter.append(clientLastName);
+                    fileWriter.append(COMMA_DELIMITER);
+                    fileWriter.append(showTotalCell);
+                    fileWriter.append(COMMA_DELIMITER);
+                    fileWriter.append(SHOW_SEPARATOR);
+                    fileWriter.append(NEW_LINE_SEPARATOR);
+                }
+            }
+
+            String showEnd = "~, ~, ~, ~, ~, ~, ~, ~, ~, " + playTotal;
+            fileWriter.append(showEnd);
+            fileWriter.append(NEW_LINE_SEPARATOR);
+
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                fileWriter.flush();
+                fileWriter.close();
+            } catch (IOException e) {
+                System.out.println("Error while flushing/closing fileWriter !!!");
+                e.printStackTrace();
+            }
+        }
+
+        return false;
     }
 
 }

@@ -21,7 +21,6 @@ public class EditPlayController implements ActionListener {
         this.view.getFindPlayButton().addActionListener(this);
         this.view.getCancelButton().addActionListener(this);
         this.view.getCancelledPlaysButton().addActionListener(this);
-        this.view.getCancelledShowsButton().addActionListener(this);
         this.view.getDeleteShowButton().addActionListener(this);
         this.view.getRescheduleShowButton().addActionListener(this);
         this.view.getDeletePlayButton().addActionListener(this);
@@ -127,6 +126,7 @@ public class EditPlayController implements ActionListener {
         final int NO_ROW_SELECTED = -1;
 
         //Si no hay una fila seleccionada, getSelectedRow() retorna -1.
+        
         int selectedRow = view.getShowsTable().getSelectedRow();
 
         if (selectedRow == NO_ROW_SELECTED) {
@@ -234,6 +234,26 @@ public class EditPlayController implements ActionListener {
         }
     }
 
+    private void generateReport() {
+         if (model.getPlay() == null) {
+             JOptionPane.showMessageDialog(
+                     null,
+                     "No se ha seleccionado una obra para generar el reporte!",
+                     "Error al generar reporte",
+                     JOptionPane.WARNING_MESSAGE);
+         } else {
+             if (model.generateReport()) {
+                 JOptionPane.showMessageDialog(null, "Reporte generado en la carpeta \"reportes\"");
+             } else {
+                 JOptionPane.showMessageDialog(
+                         null,
+                         "ERROR: No se puedo generar el reporte!",
+                         "Error al generar reporte",
+                         JOptionPane.WARNING_MESSAGE);
+             }
+         }
+    }
+
     private void cancelButton() {
         view.dispose();
     }
@@ -247,9 +267,7 @@ public class EditPlayController implements ActionListener {
         } else if (selectedButton == view.getDeletePlayButton()) {
             cancelPlay();
         } else if (selectedButton == view.getCancelledPlaysButton()) {
-            //Registro de obras canceladas.
-        } else if (selectedButton == view.getCancelledShowsButton()) {
-            //Registro de shows cancelados.
+            generateReport();
         } else if (selectedButton == view.getDeleteShowButton()) {
             cancelShow();
         } else if (selectedButton == view.getRescheduleShowButton()) {

@@ -9,7 +9,6 @@ import javax.swing.table.DefaultTableModel;
 public class EditPlayView extends javax.swing.JFrame {
     private javax.swing.JButton cancelButton;
     private javax.swing.JButton cancelledPlaysButton;
-    private javax.swing.JButton cancelledShowsButton;
     private javax.swing.JButton deletePlayButton;
     private javax.swing.JButton deleteShowButton;
     private javax.swing.JButton findPlayButton;
@@ -47,7 +46,6 @@ public class EditPlayView extends javax.swing.JFrame {
         jPanel3 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         playStatusLabel = new javax.swing.JLabel();
-        cancelledShowsButton = new javax.swing.JButton();
         cancelledPlaysButton = new javax.swing.JButton();
         deletePlayButton = new javax.swing.JButton();
 
@@ -116,9 +114,7 @@ public class EditPlayView extends javax.swing.JFrame {
 
         playStatusLabel.setText("");
 
-        cancelledShowsButton.setText("Shows cancelados");
-
-        cancelledPlaysButton.setText("Obras canceladas");
+        cancelledPlaysButton.setText("Reporte de cancelaciones...");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -134,8 +130,7 @@ public class EditPlayView extends javax.swing.JFrame {
                                                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                         .addGroup(jPanel3Layout.createSequentialGroup()
                                                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                        .addComponent(cancelledPlaysButton)
-                                                        .addComponent(cancelledShowsButton))
+                                                        .addComponent(cancelledPlaysButton))
                                                 .addGap(0, 0, Short.MAX_VALUE))))
         );
         jPanel3Layout.setVerticalGroup(
@@ -147,7 +142,6 @@ public class EditPlayView extends javax.swing.JFrame {
                                 .addGap(18, 18, 18)
                                 .addComponent(cancelledPlaysButton)
                                 .addGap(18, 18, 18)
-                                .addComponent(cancelledShowsButton)
                                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -236,10 +230,6 @@ public class EditPlayView extends javax.swing.JFrame {
 
     public JButton getCancelledPlaysButton() {
         return cancelledPlaysButton;
-    }
-
-    public JButton getCancelledShowsButton() {
-        return cancelledShowsButton;
     }
 
     public JButton getDeletePlayButton() {
