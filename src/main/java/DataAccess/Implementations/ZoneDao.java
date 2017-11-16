@@ -14,7 +14,6 @@ public class ZoneDao extends BaseDao<Zone> implements ZoneDaoInterface {
 
         Zone zone = new Zone();
         zone.setId(rs.getInt("id"));
-        zone.setName(rs.getString("name"));
         zone.setDiscountPercent(rs.getInt("discount_percent"));
 
         return zone;
@@ -42,6 +41,24 @@ public class ZoneDao extends BaseDao<Zone> implements ZoneDaoInterface {
                 throw new SQLException("No id obtained");
             }
         }
+    }
+
+    @Override
+    public Zone findById(int id) {
+        Connection connection = ConnectionFactory.getConnection();
+        Statement statement = null;
+
+        try {
+            statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM zone WHERE id=" + id);
+            connection.close();
+            if (resultSet.next())
+                return extractFromResultSet(resultSet);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 }
