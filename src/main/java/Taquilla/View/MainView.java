@@ -1,7 +1,14 @@
 package Taquilla.View;
 
+import Taquilla.Controller.EditPlayController;
+import Taquilla.Controller.PurchaseController;
+import Taquilla.Controller.RegisterPlayController;
+import Taquilla.Model.EditPlayModel;
+import Taquilla.Model.RegisterPlayModel;
 import Taquilla.View.Helpers.GUI;
 import Taquilla.View.Helpers.JFrameHelper;
+import Taquilla.Views.EditPlayView;
+import Taquilla.Views.RegisterPlayView;
 import com.sun.tools.doclets.formats.html.SourceToHTMLConverter;
 
 import javax.swing.*;
@@ -12,18 +19,21 @@ public class MainView {
 
     public MainView() {
         JFrame frame = JFrameHelper.createFrame();
-        gui = JFrameHelper.createCenteredGUI("TACO TAQUILLA by NapChallenge");
+        gui = JFrameHelper.createCenteredGUI("TACO TAQUILLA™ by NapChallenge");
 
-        JButton purchaseHistoryButton = (JButton) gui.add(new JButton("Purchase History"));
-        purchaseHistoryButton.addActionListener(actionEvent -> {
-            new PurchaseHistoryView();
-            // onClick -> new PurchaseHistoryView();
-        });
+        JButton registerPlaysButton = (JButton) gui.add(new JButton("Register Plays"));
+        registerPlaysButton.addActionListener(actionEvent -> new RegisterPlayController(new RegisterPlayView(), new RegisterPlayModel()));
+
+        JButton editPlaysButton = (JButton) gui.add(new JButton("Edit Plays"));
+        editPlaysButton.addActionListener(actionEvent -> new EditPlayController(new EditPlayView(), new EditPlayModel()));
 
         JButton salesButton = (JButton) gui.add(new JButton("Purchase Tickets"));
-        purchaseHistoryButton.addActionListener(actionEvent -> {
-            // onClick -> new PurchaseHistoryView();
+        salesButton.addActionListener(actionEvent -> {
+            // @julian
         });
+
+        JButton purchaseHistoryButton = (JButton) gui.add(new JButton("Purchase History"));
+        purchaseHistoryButton.addActionListener(actionEvent -> new PurchaseHistoryView());
 
         JFrameHelper.showFrameAndGui(frame, gui);
     }
