@@ -54,6 +54,8 @@ public class ZoneDiscountsView {
         });
         gui.add("submitZoneButton", submitZoneButton);
 
+        JFrameHelper.addCancelButton(frame, gui, "Cancel");
+
         JFrameHelper.showFrameAndGui(frame, gui);
     }
 
