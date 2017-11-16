@@ -126,7 +126,7 @@ public class EditPlayController implements ActionListener {
         final int NO_ROW_SELECTED = -1;
 
         //Si no hay una fila seleccionada, getSelectedRow() retorna -1.
-        
+
         int selectedRow = view.getShowsTable().getSelectedRow();
 
         if (selectedRow == NO_ROW_SELECTED) {
