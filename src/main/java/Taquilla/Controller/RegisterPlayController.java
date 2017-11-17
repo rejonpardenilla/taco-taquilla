@@ -100,7 +100,7 @@ public class RegisterPlayController implements ActionListener {
             show.setDate(date);
             show.setTime(time);
             show.setPlay(play);
-            show.setPrice(BigDecimal.valueOf(0.00));
+            show.setPrice(BigDecimal.valueOf(100.00));
             show.setCancelled(false);
             shows.add(show);
         }
