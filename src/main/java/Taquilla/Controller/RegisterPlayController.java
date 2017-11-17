@@ -138,7 +138,7 @@ public class RegisterPlayController implements ActionListener {
         show.setDate(date);
         show.setTime(time);
 
-        if ( (showInTable(show) == false) && (model.checkDisponibility(show) == true) ) {
+        if ( (!showInTable(show)) && (model.checkDisponibility(show)) ) {
             JOptionPane.showMessageDialog(null, "Disponible!");
             fillShowsTable(show);
         } else {
