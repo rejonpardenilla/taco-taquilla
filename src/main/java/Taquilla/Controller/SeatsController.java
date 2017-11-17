@@ -67,7 +67,8 @@ public class SeatsController {
 
     public JPanel generatePriceTag(Zone zone, Color color){
         JPanel priceTag = new JPanel();
-        priceTag.add(new JLabel(zone.getName() + "  -  " + getDiscountedPrice(zone)));
+        String discount = BigDecimal.valueOf(zone.getDiscountPercent()).toString();
+        priceTag.add(new JLabel(zone.getName() + "  -  " + discount));
         priceTag.setAlignmentX(Component.LEFT_ALIGNMENT);
         priceTag.setMaximumSize(new Dimension(200,50));
         priceTag.setBackground(color);

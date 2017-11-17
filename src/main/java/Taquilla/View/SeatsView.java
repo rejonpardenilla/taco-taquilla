@@ -75,6 +75,7 @@ public class SeatsView {
         for (SeatState state : seatsController.getModified()){
             System.out.println(state.getSeat().toString());
             BigDecimal cost = seatsController.getDiscountedPrice(state.getSeat().getZone());
+            System.out.println("COST -> " + cost);
             total = total.add(cost);
             seatList.add(new JLabel(state.getSeat().toString() + " - " + cost));
         }
