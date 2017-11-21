@@ -175,7 +175,6 @@ public class EditPlayModel {
 
             for (Ticket ticket : tickets) {
                 boolean cancelledShow = ticket.getSeating().getShow().isCancelled();
-                String showTotalCell = "";
 
                 if (cancelledShow) {
                     showDate = ticket.getSeating().getShow().getDate().toString();
