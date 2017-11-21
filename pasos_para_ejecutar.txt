@@ -1,0 +1,18 @@
+NAP Challenge
+Puedes descargar el código fuente desde la siguiente liga:
+https://github.com/rejonpardenilla/taco-taquilla.git
+
+El programa se está realizando con IntelliJ IDE. Necesitas realizar los siguientes pasos para poder compilar:
+1.	Install PostgreSQL.
+2.	Crea una nueva base de datos vacía.
+3.	Crea un archivo dbconfig.properities y coloca tus datos de configuración (puedes usar el archivo dbconfig.example.properties como ejemplo).
+4.	En IntelliJ, ve a View > Tool Windows > Maven Projects, click en Lifecycle > Install.
+5.	Corre Setup.java.
+6. La clase principal, de la cual se ejecutar el programa es MainView.java. Corre esta clase para ver el menú principal y ejecutar todo el programa.
+
+Puedes ejecutar el proyecto ya empaquetado en un archivo .jar nombrado taco-taquilla-1.2E.jar. Sigue estos pasos
+1.	Install PostgreSQL.
+2.	Crea una nueva base de datos vacía.
+3.	Crea un archivo dbconfig.properities y coloca tus datos de configuración (puedes usar el archivo dbconfig.example.properties como ejemplo).
+4.	Ejecuta en línea de comandos la siguiente línea:	java -jar taco-taquilla-1.2E.jar setup. Esto generará las configuraciones adecuadas para la base de datos.
+5.	Ahora puedes ejecutar directamente el archivo taco-taquilla-1.2E.jar para correr la aplicación.
