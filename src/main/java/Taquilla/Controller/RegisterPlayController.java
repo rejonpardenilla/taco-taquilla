@@ -124,8 +124,12 @@ public class RegisterPlayController implements ActionListener {
             registerModel.registerShow(show);
         }
 
-        JOptionPane.showMessageDialog(null, "Obra guardada con exito!");
-        view.dispose();
+        if (totalShows.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "No se registraron funciones!");
+        } else {
+            JOptionPane.showMessageDialog(null, "Obra guardada con exito!");
+            view.dispose();
+        }
     }
 
     private void checkDisponibility() {
