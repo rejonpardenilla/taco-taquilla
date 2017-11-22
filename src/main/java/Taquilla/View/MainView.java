@@ -1,5 +1,6 @@
 package Taquilla.View;
 
+import DataAccess.Faker;
 import Taquilla.Controller.EditPlayController;
 import Taquilla.Controller.RegisterPlayController;
 import Taquilla.Model.EditPlayModel;
@@ -14,7 +15,7 @@ import javax.swing.*;
 public class MainView {
     public GUI gui;
 
-    public MainView() {
+    private MainView() {
         JFrame frame = JFrameHelper.createFrame();
         gui = JFrameHelper.createCenteredGUI("TACO TAQUILLA by NapChallenge");
 
@@ -64,6 +65,8 @@ public class MainView {
     }
 
     public static void main(String[] args) {
+        if (args.length != 0 && args[0].equals("setup"))
+            new Faker();
         new MainView();
     }
 }
