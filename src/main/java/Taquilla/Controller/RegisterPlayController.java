@@ -100,7 +100,7 @@ public class RegisterPlayController implements ActionListener {
             show.setDate(date);
             show.setTime(time);
             show.setPlay(play);
-            show.setPrice(BigDecimal.valueOf(0.00));
+            show.setPrice(BigDecimal.valueOf(100.00));
             show.setCancelled(false);
             shows.add(show);
         }
@@ -124,8 +124,12 @@ public class RegisterPlayController implements ActionListener {
             registerModel.registerShow(show);
         }
 
-        JOptionPane.showMessageDialog(null, "Obra guardada con exito!");
-        view.dispose();
+        if (totalShows.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "No se registraron funciones!");
+        } else {
+            JOptionPane.showMessageDialog(null, "Obra guardada con exito!");
+            view.dispose();
+        }
     }
 
     private void checkDisponibility() {
@@ -138,7 +142,7 @@ public class RegisterPlayController implements ActionListener {
         show.setDate(date);
         show.setTime(time);
 
-        if ( (showInTable(show) == false) && (model.checkDisponibility(show) == true) ) {
+        if ( (!showInTable(show)) && (model.checkDisponibility(show)) ) {
             JOptionPane.showMessageDialog(null, "Disponible!");
             fillShowsTable(show);
         } else {

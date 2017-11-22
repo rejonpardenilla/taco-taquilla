@@ -15,7 +15,7 @@ public class EditPlayModel {
     private static final String COMMA_DELIMITER = ",";
     private static final String NEW_LINE_SEPARATOR = "\n";
     private static final String SHOW_SEPARATOR = "~";
-    private static final String FILE_HEADER = "play, date, time, row, number, price, client_name, client_last_name, show_total, play_total";
+    private static final String FILE_HEADER = "play, date, time, row, number, price, client_name, client_last_name, play_total";
 
     private Play play;
     private List<Show> shows;
@@ -175,7 +175,6 @@ public class EditPlayModel {
 
             for (Ticket ticket : tickets) {
                 boolean cancelledShow = ticket.getSeating().getShow().isCancelled();
-                String showTotalCell = "";
 
                 if (cancelledShow) {
                     showDate = ticket.getSeating().getShow().getDate().toString();
@@ -186,7 +185,6 @@ public class EditPlayModel {
                     clientName = ticket.getPurchase().getClient().getName();
                     clientLastName = ticket.getPurchase().getClient().getLastName();
                     playTotal = playTotal.add(ticket.getPrice());
-
 
                     fileWriter.append(playName);
                     fileWriter.append(COMMA_DELIMITER);
@@ -204,14 +202,12 @@ public class EditPlayModel {
                     fileWriter.append(COMMA_DELIMITER);
                     fileWriter.append(clientLastName);
                     fileWriter.append(COMMA_DELIMITER);
-                    fileWriter.append(showTotalCell);
-                    fileWriter.append(COMMA_DELIMITER);
                     fileWriter.append(SHOW_SEPARATOR);
                     fileWriter.append(NEW_LINE_SEPARATOR);
                 }
             }
 
-            String showEnd = "~, ~, ~, ~, ~, ~, ~, ~, ~, " + playTotal;
+            String showEnd = "~, ~, ~, ~, ~, ~, ~, ~, " + playTotal;
             fileWriter.append(showEnd);
             fileWriter.append(NEW_LINE_SEPARATOR);
 

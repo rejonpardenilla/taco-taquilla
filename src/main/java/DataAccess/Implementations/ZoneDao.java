@@ -15,6 +15,7 @@ public class ZoneDao extends BaseDao<Zone> implements ZoneDaoInterface {
         Zone zone = new Zone();
         zone.setId(rs.getInt("id"));
         zone.setDiscountPercent(rs.getInt("discount_percent"));
+        zone.setName(rs.getString("name"));
 
         return zone;
     }

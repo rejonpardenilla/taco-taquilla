@@ -19,11 +19,12 @@ public class PurchaseView {
 
     public PurchaseView(ArrayList<SeatState> seats) {
         frame = JFrameHelper.createFrame();
-        frame.setSize(new Dimension(200, 300));
+        frame.setSize(new Dimension(400, 300));
 
         GUI leftPanel;
         leftPanel = JFrameHelper.createCenteredGUI("Register Client");
         leftPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+        leftPanel.setSize(new Dimension(400, 300));
 
         // Name
         JTextField nameField = new JTextField();
@@ -91,7 +92,11 @@ public class PurchaseView {
                 e.printStackTrace();
             }
         });
+
         leftPanel.add(sendButton);
+        JButton cancelButton = (JButton) leftPanel.add(new JButton("Cancel"));
+        cancelButton.addActionListener(event -> frame.dispose());
+
         leftPanel.setPreferredSize(new Dimension(200, 300));
 
         gui = new GUI(new BorderLayout());

@@ -53,10 +53,14 @@ public class SeatsView {
         JButton proceed = new JButton("Proceed to Purchase");
         proceed.addActionListener(purchaseSelection);
 
+        JButton cancelButton = new JButton("     Cancel     ");
+        cancelButton.addActionListener(event -> window.dispose());
+
         gui.add("proceedButton", proceed);
         gui.add("seatList", seatList);
         seatContainer.add(seatList);
         seatContainer.add(proceed, BorderLayout.SOUTH);
+        seatContainer.add(cancelButton, BorderLayout.EAST);
         seatContainer.setMaximumSize(new Dimension(200, 250));
         gui.add("seatContainer", seatContainer);
         return seatContainer;
@@ -71,6 +75,7 @@ public class SeatsView {
         for (SeatState state : seatsController.getModified()){
             System.out.println(state.getSeat().toString());
             BigDecimal cost = seatsController.getDiscountedPrice(state.getSeat().getZone());
+            System.out.println("COST -> " + cost);
             total = total.add(cost);
             seatList.add(new JLabel(state.getSeat().toString() + " - " + cost));
         }

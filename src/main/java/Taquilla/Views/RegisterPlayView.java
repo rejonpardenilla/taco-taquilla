@@ -234,7 +234,7 @@ public class RegisterPlayView extends javax.swing.JFrame {
 
         scheduleDateLabel.setText("Selecciones fecha (dd-MM-yyyy):");
 
-        disponibilityButton.setText("Comprobar disponibilidad...");
+        disponibilityButton.setText("Agregar obra...");
 
         javax.swing.GroupLayout panelScheduleLayout = new javax.swing.GroupLayout(panelSchedule);
         panelSchedule.setLayout(panelScheduleLayout);

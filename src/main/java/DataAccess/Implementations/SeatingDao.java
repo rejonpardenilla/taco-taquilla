@@ -68,7 +68,7 @@ public class SeatingDao extends BaseDao<Seating> implements SeatingDaoInterface{
         this.connection = connection;
         PreparedStatement statement = null;
 
-        String query = "INSERT INTO seating (seat, state, show) VALUES (?, ?, ?)";
+        String query = "INSERT INTO seating (seat, state, show) VALUES (?,?,?)";
         statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 
         statement.setInt(1, seating.getSeat().getId());
