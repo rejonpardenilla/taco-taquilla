@@ -16,7 +16,7 @@ public class MainView {
 
     public MainView() {
         JFrame frame = JFrameHelper.createFrame();
-        gui = JFrameHelper.createCenteredGUI("TACO TAQUILLA™ by NapChallenge");
+        gui = JFrameHelper.createCenteredGUI("TACO TAQUILLA by NapChallenge");
 
         GUI playsGUI = JFrameHelper.createCenteredGUI("Plays");
         JButton registerPlaysButton = (JButton) playsGUI.add(new JButton("Register Plays"));

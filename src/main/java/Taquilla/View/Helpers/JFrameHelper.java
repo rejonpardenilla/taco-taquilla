@@ -1,13 +1,11 @@
 package Taquilla.View.Helpers;
 
-import com.sun.istack.internal.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
 import java.sql.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 
 public class JFrameHelper {
     public static JFrame createFrame() {
