@@ -2,7 +2,6 @@ package DataAccess.Implementations;
 
 import DataAccess.ConnectionFactory;
 import DataAccess.Interfaces.ZoneDaoInterface;
-import Elements.Seating;
 import Elements.Zone;
 
 import java.sql.*;

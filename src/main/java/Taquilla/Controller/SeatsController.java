@@ -1,7 +1,5 @@
 package Taquilla.Controller;
 
-import DataAccess.Implementations.ShowDao;
-import Elements.Seat;
 import Elements.Show;
 import Elements.Zone;
 import Taquilla.Auxiliary.SeatButton;
@@ -13,7 +11,6 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 
 public class SeatsController {
@@ -46,9 +43,14 @@ public class SeatsController {
                 //Se agrega el estado al array modified
                 sb.addActionListener(event->{
                     SeatState selfState = sb.getSeatState();
-                    if (!sb.isSelected()){
-                        selfState.modifySeatState(this.type, this.show);
-                        modified.add(selfState);
+                    if (!sb.isSelected()) {
+                        if(modified.size() >= 5){
+                            JOptionPane.showMessageDialog(new JPanel(),"No puedes agregar más de 5 uwu");
+                            sb.setSelected(true);
+                        } else {
+                            selfState.modifySeatState(this.type, this.show);
+                            modified.add(selfState);
+                        }
                     } else {
                         modified.remove(selfState);
                     }

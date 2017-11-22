@@ -3,7 +3,8 @@ package Taquilla.Model;
 import DataAccess.Implementations.*;
 import Elements.*;
 
-import java.io.*;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;

@@ -5,6 +5,7 @@ import Elements.Play;
 import Elements.Show;
 import Taquilla.Model.RegisterPlayModel;
 import Taquilla.Views.RegisterPlayView;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

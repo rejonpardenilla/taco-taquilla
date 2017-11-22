@@ -2,10 +2,8 @@ package DataAccess.Implementations;
 
 import DataAccess.ConnectionFactory;
 import DataAccess.Interfaces.PurchaseDaoInterface;
-import Elements.Person;
 import Elements.Purchase;
 
-import java.math.BigDecimal;
 import java.sql.*;
 import java.util.List;
 
