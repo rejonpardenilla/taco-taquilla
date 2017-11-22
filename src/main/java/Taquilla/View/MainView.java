@@ -67,6 +67,8 @@ public class MainView {
     public static void main(String[] args) {
         if (args.length != 0 && args[0].equals("setup"))
             new Faker();
+        if (args.length != 0 && args[0].equals("test"))
+            System.out.println("confirmed");
         new MainView();
     }
 }
